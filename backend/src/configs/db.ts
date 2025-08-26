@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { configurations } from './connections'
 
-const connectDB = async(): Promise<void> => {
+const connectDB = async(): Promise<void> => {           // Function to connect to MongoDB
     try{
         await mongoose.connect(configurations.MONGO_URI)
         console.log("Successfully connected to Mongo DB")

@@ -1,4 +1,4 @@
-export interface ENV_Interface {
+export interface ENV_Interface {                  // Environmental Variables
     MONGO_URI: string
     PORT: number
     GOOGLE_CLIENT_ID: string
@@ -6,13 +6,13 @@ export interface ENV_Interface {
     SESSION_SECRET: string,
 }
 
-export interface Account_Interface extends Document {
+export interface Account_Interface extends Document { // Accounts
     googleId: string
     displayName: string
     email: string
 }
 
-export interface AuthenticatedRequestInterface extends Request{
+export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
     account: {
         _id: string,
         googleId: string,

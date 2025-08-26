@@ -6,8 +6,10 @@ import { configurations } from "./connections"
 import { Account_Interface } from "./types_and_interfaces"
 import Account from "../models/accounts"
 
-dotenv.config()
+dotenv.config() // Enables Environmental Variables
 
+
+// Redefined the passport with my custom routes and requirements
 passport.use(
     new GoogleStrategy({
         clientID: configurations.GOOGLE_CLIENT_ID,
@@ -35,10 +37,14 @@ passport.use(
     }
 ))
 
+
+// Saves only MongoDB ID in session storage after successfull login
 passport.serializeUser((account, done) => {
     done(null, (account as HydratedDocument<Account_Interface>)._id)
 })
 
+
+// Stores the entire account details in req.account. Will be used on protected routes
 passport.deserializeUser(async(id: string, done) => {
     try{
         const account = await Account.findById(id)
