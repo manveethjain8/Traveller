@@ -1,7 +1,30 @@
+import { useEffect, useState } from 'react'
 import WP from '../../assets/background_images/authenticate_page_background.jpg'
 import GoogleIcon from '../../assets/logo/google.png'
+import type { Quotes_Type } from '../../configs/types_and_interfaces'
+import customAPI from '../../api/customAPI'
 
 const Authenticate = () => {
+
+    const [quote, setQuote] = useState<Quotes_Type | null>(null)
+
+    useEffect(() => {
+        const getQuote = async(): Promise<void> => {
+            try{
+                const response = await customAPI.get<Quotes_Type>('/quote/single-quote')
+                setQuote(response.data)
+            }catch(err: unknown){
+                if(err instanceof Error){
+                    console.error("Error fetching quote\nLocation: FRONTEND[Authenticate]")
+                }else{
+                    console.error("Unknown error has occured while fetching quote\nLocation: FRONTEND[Authenticate]")
+                }
+            }
+        }
+
+        getQuote()
+    },[])
+
     return (
         <div className="fixed w-screen h-screen flex justify-center items-center">
             <div className="flex 2xl:w-[60%] 2xl:h-[80%] border-box">
@@ -34,7 +57,7 @@ const Authenticate = () => {
                                     2xl:text-[1.1rem] 2xl:bottom-5
                                     3xl:text-[1.2rem]'
                     >
-                        The journey, not the arrival, matters. While the destination may be the goal, the most valuable part of any trip is the experience of getting there. It's the people you meet, the lessons you learn, and the memories you make along the way. So don't rush through the journey; savor every moment.
+                        {quote ? `${quote.quote} - ${quote.author}` : "The journey, not the arrival, matters. While the destination may be the goal, the most valuable part of any trip is the experience of getting there. It's the people you meet, the lessons you learn, and the memories you make along the way. So don't rush through the journey; savor every moment. - 'Devs'"}
                     </p>
                 </div>
             </div>
