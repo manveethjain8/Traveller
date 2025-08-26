@@ -6,6 +6,12 @@ export interface ENV_Interface {                  // Environmental Variables
     SESSION_SECRET: string,
 }
 
+export interface Error_Interface { // Error
+    message: string; 
+    error: unknown; 
+    location: string 
+}
+
 export interface Account_Interface extends Document { // Accounts
     googleId: string
     displayName: string
@@ -18,4 +24,9 @@ export interface AuthenticatedRequestInterface extends Request{ // Google Authen
         googleId: string,
         displayName: string
     }
+}
+
+export interface Quotes_Interface { // Quotes
+    author: string,
+    quote: string
 }

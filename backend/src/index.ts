@@ -8,6 +8,7 @@ import { configurations } from './configs/connections'
 import passport from './configs/passport'
 
 import accountRoutes from './routes/accountRoutes'
+import quoteRoutes from './routes/quotesRoutes'
 
 //Provides access to ENV'S
 dotenv.config()
@@ -35,6 +36,7 @@ app.use(passport.session())
 
 //Enables the app to use the routes
 app.use('/auth', accountRoutes)
+app.use('/quote', quoteRoutes)
 
 //Provides the means to connect to the server
 const PORT: number = configurations.PORT
