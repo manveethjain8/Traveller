@@ -1,9 +1,13 @@
-import './App.css'
+import { Routes, Route} from "react-router-dom"
+
+import Authenticate from "./components/authenticate/Authenticate"
 
 function App() {
 	return (
 		<main>
-			<button onClick={() => {window.location.href = 'http://localhost:5000/auth/google'}}>Login</button>
+			<Routes>
+				<Route path="/" element={<Authenticate/>}/>
+			</Routes>
 		</main>
 	)
 }
