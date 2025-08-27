@@ -3,7 +3,7 @@ import exploreIcon from '../../assets/icons/explore_25dp_E3E3E3_FILL0_wght400_GR
 
 const Sidebar = () => {
     return (
-        <div className="fixed bg-blue-500
+        <div className="fixed
                         2xl:top-[4rem] 2xl:w-[15rem] 2xl:h-full
                         3xl:top-[5rem] 3xl:w-[17rem] 2xl:h-full">
             <div className="flex flex-col gap-y-2 w-full h-full box-border p-2 items-center overflow-y-auto
