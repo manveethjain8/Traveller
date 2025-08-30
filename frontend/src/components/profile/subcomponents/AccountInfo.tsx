@@ -8,6 +8,7 @@ const AccountInfo = () => {
             <div className="flex flex-1 h-full box-border
                             2xl:p-2 2xl:gap-x-2>
                             2xl:p-3 2xl:gap-x-3">
+                {/* Start of Profile Picture Box*/}
                 <div className="flex flex-row">
                     <img
                         className='rounded-full
@@ -16,6 +17,9 @@ const AccountInfo = () => {
                         src={pp} 
                         alt="Profile Picture" />
                 </div>
+                {/* End of Profile Picture Box*/}
+
+                {/* Start of User's Name and Native*/}
                 <div className='flex flex-1 flex-col justify-center 2xl:gap-y-1'>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
@@ -34,7 +38,10 @@ const AccountInfo = () => {
                         <p className='3xl:text-[1.1rem]'>India</p>
                     </div>
                 </div>
+                {/* End of User's Name and Native*/}
             </div>
+
+            {/* Start of User's tag line */}
             <div className="flex flex-2 justify-center items-center h-full box-border 2xl:p-2">
                 <strong className='font-[Avenir] 2xl:text-[1rem] 3xl:text-[1.1rem]'>
                     <span className='text-red-500 2xl:text-[1rem]'>" </span>
@@ -42,6 +49,9 @@ const AccountInfo = () => {
                     <span className='text-red-500 2xl:text-[1.2rem]'> "</span>
                 </strong>
             </div>
+            {/* Start of User's tag line */}
+
+            {/* Start of Accounts Statisticks */}
             <div className="flex flex-[0.75] h-full box-border items-center justify-center
                             2xl:p-2 2xl:gap-x-5
                             3xl:text-[1.1rem]">
@@ -58,6 +68,8 @@ const AccountInfo = () => {
                     <p>0</p>
                 </div>
             </div>
+            {/* Start of Accounts Statisticks */}
+            
         </div>
     )
 }

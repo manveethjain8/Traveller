@@ -1,6 +1,7 @@
 import TopBar from "../topbar/TopBar"
 import Sidebar from "../sidebar/Sidebar"
 import AccountInfo from "./subcomponents/AccountInfo"
+import AccountPosts from "./subcomponents/AccountPosts"
 
 const Profile = () => {
     return (
@@ -14,6 +15,7 @@ const Profile = () => {
             >
                 <div className="w-full h-full flex flex-col">
                     <AccountInfo/>
+                    <AccountPosts/>
                 </div>
             </div>
         </div>
