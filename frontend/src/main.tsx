@@ -5,13 +5,16 @@ import './index.css'
 import App from './App.tsx'
 
 import { ProfileContextProvider } from './contexts/profileContext.tsx'
+import { NavigationContextProvider } from './contexts/navigationContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<StrictMode>
-			<ProfileContextProvider>
-				<App />
-			</ProfileContextProvider>
+			<NavigationContextProvider>
+				<ProfileContextProvider>
+					<App />
+				</ProfileContextProvider>
+			</NavigationContextProvider>
 		</StrictMode>
 	</BrowserRouter>
 )

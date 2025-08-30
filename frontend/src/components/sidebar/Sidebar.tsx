@@ -1,7 +1,11 @@
 import homeIcon from '../../assets/icons/home_25dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
 import exploreIcon from '../../assets/icons/explore_25dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
+import { useNavigationContext } from '../../contexts/navigationContext'
 
 const Sidebar = () => {
+
+    const {sideBarCategory, setSideBarCategory} = useNavigationContext()
+
     return (
         <div className="fixed
                         2xl:top-[4rem] 2xl:w-[15rem] 2xl:h-full
@@ -10,9 +14,15 @@ const Sidebar = () => {
                             2xl:p-4
                             3xl:px-5">
                 <button 
-                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-400 ease-in-out cursor-pointer
+                    onClick={() => {
+                        if(sideBarCategory !== 'home'){
+                            setSideBarCategory('home')
+                        }
+                    }}
+                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2
                     3xl:px-6 3xl:py-3 3xl:text-[1.2rem]"
+                    style={sideBarCategory === 'home' ? {backgroundColor: "red"} : {}}
                 >   
                     <img
                         className='align-center 3xl:w-[1.7rem] 3xl:h-[1.7rem]' 
@@ -22,9 +32,15 @@ const Sidebar = () => {
                     <p className='font-semibold'>Home</p>
                 </button> 
                 <button 
-                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-400 ease-in-out cursor-pointer
+                    onClick={() => {
+                        if(sideBarCategory !== 'explore'){
+                            setSideBarCategory('explore')
+                        }
+                    }} 
+                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2
                     3xl:px-6 3xl:py-3 3xl:text-[1.2rem]"
+                    style={sideBarCategory === 'explore' ? {backgroundColor: "red"} : {}}
                 >   
                     <img 
                         className='align-center 3xl:w-[1.7rem] 3xl:h-[1.7rem]' 

@@ -23,7 +23,7 @@ const AccountPosts = () => {
                 >   <img 
                         className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
                                 2xl:p-1'
-                        style={postsCategory === 'public' ? {backgroundColor: 'teal', padding: '5px'} : {}}
+                        style={postsCategory === 'public' ? {backgroundColor: 'red', padding: '5px'} : {}}
                         src={publicIcon} alt="Public" 
                     />
                 </button>
@@ -37,7 +37,7 @@ const AccountPosts = () => {
                     <img 
                         className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
                                 2xl:p-1'
-                        style={postsCategory === 'private' ? {backgroundColor: 'teal', padding: '5px'} : {}}
+                        style={postsCategory === 'private' ? {backgroundColor: 'red', padding: '5px'} : {}}
                         src={privateIcon} alt="Private" 
                     />
                 </button>
@@ -51,7 +51,7 @@ const AccountPosts = () => {
                     <img 
                         className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
                                 2xl:p-1'
-                        style={postsCategory === 'star' ? {backgroundColor: 'teal', padding: '5px'} : {}}
+                        style={postsCategory === 'star' ? {backgroundColor: 'red', padding: '5px'} : {}}
                         src={starIcon} alt="Star" 
                     />
                 </button>
