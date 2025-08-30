@@ -2,9 +2,14 @@ import { createContext, useContext, useState, type Dispatch, type FC, type React
 
 interface ProfileContext_Interface {
     // Profile Posts Category
-    postsCategory: string,
+    postsCategory: string
     setPostCategory: Dispatch<SetStateAction<string>> 
     // Profile Posts Category
+
+    // Edit Profile
+    editProfileClicked: boolean
+    setEditProfileClicked: Dispatch<SetStateAction<boolean>>
+    // Edit Profile
 }
 
 const ProfileContext = createContext<ProfileContext_Interface | undefined>(undefined)
@@ -19,10 +24,15 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
     const [postsCategory, setPostCategory] = useState<string>('public')
     // Profile Posts Category
 
+    // Edit Profile
+    const [editProfileClicked, setEditProfileClicked] = useState<boolean>(false)
+    // Edit Profile
+
     return(
         <ProfileContext.Provider value = {
             {
-                postsCategory, setPostCategory
+                postsCategory, setPostCategory,
+                editProfileClicked, setEditProfileClicked
             }
         }>
             {children}

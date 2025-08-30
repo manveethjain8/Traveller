@@ -2,8 +2,13 @@ import TopBar from "../topbar/TopBar"
 import Sidebar from "../sidebar/Sidebar"
 import AccountInfo from "./subcomponents/AccountInfo"
 import AccountPosts from "./subcomponents/AccountPosts"
+import { useProfileContext } from "../../contexts/profileContext"
+import EditProfile from "./subcomponents/EditProfile"
 
 const Profile = () => {
+
+    const {editProfileClicked} = useProfileContext()
+
     return (
         <div className="w-screen h-screen">
             <TopBar/>
@@ -18,6 +23,9 @@ const Profile = () => {
                     <AccountPosts/>
                 </div>
             </div>
+            {/* Start of Edit Profile */}
+            {editProfileClicked === true ? <EditProfile/> : ''}
+            {/* End of Edit Profile */}
         </div>
     )
 }

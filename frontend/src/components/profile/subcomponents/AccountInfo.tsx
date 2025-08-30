@@ -1,6 +1,10 @@
 import pp from '../../../assets/background_images/authenticate_page_background.jpg'
+import { useProfileContext } from '../../../contexts/profileContext'
 
 const AccountInfo = () => {
+
+    const {setEditProfileClicked} = useProfileContext()
+
     return (
         <div className="flex flex-1 w-full justify-center
                         2xl:max-h-[10rem] 2xl:gap-x-10
@@ -37,6 +41,13 @@ const AccountInfo = () => {
                                     2xl:gap-x-2'>
                         <p className='3xl:text-[1.1rem]'>India</p>
                     </div>
+                    <button
+                        onClick={() => setEditProfileClicked(prev => !prev)}
+                        className='bg-red-500 w-full rounded-2xl mt-[0.2rem] hover:bg-white hover:text-red-500 active:text-white active:bg-red-700 transition-all duration-300 cursor-pointer
+                                    2xl:h-[1.5rem]'
+                    >
+                        Edit Profile
+                    </button>
                 </div>
                 {/* End of User's Name and Native*/}
             </div>
@@ -69,7 +80,6 @@ const AccountInfo = () => {
                 </div>
             </div>
             {/* Start of Accounts Statisticks */}
-            
         </div>
     )
 }
