@@ -30,46 +30,81 @@ const AccountPosts = () => {
 
             {/* Posts Display */}
             <div className='bg-blue-500 flex-1 grid box-border overflow-y-auto justify-items-center
-                            2xl:grid-cols-5 2xl:p-5 2xl:pb-[11rem] 2xl:gap-y-2'>
+                            2xl:grid-cols-5 2xl:p-5 2xl:pb-[11rem] 2xl:gap-y-2
+                            3xl:grid-cols-6 3xl:px-7 3xl:pb-[13rem] 2xl:gap-y-1'>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
                 <div className='bg-yellow-500
-                                2xl:w-[15rem] 2xl:h-[20rem]'>
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
                 </div>
+                <div className='bg-yellow-500
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
+                </div>
+                <div className='bg-yellow-500
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
+                </div>
+                <div className='bg-yellow-500
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
+                </div>
+                <div className='bg-yellow-500
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
+                </div>
+                <div className='bg-yellow-500
+                                2xl:w-[15rem] 2xl:h-[20rem]
+                                3xl:w-[16rem] 2xl:h-[22rem]'>
+                </div>
+                
             </div>
             {/* Posts Display */}
         </div>
