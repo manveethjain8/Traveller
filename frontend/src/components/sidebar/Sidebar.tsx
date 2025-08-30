@@ -1,8 +1,12 @@
 import homeIcon from '../../assets/icons/home_25dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
 import exploreIcon from '../../assets/icons/explore_25dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
+import profileIcon from '../../assets/icons/account_circle_25dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
 import { useNavigationContext } from '../../contexts/navigationContext'
+import { useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
+
+    const navigate = useNavigate()
 
     const {sideBarCategory, setSideBarCategory} = useNavigationContext()
 
@@ -17,6 +21,7 @@ const Sidebar = () => {
                     onClick={() => {
                         if(sideBarCategory !== 'home'){
                             setSideBarCategory('home')
+                            navigate('/home')
                         }
                     }}
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
@@ -35,6 +40,7 @@ const Sidebar = () => {
                     onClick={() => {
                         if(sideBarCategory !== 'explore'){
                             setSideBarCategory('explore')
+                            navigate('/explore')
                         }
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
@@ -48,6 +54,28 @@ const Sidebar = () => {
                         alt="Explore Icon"
                     />
                     <p className='font-semibold'>Explore</p>
+                </button> 
+
+                <div className='bg-red-500 h-[0.1rem] w-[90%] my-[1rem]'></div>
+
+                <button 
+                    onClick={() => {
+                        if(sideBarCategory !== 'profile'){
+                            setSideBarCategory('profile')
+                            navigate('/profile')
+                        }
+                    }} 
+                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
+                    2xl:px-5 2xl:py-2
+                    3xl:px-6 3xl:py-3 3xl:text-[1.2rem]"
+                    style={sideBarCategory === 'profile' ? {backgroundColor: "red"} : {}}
+                >   
+                    <img 
+                        className='align-center 3xl:w-[1.7rem] 3xl:h-[1.7rem]' 
+                        src={profileIcon} 
+                        alt="profile Icon"
+                    />
+                    <p className='font-semibold'>Profile</p>
                 </button>  
             </div>
         </div>
