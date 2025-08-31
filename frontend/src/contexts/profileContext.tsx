@@ -68,6 +68,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
             })
 
             await customAPI.put('/account/update-user-details', formData,{
+                withCredentials: true,
                 headers: {
                     'Content-Type' : 'multipart/form-data'
                 }
