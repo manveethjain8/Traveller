@@ -2,8 +2,8 @@ import passport from "passport"
 import { Strategy as GoogleStrategy, Profile } from "passport-google-oauth20"
 import { HydratedDocument } from "mongoose"
 import dotenv from 'dotenv'
-import { configurations } from "./connections"
-import { Account_Interface } from "./types_and_interfaces"
+import { configurations } from "../configs/connections"
+import { Account_Interface } from "../configs/types_and_interfaces"
 import Account from "../models/accounts"
 
 dotenv.config() // Enables Environmental Variables

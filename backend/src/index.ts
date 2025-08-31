@@ -5,7 +5,7 @@ import connectDB from './configs/db'
 import session from 'express-session';
 import { configurations } from './configs/connections'
 
-import passport from './configs/passport'
+import passport from './utils/passportUtils'
 
 import accountRoutes from './routes/accountRoutes'
 import quoteRoutes from './routes/quotesRoutes'
