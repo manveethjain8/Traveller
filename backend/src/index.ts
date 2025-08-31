@@ -8,6 +8,7 @@ import { configurations } from './configs/connections'
 
 import passport from './utils/passportUtils'
 
+import authRoutes from './routes/authRoutes'
 import accountRoutes from './routes/accountRoutes'
 import quoteRoutes from './routes/quotesRoutes'
 
@@ -42,7 +43,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 //Enables the app to use the routes
-app.use('/auth', accountRoutes)
+app.use('/auth', authRoutes)
+app.use('/account', accountRoutes)
 app.use('/quote', quoteRoutes)
 
 //Provides the means to connect to the server
