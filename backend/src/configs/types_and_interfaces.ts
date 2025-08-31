@@ -16,6 +16,14 @@ export interface Account_Interface extends Document { // Accounts
     googleId: string
     displayName: string
     email: string
+    firstName: string
+    lastName: string
+    userName: string
+    gender: string,
+    district: string
+    state: string
+    country: string
+    date_of_birth: string
 }
 
 export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
