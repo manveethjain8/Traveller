@@ -6,7 +6,7 @@ const AccountInfo = () => {
     const {setEditProfileClicked} = useProfileContext()
 
     return (
-        <div className="flex flex-1 w-full justify-center
+        <div className="flex flex-1 w-full justify-center items-center
                         2xl:max-h-[10rem] 2xl:gap-x-10
                         3xl:max-h-[12rem]">
             <div className="flex flex-1 h-full box-border
