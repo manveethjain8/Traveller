@@ -42,3 +42,8 @@ export interface Quotes_Interface { // Quotes
     author: string,
     quote: string
 }
+
+export interface TokenPayload_Interface {
+    mongoDbId: string
+    googleId: string
+}

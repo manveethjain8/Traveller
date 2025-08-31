@@ -1,8 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import connectDB from './configs/db'
-import session from 'express-session';
+import session from 'express-session'
 import { configurations } from './configs/connections'
 
 import passport from './utils/passportUtils'
@@ -23,7 +24,13 @@ const app = express()
 app.use(express.json())
 
 //Enables the frontend to talk to backend
-app.use(cors())
+//Enables security with JWT
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
+
+app.use(cookieParser())
 
 //Enables the app to use session storage for OAuth2
 app.use(session({
