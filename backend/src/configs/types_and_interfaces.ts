@@ -16,10 +16,12 @@ export interface Account_Interface extends Document { // Accounts
     googleId: string
     displayName: string
     email: string
+    profilePicture: string,
     firstName: string
     lastName: string
     userName: string
-    gender: string,
+    tagline: string
+    gender: string
     district: string
     state: string
     country: string
