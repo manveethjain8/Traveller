@@ -3,7 +3,9 @@ export interface ENV_Interface {                  // Environmental Variables
     PORT: number
     GOOGLE_CLIENT_ID: string
     GOOGLE_CLIENT_SECRET: string
-    SESSION_SECRET: string,
+    SESSION_SECRET: string
+    ACCESS_TOKEN_SECRET: string
+    REFRESH_TOKEN_SECRET: string
 }
 
 export interface Error_Interface { // Error
