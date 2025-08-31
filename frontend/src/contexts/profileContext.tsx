@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { UserInfo_Type } from "../configs/types_and_interfaces";
 import { userInfo_Template } from "../configs/templates";
+import customAPI from "../api/customAPI";
 
 interface ProfileContext_Interface {
     // Profile Posts Category
@@ -16,6 +17,7 @@ interface ProfileContext_Interface {
     ppPreview: string | null
     setppPreview: Dispatch<SetStateAction<string | null>>
     handleInputChange: <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]) => void
+    handleSaveChanges: () => void
     // Edit Profile
 }
 
@@ -50,6 +52,34 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
             }))
         )
     }
+
+    const handleSaveChanges = async(): Promise<void> => {
+        try{
+            const formData = new FormData();
+
+            (Object.keys(userInfo) as (keyof UserInfo_Type)[]).forEach((key) => {
+                const value = userInfo[key]
+
+                if (value instanceof File){
+                    formData.append(key, value)
+                }else if (typeof value === 'string'){
+                    formData.append(key, value)
+                }
+            })
+
+            await customAPI.put('/account/update-user-details', formData,{
+                headers: {
+                    'Content-Type' : 'multipart/form-data'
+                }
+            })
+        }catch(err){
+            if(err instanceof Error){
+                console.log('Error updating user details. Location: profileContext[Frontend]', err)
+            }else{
+                console.log("Unknown error has occured while updating user details. Location: profileContext[Frontend]", err)
+            }
+        }
+    }
     // Edit Profile
 
     return(
@@ -60,7 +90,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 editProfileClicked, setEditProfileClicked,
                 userInfo, setUserInfo,
                 ppPreview, setppPreview,
-                handleInputChange
+                handleInputChange, handleSaveChanges
             }
         }>
             {children}
