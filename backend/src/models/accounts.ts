@@ -5,7 +5,15 @@ import { Account_Interface} from "../configs/types_and_interfaces"
 const accountSchema = new mongoose.Schema<Account_Interface>({
     googleId: {type: String, required: true, unique: true},
     displayName: {type: String, required: true},
-    email: {type: String, required: true}
+    email: {type: String, required: true},
+    firstName: {type: String},
+    lastName: {type: String},
+    userName: {type: String, unique: true},
+    district: {type: String},
+    state: {type: String},
+    country: {type: String},
+    gender: {type: String},
+    date_of_birth: {type: String}
 })
 
 //Model the structure
