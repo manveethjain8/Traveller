@@ -18,7 +18,6 @@ export const authorizeAccount = (req: Request, res: Response, next: NextFunction
             return res.status(401).json({ message: 'Invalid Access token' })
         }
 
-        console.log('Access token verified for user:', decoded.mongoDbId)
 
         req.user = {
             mongoDbId: decoded.mongoDbId,

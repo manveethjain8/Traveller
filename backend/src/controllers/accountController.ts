@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
 import Account from "../models/accounts";
-import { Account_Interface, TokenPayload_Interface} from "../configs/types_and_interfaces";
+import { Account_Interface} from "../configs/types_and_interfaces";
 
 
 export const updateUserInfo = async(req: Request, res: Response) => {
@@ -14,8 +14,6 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 		const updatedFields: Partial<Account_Interface> = {
 			...textData
 		}
-
-		console.log('File data received:', fileData);
 
 		if(fileData){
 			console.log('Uploading new profile picture to Cloudinary...');
@@ -35,7 +33,6 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 		if(!account){
 			res.status(500).json({message: 'Failed to find the account to be updated', location: 'accounts controller [Backend]'})
 		}
-		console.log('Account updated successfully:')
 		res.status(200).json({message: 'Account updated successfully'})
 	}catch(err: unknown){
 		if(err instanceof Error){

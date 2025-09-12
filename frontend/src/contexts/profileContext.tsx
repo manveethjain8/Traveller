@@ -34,7 +34,6 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
     // Profile Posts Category
 
     // Edit Profile
-    const [isUpdating, setIsUpdating] = useState<boolean>(false)
     const [editProfileClicked, setEditProfileClicked] = useState<boolean>(false)
     const [userInfo, setUserInfo] = useState<UserInfo_Type>(userInfo_Template)
     const [ppPreview, setppPreview] = useState<string | null>(null)
