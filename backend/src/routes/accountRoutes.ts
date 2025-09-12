@@ -6,7 +6,7 @@ import { updateUserInfo } from '../controllers/accountController';
 const router = express.Router()
 
 // Routes to access the account
-router.put('/update-user-account', authorizeAccount, upload.single('profile_pictures'), updateUserInfo);
+router.put('/update-user-account', authorizeAccount, upload.single('profilePicture'), updateUserInfo);
 
 
 export default router

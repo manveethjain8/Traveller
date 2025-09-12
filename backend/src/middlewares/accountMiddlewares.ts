@@ -17,7 +17,7 @@ export const authorizeAccount = (req: Request, res: Response, next: NextFunction
         }
 
         req.user = {
-            mongoDbId: decoded.mongoDbId,
+            _id: decoded.mongoDbId,
             googleId: decoded.googleId
         }
         next()

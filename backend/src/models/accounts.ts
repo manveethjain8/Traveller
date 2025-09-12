@@ -7,6 +7,7 @@ const accountSchema = new mongoose.Schema<Account_Interface>({
     displayName: {type: String, required: true},
     email: {type: String, required: true},
     profilePicture: {type: String},
+    profilePictureId: {type: String},
     firstName: {type: String},
     lastName: {type: String},
     userName: {type: String, unique: true},

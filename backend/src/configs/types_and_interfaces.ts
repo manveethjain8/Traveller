@@ -22,6 +22,7 @@ export interface Account_Interface extends Document { // Accounts
     displayName: string
     email: string
     profilePicture: string,
+    profilePictureId: string,
     firstName: string
     lastName: string
     userName: string

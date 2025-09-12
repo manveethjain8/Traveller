@@ -1,45 +1,42 @@
 import { Request, Response } from "express"
 import { uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
 import Account from "../models/accounts";
+import { Account_Interface} from "../configs/types_and_interfaces";
 
-export const uploadImage = async (req: Request, res: Response) => {
-  try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-
-    const result = await uploadToCloudinary(req.file.buffer);
-    res.json({ url: result.secure_url, publicId: result.public_id });
-  } catch (err) {
-    res.status(500).json({ message: "Upload failed", err });
-  }
-};
 
 export const updateUserInfo = async(req: Request, res: Response) => {
-    // try{
-    //     const textData = req.body;
-    //     const fileData = req.file;
+	try{
+		
+		const textData: Partial<Account_Interface> = req.body
+		const fileData: Express.Multer.File | undefined = req.file
 
-    //     const {day, month, year, ...rest} = textData;
+		const updatedFields: Partial<Account_Interface> = {
+			...textData
+		}
 
-    //     const updatedFields = {
-    //         ...rest,
-    //         birthday : {day,month,year}
-    //     }
+		if(fileData){
+			const uploadResult = await uploadToCloudinary(fileData.buffer)
+			
+			updatedFields.profilePicture = uploadResult.path
+			updatedFields.profilePictureId = uploadResult.filename
+		}
 
-    //     if(fileData){
-    //         updatedFields.profilePicture = fileData.path;
-    //     }
 
-    //     const account = await Account.findByIdAndUpdate(
-    //         req.user?.mongoDbId,
-    //         updatedFields,
-    //         {new : true}
-    //     );
+		const account = await Account.findByIdAndUpdate(
+			(req.user as any)?._id,
+			updatedFields,
+			{new : true}
+		)
 
-    //     if(!account){
-    //         res.status(404).json({error : 'Account not found'});
-    //     }
-    //     res.status(200).json(account);
-    // }catch(err){
-    //     res.status(500).json({error : err.message});
-    // }
+		if(!account){
+			res.status(500).json({message: 'Failed to find the account to be updated', location: 'accounts controller [Backend]'})
+		}
+		res.status(200)
+	}catch(err: unknown){
+		if(err instanceof Error){
+			res.status(500).json({message: 'Error while updating account details', error: err.message})
+		}else{
+			res.status(500).json({message: 'Unknown Error while updating account details'})
+		}
+	}
 }

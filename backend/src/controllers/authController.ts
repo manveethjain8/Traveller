@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from "express"
+import { Response, Request} from "express"
 import passport from "passport"
 import { AuthenticatedRequestInterface, TokenPayload_Interface } from "../configs/types_and_interfaces";
 import { generateAccessToken, generateRefreshToken } from "../utils/accountUtils";
@@ -23,7 +23,7 @@ export const callback_from_google = [passport.authenticate('google', {
             const refreshToken: string = generateRefreshToken(payload)
 
             if(!accessToken || !refreshToken){
-                res.status(500).json({message: 'Failed to generate tokens', location: 'accounts controller [Backend]'})
+                res.status(500).json({message: 'Failed to generate tokens', location: 'auth controller [Backend]'})
                 res.redirect('http://localhost:5173/')
             }
 
@@ -54,7 +54,7 @@ export const callback_from_google = [passport.authenticate('google', {
 export const refreshAccessToken = async(req: Request, res: Response): Promise<any> => {
     try{}catch(err){
         if(err instanceof Error){
-            res.status(500).json({message: 'Error refreshing tokens', error: err.message, location: 'accounts controller [Backend]'})
+            res.status(500).json({message: 'Error refreshing tokens', error: err.message, location: 'auth controller [Backend]'})
         }else{
             res.status(500).json({message: 'Unknown Error', location: 'accounts controller [Backend]'})
         }
