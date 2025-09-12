@@ -6,18 +6,22 @@ export const authorizeAccount = (req: Request, res: Response, next: NextFunction
     try{
         const token: string = req.cookies.accessToken
 
+
         if(!token){
             return res.status(401).json({message: 'Access token expired or missing'})
         }
 
         const decoded: TokenPayload_Interface = verifyAccessToken(token)
+        
 
         if(!decoded){
             return res.status(401).json({ message: 'Invalid Access token' })
         }
 
+        console.log('Access token verified for user:', decoded.mongoDbId)
+
         req.user = {
-            _id: decoded.mongoDbId,
+            mongoDbId: decoded.mongoDbId,
             googleId: decoded.googleId
         }
         next()

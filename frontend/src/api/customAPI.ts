@@ -6,29 +6,25 @@ const customAPI = axios.create({
 })
 
 customAPI.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        const original_request = error.config
+    response => response,
+    async error => {
+        const originalRequest = error.config;
 
-        if (error.response && error.response.status === 401 && !original_request._retry) {
-            original_request._retry = true
-
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
             try {
-                await customAPI.get('/auth/refresh-token', {withCredentials: true})
-                return customAPI(original_request)
-            } catch (refreshError: unknown) {
-                if(refreshError instanceof Error){
-                    console.log("Refresh token failed", refreshError.message)
-                }else{
-                    console.log("Refresh Error")
-                }
+                console.log('Access token expired. Attempting to refresh token...');
+                await customAPI.get('/auth/refresh-token');
+                return customAPI(originalRequest); // ✅ MUST return the retried request
+            } catch (refreshErr) {
+                console.error('Refresh token failed', refreshErr);
                 window.location.href = '/';
             }
         }
 
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
-)
+);
 
 
 export default customAPI

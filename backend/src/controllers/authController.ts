@@ -1,7 +1,7 @@
 import { Response, Request} from "express"
 import passport from "passport"
 import { AuthenticatedRequestInterface, TokenPayload_Interface } from "../configs/types_and_interfaces";
-import { generateAccessToken, generateRefreshToken } from "../utils/accountUtils";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/accountUtils";
 
 // Redirects the user to google
 export const redirect_to_google = await passport.authenticate('google', {
@@ -52,7 +52,36 @@ export const callback_from_google = [passport.authenticate('google', {
 ]
 
 export const refreshAccessToken = async(req: Request, res: Response): Promise<any> => {
-    try{}catch(err){
+    try{
+        const token: string = req.cookies.refreshToken
+
+        if (!token){
+            return res.status(401).json({message: 'No token provided', location: 'auth controller [Backend]'})
+        }
+
+
+        const decoded = verifyRefreshToken(token)
+
+        const payload: TokenPayload_Interface = {
+            mongoDbId: decoded.mongoDbId,
+            googleId: decoded.googleId
+        }
+        const accessToken: string = generateAccessToken(payload)
+
+        if(!accessToken){
+            return res.status(500).json({message: 'Failed to generate access token', location: 'auth controller [Backend]'})
+        }
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 1 * 60 * 1000
+        })
+
+        res.status(200).json({accessToken})
+
+    }catch(err){
         if(err instanceof Error){
             res.status(500).json({message: 'Error refreshing tokens', error: err.message, location: 'auth controller [Backend]'})
         }else{

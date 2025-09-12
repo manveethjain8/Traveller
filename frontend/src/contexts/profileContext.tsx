@@ -34,6 +34,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
     // Profile Posts Category
 
     // Edit Profile
+    const [isUpdating, setIsUpdating] = useState<boolean>(false)
     const [editProfileClicked, setEditProfileClicked] = useState<boolean>(false)
     const [userInfo, setUserInfo] = useState<UserInfo_Type>(userInfo_Template)
     const [ppPreview, setppPreview] = useState<string | null>(null)
@@ -67,12 +68,13 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 }
             })
 
-            await customAPI.put('/account/update-user-details', formData,{
-                withCredentials: true,
-                headers: {
-                    'Content-Type' : 'multipart/form-data'
-                }
-            })
+            console.log('Updating user details...');
+            try {
+                await customAPI.put('/account/update-user-account', formData, { withCredentials: true });
+                console.log('User details updated successfully');
+            } catch (err) {
+                console.error('Error updating user details:', err);
+            }
         }catch(err){
             if(err instanceof Error){
                 console.log('Error updating user details. Location: profileContext[Frontend]', err)

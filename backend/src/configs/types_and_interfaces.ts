@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose"
+
 export interface ENV_Interface {                  // Environmental Variables
     MONGO_URI: string
     PORT: number
@@ -36,7 +38,7 @@ export interface Account_Interface extends Document { // Accounts
 
 export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
     user: {
-        _id: string,
+        _id: ObjectId | string,
         googleId: string,
         displayName: string
     }
@@ -48,6 +50,6 @@ export interface Quotes_Interface { // Quotes
 }
 
 export interface TokenPayload_Interface {
-    mongoDbId: string
+    mongoDbId: ObjectId | string
     googleId: string
 }

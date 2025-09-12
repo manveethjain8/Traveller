@@ -5,7 +5,7 @@ import { useProfileContext } from "../../../contexts/profileContext"
 
 const EditProfile = () => {
 
-    const {setEditProfileClicked, handleInputChange, ppPreview} = useProfileContext()
+    const {setEditProfileClicked, handleInputChange, handleSaveChanges,  ppPreview} = useProfileContext()
 
     return (
         <div className="bg-[#242424] fixed w-screen h-screen flex justify-center items-center" >
@@ -184,6 +184,7 @@ const EditProfile = () => {
                                 className='bg-red-500 h-fit w-fit rounded-3xl hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer 
                                 2xl:p-2 
                                 3xl:text-[1.2rem]'
+                                onClick={() => handleSaveChanges()}
                             >
                                 Save Changes
                             </button>
