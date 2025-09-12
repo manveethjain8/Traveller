@@ -34,7 +34,7 @@ export interface Account_Interface extends Document { // Accounts
 }
 
 export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
-    account: {
+    user: {
         _id: string,
         googleId: string,
         displayName: string

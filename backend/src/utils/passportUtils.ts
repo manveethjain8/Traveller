@@ -18,19 +18,19 @@ passport.use(
     },
     async(accessToken, refreshToken, profile: Profile, done): Promise<any> => {
         try{
-            let account: HydratedDocument<Account_Interface> | null = await Account.findOne({googleId: profile.id})
+            let user: HydratedDocument<Account_Interface> | null = await Account.findOne({googleId: profile.id})
 
-            if(!account){
-                account = new Account ({
+            if(!user){
+                user = new Account ({
                     googleId: profile.id,
                     displayName: profile.displayName,
                     email: profile.emails?.[0].value
                 })
 
-                await account.save()
+                await user.save()
             }
 
-            done(null, account || false)
+            done(null, user || false)
         }catch(err: unknown){
             done(err as Error, undefined)
         }
@@ -39,16 +39,16 @@ passport.use(
 
 
 // Saves only MongoDB ID in session storage after successfull login
-passport.serializeUser((account, done) => {
-    done(null, (account as HydratedDocument<Account_Interface>)._id)
+passport.serializeUser((user, done) => {
+    done(null, (user as HydratedDocument<Account_Interface>)._id)
 })
 
 
 // Stores the entire account details in req.account. Will be used on protected routes
 passport.deserializeUser(async(id: string, done) => {
     try{
-        const account = await Account.findById(id)
-        done(null, account)
+        const user = await Account.findById(id)
+        done(null, user)
     }catch(err){
         done(err as Error, undefined)
     }

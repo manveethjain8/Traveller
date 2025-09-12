@@ -15,8 +15,8 @@ export const callback_from_google = [passport.authenticate('google', {
     (req: AuthenticatedRequestInterface, res: Response) => {
         try{
             const payload: TokenPayload_Interface = {
-                mongoDbId: String(req.account._id),
-                googleId: req.account.googleId
+                mongoDbId: String(req.user._id),
+                googleId: req.user.googleId
             }
 
             const accessToken: string = generateAccessToken(payload)
