@@ -35,6 +35,7 @@ export interface Account_Interface extends Document { // Accounts
     state: string
     country: string
     date_of_birth: string
+    createdAt: Date
 }
 
 export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
@@ -53,4 +54,10 @@ export interface Quotes_Interface { // Quotes
 export interface TokenPayload_Interface {
     mongoDbId: ObjectId | string
     googleId: string
+}
+
+export interface AccountInteraction_Interface extends Document {
+    followers: ObjectId | string
+    followings: ObjectId | string
+    createdAt: Date
 }

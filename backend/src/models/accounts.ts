@@ -16,7 +16,8 @@ const accountSchema = new mongoose.Schema<Account_Interface>({
     state: {type: String},
     country: {type: String},
     gender: {type: String},
-    date_of_birth: {type: String}
+    date_of_birth: {type: String},
+    createdAt: {type:Date, default: Date.now}
 })
 
 //Model the structure
