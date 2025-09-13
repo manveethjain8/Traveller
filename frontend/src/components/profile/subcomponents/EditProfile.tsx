@@ -5,7 +5,7 @@ import { useProfileContext } from "../../../contexts/profileContext"
 
 const EditProfile = () => {
 
-    const {setEditProfileClicked, handleInputChange, handleSaveChanges,  ppPreview} = useProfileContext()
+    const {setEditProfileClicked, handleInputChange, handleSaveChanges,  ppPreview, userInfo} = useProfileContext()
 
     return (
         <div className="bg-[#242424] fixed w-screen h-screen flex justify-center items-center" >
@@ -37,13 +37,22 @@ const EditProfile = () => {
                                         2xl:h-[12rem] 2xl:w-[12rem]
                                         3xl:h-[14rem] 3xl:w-[14rem]'>
                             <>
-                                {ppPreview && 
-                                    <img 
-                                        className='rounded-full object-cover
-                                                    2xl:h-[12rem] 2xl:w-[12rem]
-                                                    3xl:h-[14rem] 3xl:w-[14rem]' 
-                                        src={ppPreview}
-                                    />
+                                {ppPreview ? 
+                                    (
+                                        <img 
+                                            className='rounded-full object-cover
+                                                        2xl:h-[12rem] 2xl:w-[12rem]
+                                                        3xl:h-[14rem] 3xl:w-[14rem]' 
+                                            src={ppPreview}
+                                        />
+                                    ) : (
+                                        <img 
+                                            className='rounded-full object-cover
+                                                        2xl:h-[12rem] 2xl:w-[12rem]
+                                                        3xl:h-[14rem] 3xl:w-[14rem]' 
+                                            src={userInfo?.profilePicture as string}
+                                        />
+                                    )
                                 }
                                 <input
                                     id='fileInput'
@@ -74,7 +83,7 @@ const EditProfile = () => {
                                 className='bg-[#36454F] rounded-2xl placeholder:text-white placeholder:text-center w-full h-full focus:outline-none resize-none
                                 2xl:p-4
                                 3xl:p-5 3xl:text-[1.2rem]'
-                                placeholder='Enter your tag-line...'
+                                placeholder={userInfo.tagline ?? 'Enter your tag-line...'}
                                 onChange={(e) => handleInputChange('tagline', e.target.value)}
                             />
                         </div>
@@ -98,7 +107,7 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.firstName ?? '...'}
                                         onChange={(e) => handleInputChange('firstName',e.target.value)}
                                     />
                                 </div>
@@ -107,7 +116,7 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.lastName ?? '...'}
                                         onChange={(e) => handleInputChange('lastName',e.target.value)}
                                     />
                                 </div>
@@ -116,22 +125,22 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.userName ?? '...'}
                                         onChange={(e) => handleInputChange('userName',e.target.value)}
                                     />
                                 </div>
                                 <div className='h-fit w-full'>
                                     <p className='pl-3'>Gender</p>
                                     <select
-                                        defaultValue='gender'
+                                        defaultValue={userInfo.gender ?? '...'}
                                         className='bg-[#36454F] rounded-xl placeholder:text-white text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
                                                     onChange={(e) => handleInputChange('gender', e.target.value)}
                                         
                                     >
                                         <option value="gender" disabled>...</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
                                     </select>
                                 </div>
                             </div>
@@ -143,7 +152,7 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.district ?? '...'}
                                         onChange={(e) => handleInputChange('district', e.target.value)}
                                     />
                                 </div>
@@ -152,7 +161,7 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.state ?? '...'}
                                         onChange={(e) => handleInputChange('state', e.target.value)}
                                     />
                                 </div>
@@ -161,7 +170,7 @@ const EditProfile = () => {
                                     <input
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
-                                        placeholder='...'
+                                        placeholder={userInfo.country ?? '...'}
                                         onChange={(e) => handleInputChange('country', e.target.value)}
                                     />
                                 </div>
@@ -171,6 +180,7 @@ const EditProfile = () => {
                                         type='date'
                                         className='bg-[#36454F] rounded-xl placeholder:text-white placeholder:text-center w-full focus:outline-none indent-[1rem]
                                                     2xl:p-1'
+                                        defaultValue={userInfo.date_of_birth ?? ''}
                                         onChange={(e) => handleInputChange('date_of_birth', e.target.value)}
                                     />
                                 </div>

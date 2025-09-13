@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
-import type { UserInfo_Type } from "../configs/types_and_interfaces";
+import type {UserInfo_Type } from "../configs/types_and_interfaces";
 import { userInfo_Template } from "../configs/templates";
 import customAPI from "../api/customAPI";
 
@@ -18,6 +18,7 @@ interface ProfileContext_Interface {
     setppPreview: Dispatch<SetStateAction<string | null>>
     handleInputChange: <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]) => void
     handleSaveChanges: () => void
+    getAccountDetails: () => void
     // Edit Profile
 }
 
@@ -53,6 +54,19 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
         )
     }
 
+    const getAccountDetails = async(): Promise<void> => {
+        try{
+            const result = await customAPI.get<UserInfo_Type>('/account/fetch-account-details', {withCredentials: true})
+            setUserInfo(result.data)
+        }catch(err){
+            if (err instanceof Error){
+                console.log('Error retrieving account details. Location: profileContext[Frontend]', err)
+            }else{
+                console.log('Unknown error occured while retrieving account details. Location: profileContext[Frontend]', err)
+            }
+        }
+    }
+
     const handleSaveChanges = async(): Promise<void> => {
         try{
             const formData = new FormData();
@@ -67,13 +81,8 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 }
             })
 
-            console.log('Updating user details...');
-            try {
-                await customAPI.put('/account/update-user-account', formData, { withCredentials: true });
-                console.log('User details updated successfully');
-            } catch (err) {
-                console.error('Error updating user details:', err);
-            }
+            await customAPI.put('/account/update-user-account', formData, { withCredentials: true })
+            getAccountDetails()
         }catch(err){
             if(err instanceof Error){
                 console.log('Error updating user details. Location: profileContext[Frontend]', err)
@@ -92,7 +101,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 editProfileClicked, setEditProfileClicked,
                 userInfo, setUserInfo,
                 ppPreview, setppPreview,
-                handleInputChange, handleSaveChanges
+                handleInputChange, handleSaveChanges, getAccountDetails
             }
         }>
             {children}

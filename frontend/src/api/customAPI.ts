@@ -16,8 +16,8 @@ customAPI.interceptors.response.use(
                 console.log('Access token expired. Attempting to refresh token...');
                 await customAPI.get('/auth/refresh-token');
                 return customAPI(originalRequest); // ✅ MUST return the retried request
-            } catch (refreshErr) {
-                console.error('Refresh token failed', refreshErr);
+            } catch (err) {
+                console.error('Refresh token failed', err);
                 window.location.href = '/';
             }
         }

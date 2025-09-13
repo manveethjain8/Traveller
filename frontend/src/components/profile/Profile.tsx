@@ -5,11 +5,16 @@ import AccountPosts from "./subcomponents/AccountPosts"
 import { useProfileContext } from "../../contexts/profileContext"
 import EditProfile from "./subcomponents/EditProfile"
 import { useNavigationContext } from "../../contexts/navigationContext"
+import { useEffect } from "react"
 
 const Profile = () => {
 
-    const {editProfileClicked} = useProfileContext()
+    const {editProfileClicked, getAccountDetails} = useProfileContext()
     const {sideBarCategory} = useNavigationContext()
+
+    useEffect(() => {
+        getAccountDetails()
+    }, [])
 
     return (
         <div className="w-screen h-screen">

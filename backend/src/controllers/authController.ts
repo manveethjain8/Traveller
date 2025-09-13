@@ -56,7 +56,7 @@ export const refreshAccessToken = async(req: Request, res: Response): Promise<an
         const token: string = req.cookies.refreshToken
 
         if (!token){
-            return res.status(401).json({message: 'No token provided', location: 'auth controller [Backend]'})
+            return res.status(402).json({message: 'No token provided', location: 'auth controller [Backend]'})
         }
 
 

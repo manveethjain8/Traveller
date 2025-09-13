@@ -3,7 +3,7 @@ import { useProfileContext } from '../../../contexts/profileContext'
 
 const AccountInfo = () => {
 
-    const {setEditProfileClicked} = useProfileContext()
+    const {setEditProfileClicked, userInfo} = useProfileContext()
 
     return (
         <div className="flex flex-1 w-full justify-center items-center
@@ -18,7 +18,7 @@ const AccountInfo = () => {
                         className='rounded-full
                                     2xl:w-[9rem] 2xl:h-[9rem]
                                     3xl:w-[11rem] 3xl:h-[11rem]' 
-                        src={pp} 
+                        src={userInfo.profilePicture as string ?? pp} 
                         alt="Profile Picture" />
                 </div>
                 {/* End of Profile Picture Box*/}
@@ -27,19 +27,19 @@ const AccountInfo = () => {
                 <div className='flex flex-1 flex-col justify-center 2xl:gap-y-1'>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
-                        <strong className='3xl:text-[1.1rem]'>Manveeth</strong>
+                        <strong className='3xl:text-[1.1rem]'>{userInfo.firstName ?? "first name"}</strong>
                         <p className='h-fit w-fit 2xl:mt-[-1.4rem] 2xl:text-[2rem] 3xl:mt-[-1.3rem]'>.</p>
-                        <strong className='3xl:text-[1.1rem]'>Jain</strong>
+                        <strong className='3xl:text-[1.1rem]'>{userInfo.lastName ?? "last name"}</strong>
                     </div>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
-                        <p className='3xl:text-[1.1rem]'>Mysuru</p>
+                        <p className='3xl:text-[1.1rem]'>{userInfo.district ?? "district"}</p>
                         <p className='h-fit w-fit 2xl:mt-[-1.4rem] 2xl:text-[2rem] 3xl:mt-[-1.3rem]'>.</p>
-                        <p className='3xl:text-[1.1rem]'>Karnataka</p>
+                        <p className='3xl:text-[1.1rem]'>{userInfo.state ?? "state"}</p>
                     </div>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
-                        <p className='3xl:text-[1.1rem]'>India</p>
+                        <p className='3xl:text-[1.1rem]'>{userInfo.country ?? "country"}</p>
                     </div>
                     <button
                         onClick={() => setEditProfileClicked(prev => !prev)}
@@ -56,7 +56,7 @@ const AccountInfo = () => {
             <div className="flex flex-2 justify-center items-center h-full box-border 2xl:p-2">
                 <strong className='font-[Avenir] 2xl:text-[1rem] 3xl:text-[1.1rem]'>
                     <span className='text-red-500 2xl:text-[1rem]'>" </span>
-                        Travel is not just about where you go, but how deeply the journey changes you. Every step holds a story, every mile a memory.
+                        {userInfo.tagline ?? "tagline"}
                     <span className='text-red-500 2xl:text-[1.2rem]'> "</span>
                 </strong>
             </div>

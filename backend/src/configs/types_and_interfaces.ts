@@ -20,6 +20,7 @@ export interface Error_Interface { // Error
 }
 
 export interface Account_Interface extends Document { // Accounts
+    _id: ObjectId | string
     googleId: string
     displayName: string
     email: string

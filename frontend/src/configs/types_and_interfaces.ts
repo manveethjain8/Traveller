@@ -3,8 +3,9 @@ export type Quotes_Type = { // Quotes
     quote: string
 }
 
-export interface UserInfo_Type { // User Information
-    profilePicture: File | undefined
+export type UserInfo_Type = { // User Information
+    _id: string
+    profilePicture: File | string | undefined
     firstName: string
     lastName: string
     userName: string
@@ -15,3 +16,4 @@ export interface UserInfo_Type { // User Information
     country: string
     date_of_birth: string
 }
+
