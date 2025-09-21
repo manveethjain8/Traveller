@@ -16,17 +16,18 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 		}
 
 		if(fileData){
-			console.log('Uploading new profile picture to Cloudinary...');
 			const uploadResult = await uploadToCloudinary(fileData.buffer)
 	
-
 			updatedFields.profilePicture = uploadResult.secure_url
 			updatedFields.profilePictureId = uploadResult.public_id
 		}
 
+
+		const filteredUpdatedFields = Object.fromEntries(Object.entries(updatedFields).filter(([_, v]) => v !== ''))
+
 		const account = await Account.findByIdAndUpdate(
 			(req.user as any).mongoDbId,
-			updatedFields,
+			filteredUpdatedFields,
 			{new : true}
 		)
 

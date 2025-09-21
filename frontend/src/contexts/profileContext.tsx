@@ -81,8 +81,9 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 }
             })
 
-            await customAPI.put('/account/update-user-account', formData, { withCredentials: true })
+            await customAPI.patch('/account/update-user-account', formData, { withCredentials: true })
             getAccountDetails()
+            setEditProfileClicked(false)
         }catch(err){
             if(err instanceof Error){
                 console.log('Error updating user details. Location: profileContext[Frontend]', err)

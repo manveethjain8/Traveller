@@ -6,7 +6,7 @@ import { getAccountInfo, updateUserInfo } from '../controllers/accountController
 const router = express.Router()
 
 // Routes to access the account
-router.put('/update-user-account', authorizeAccount, upload.single('profilePicture'), updateUserInfo)
+router.patch('/update-user-account', authorizeAccount, upload.single('profilePicture'), updateUserInfo)
 router.get('/fetch-account-details', authorizeAccount, getAccountInfo)
 
 
