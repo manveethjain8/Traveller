@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
+import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
 import Account from "../models/accounts";
 import { Account_Interface, Error_Interface} from "../configs/types_and_interfaces";
 import { findAccount } from "../utils/accountUtils";
@@ -16,6 +16,17 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 		}
 
 		if(fileData){
+			const mongoDbId: ObjectId | string = (req.user as any).mongoDbId
+			const account: Account_Interface| null | Error_Interface= await findAccount(mongoDbId)
+
+			if (account && "profilePictureId" in account) {
+				try {
+					await deleteFromCloudinary(account.profilePictureId);
+				} catch(err) {
+					console.error("Failed to delete old Cloudinary image:", err);
+				}
+			}
+
 			const uploadResult = await uploadToCloudinary(fileData.buffer)
 	
 			updatedFields.profilePicture = uploadResult.secure_url
