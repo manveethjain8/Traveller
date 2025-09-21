@@ -12,6 +12,8 @@ interface ProfileContext_Interface {
     // Edit Profile
     editProfileClicked: boolean
     setEditProfileClicked: Dispatch<SetStateAction<boolean>>
+    updating: boolean
+    setUpdating: Dispatch<SetStateAction<boolean>>
     userInfo: UserInfo_Type
     setUserInfo: Dispatch<SetStateAction<UserInfo_Type>>
     ppPreview: string | null
@@ -19,6 +21,7 @@ interface ProfileContext_Interface {
     handleInputChange: <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]) => void
     handleSaveChanges: () => void
     getAccountDetails: () => void
+    handleTagToggle: (tag: string) => void
     // Edit Profile
 }
 
@@ -36,6 +39,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
 
     // Edit Profile
     const [editProfileClicked, setEditProfileClicked] = useState<boolean>(false)
+    const [updating, setUpdating] = useState<boolean>(false)
     const [userInfo, setUserInfo] = useState<UserInfo_Type>(userInfo_Template)
     const [ppPreview, setppPreview] = useState<string | null>(null)
 
@@ -54,6 +58,17 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
         )
     }
 
+    const handleTagToggle = (tag: string) => {
+        setUserInfo(prev => {
+            const currentTags = prev.tags || []
+            const newTags = currentTags.includes(tag)
+            ? currentTags.filter(t => t !== tag)
+            : [...currentTags, tag]
+            return { ...prev, tags: newTags }
+        })
+        console.log(userInfo)
+    }
+
     const getAccountDetails = async(): Promise<void> => {
         try{
             const result = await customAPI.get<UserInfo_Type>('/account/fetch-account-details', {withCredentials: true})
@@ -69,6 +84,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
 
     const handleSaveChanges = async(): Promise<void> => {
         try{
+            setUpdating(true)
             const formData = new FormData();
 
             (Object.keys(userInfo) as (keyof UserInfo_Type)[]).forEach((key) => {
@@ -78,11 +94,14 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                     formData.append(key, value)
                 }else if (typeof value === 'string'){
                     formData.append(key, value)
+                }else if (Array.isArray(value)) {
+                    value.forEach(item => formData.append(key, item))
                 }
             })
 
             await customAPI.patch('/account/update-user-account', formData, { withCredentials: true })
             getAccountDetails()
+            setUpdating(false)
             setEditProfileClicked(false)
         }catch(err){
             if(err instanceof Error){
@@ -100,9 +119,10 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 postsCategory, setPostCategory,
 
                 editProfileClicked, setEditProfileClicked,
+                updating, setUpdating,
                 userInfo, setUserInfo,
                 ppPreview, setppPreview,
-                handleInputChange, handleSaveChanges, getAccountDetails
+                handleInputChange, handleSaveChanges, getAccountDetails, handleTagToggle
             }
         }>
             {children}

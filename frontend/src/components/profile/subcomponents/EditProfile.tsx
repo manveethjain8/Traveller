@@ -1,17 +1,28 @@
 import backArrow from '../../../assets/icons/arrow_back_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
 import editIcon from '../../../assets/icons/edit_30dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.png'
 
+import ProfileTags from './ProfileTags'
+
 import { useProfileContext } from "../../../contexts/profileContext"
 
 const EditProfile = () => {
 
-    const {setEditProfileClicked, handleInputChange, handleSaveChanges,  ppPreview, userInfo} = useProfileContext()
+    const {setEditProfileClicked, handleInputChange, handleSaveChanges,  ppPreview, userInfo, updating} = useProfileContext()
 
     return (
         <div className="bg-[#242424] fixed w-screen h-screen flex justify-center items-center" >
             <div className='flex flex-col w-[80%] h-[80%] box-border p-5'>
+                {/* Start of Updating Screen */}
+                    {updating && 
+                        <div className='fixed z-100 top-0 left-0 w-screen h-screen bg-black/80 flex justify-center items-center'>
+                            <div className='w-[40%] h-[40%] rounded-3xl flex justify-center items-center font-["Oddly-Calm"] text-[3rem]'>
+                                <p>Updating...</p>
+                            </div>
+                        </div>
+                    }
+                {/* End of Updating Screen */}
                 {/* Start of top bar */}
-                <div className='relative w-full flex justify-center
+                <div className='w-full flex justify-center
                                 2xl:h-[2.5rem] 3xl:h-[3rem]'
                 >
                     <button 
@@ -78,9 +89,9 @@ const EditProfile = () => {
                             </>
 
                         </div>
-                        <div className='mt-[1rem] w-full flex-1 box-border'>
+                        <div className='mt-[1rem] w-full flex-1 box-border gap-y-3'>
                             <textarea
-                                className='bg-[#36454F] rounded-2xl placeholder:text-white placeholder:text-center w-full h-full focus:outline-none resize-none
+                                className='bg-[#36454F] rounded-2xl placeholder:text-white placeholder:text-center w-full h-full max-h-[18rem] focus:outline-none resize-none
                                 2xl:p-4
                                 3xl:p-5 3xl:text-[1.2rem]'
                                 placeholder={userInfo.tagline ?? 'Enter your tag-line...'}
@@ -98,7 +109,7 @@ const EditProfile = () => {
                     <div className='flex flex-col flex-3'>
 
                         {/* Start of Information Part */}
-                        <div className='flex flex-3'>
+                        <div className='relative flex flex-3'>
                             <div className='flex flex-col flex-1 p-2
                                         2xl:py-[3rem] 2xl:gap-y-[2rem]
                                         3xl:py-[4rem] 3xl:gap-y-[3rem] 3xl:text-[1.2rem]'>
@@ -188,6 +199,12 @@ const EditProfile = () => {
                         </div>
                         {/* End of Information Part */}
 
+                        {/* Start of Tags Part */}
+                        <div className='h-fit w-full mb-[2rem]'>
+                            {<ProfileTags/>}
+                        </div>
+                        {/* End of Tags Part */}
+                        
                         {/* Start of Save Changes Button */}
                         <div className='flex flex-1 justify-center items-center'>
                             <button 

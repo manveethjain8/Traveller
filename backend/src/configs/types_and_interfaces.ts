@@ -35,6 +35,7 @@ export interface Account_Interface extends Document { // Accounts
     state: string
     country: string
     date_of_birth: string
+    tags: string[]
     createdAt: Date
 }
 

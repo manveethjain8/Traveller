@@ -17,6 +17,7 @@ const accountSchema = new mongoose.Schema<Account_Interface>({
     country: {type: String},
     gender: {type: String},
     date_of_birth: {type: String},
+    tags: {type: []},
     createdAt: {type:Date, default: Date.now}
 })
 

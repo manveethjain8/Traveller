@@ -28,7 +28,7 @@ export const verifyRefreshToken = (payload: string): TokenPayload_Interface => {
 
 export const findAccount = async(mongoDbId: ObjectId | string): Promise<Account_Interface | Error_Interface | null> => {
     try{
-        const response = await Account.findOne<Account_Interface | null>({_id: mongoDbId}, 'firstName lastName profilePicture userName tagline gender district state country date_of_birth profilePictureId')
+        const response = await Account.findOne<Account_Interface | null>({_id: mongoDbId}, 'firstName lastName profilePicture userName tagline gender district state country date_of_birth profilePictureId tags')
         return response
     }catch(err: unknown){
         if(err instanceof Error){

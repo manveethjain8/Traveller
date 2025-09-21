@@ -36,6 +36,7 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 
 		const filteredUpdatedFields = Object.fromEntries(Object.entries(updatedFields).filter(([_, v]) => v !== ''))
 
+
 		const account = await Account.findByIdAndUpdate(
 			(req.user as any).mongoDbId,
 			filteredUpdatedFields,

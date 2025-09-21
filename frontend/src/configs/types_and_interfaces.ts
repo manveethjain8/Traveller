@@ -15,5 +15,6 @@ export type UserInfo_Type = { // User Information
     state: string
     country: string
     date_of_birth: string
+    tags: string[]
 }
 

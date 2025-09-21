@@ -9,7 +9,7 @@ const AccountInfo = () => {
         <div className="flex flex-1 w-full justify-center items-center
                         2xl:max-h-[10rem] 2xl:gap-x-10
                         3xl:max-h-[12rem]">
-            <div className="flex flex-1 h-full box-border
+            <div className="flex flex-[3rem] h-full box-border
                             2xl:p-2 2xl:gap-x-2>
                             2xl:p-3 2xl:gap-x-3">
                 {/* Start of Profile Picture Box*/}
@@ -27,19 +27,13 @@ const AccountInfo = () => {
                 <div className='flex flex-1 flex-col justify-center 2xl:gap-y-1'>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
-                        <strong className='3xl:text-[1.1rem]'>{userInfo.firstName ?? "first name"}</strong>
-                        <p className='h-fit w-fit 2xl:mt-[-1.4rem] 2xl:text-[2rem] 3xl:mt-[-1.3rem]'>.</p>
-                        <strong className='3xl:text-[1.1rem]'>{userInfo.lastName ?? "last name"}</strong>
+                        <strong className='3xl:text-[1.1rem]'>{userInfo.userName?? "first name"}</strong>
                     </div>
                     <div className='w-full flex flex-row
                                     2xl:gap-x-2'>
-                        <p className='3xl:text-[1.1rem]'>{userInfo.district ?? "district"}</p>
+                        <p className='3xl:text-[1rem]'>{userInfo.firstName ?? "first name"}</p>
                         <p className='h-fit w-fit 2xl:mt-[-1.4rem] 2xl:text-[2rem] 3xl:mt-[-1.3rem]'>.</p>
-                        <p className='3xl:text-[1.1rem]'>{userInfo.state ?? "state"}</p>
-                    </div>
-                    <div className='w-full flex flex-row
-                                    2xl:gap-x-2'>
-                        <p className='3xl:text-[1.1rem]'>{userInfo.country ?? "country"}</p>
+                        <p className='3xl:text-[1rem]'>{userInfo.lastName ?? "last name"}</p>
                     </div>
                     <button
                         onClick={() => setEditProfileClicked(prev => !prev)}
@@ -53,12 +47,23 @@ const AccountInfo = () => {
             </div>
 
             {/* Start of User's tag line */}
-            <div className="flex flex-2 justify-center items-center h-full box-border 2xl:p-2">
-                <strong className='font-[Avenir] 2xl:text-[1rem] 3xl:text-[1.1rem]'>
+            <div className="flex flex-col flex-2 justify-center items-center h-full box-border 2xl:p-2">
+                <strong className='mb-5 font-[Avenir] 2xl:text-[1rem] 3xl:text-[1.1rem]'>
                     <span className='text-red-500 2xl:text-[1rem]'>" </span>
                         {userInfo.tagline ?? "tagline"}
                     <span className='text-red-500 2xl:text-[1.2rem]'> "</span>
                 </strong>
+                <div className='w-full flex flex-wrap justify-center font-[Avenir] 2xl:text-[1rem] 2xl:gap-x-2 gap-y-2'>
+                    {userInfo.tags.map((tag, idx) => (
+                        <div
+                            key={idx}
+                        >
+                            <strong className='text-red-500'>"</strong>
+                            {`${tag.charAt(0).toUpperCase() + tag.slice(1)}`}
+                            <strong className='text-red-500'>"</strong>
+                        </div>
+                    ))}
+                </div>
             </div>
             {/* Start of User's tag line */}
 
