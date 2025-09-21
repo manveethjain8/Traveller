@@ -66,7 +66,6 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
             : [...currentTags, tag]
             return { ...prev, tags: newTags }
         })
-        console.log(userInfo)
     }
 
     const getAccountDetails = async(): Promise<void> => {
