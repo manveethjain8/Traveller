@@ -4,10 +4,10 @@ const ProfileTags = () => {
 
     const {handleTagToggle, userInfo} = useProfileContext()
 
-    const selectionTags = ["Homebody", "Casual Walker", "Hiker", "Explorer", "Nature-lover", "Traveler", 
-                            "Adventurer", "Thrill-seeker", "Extreme Sports Enthusiast", "Wanderer", 
-                            "Free Spirit", "Outdoorsy", "Backpacker", "Campfire Lover", "Mountain Climber",
-                            "Beach Lover", "Cyclist", "Runner", "Motorcyclist", "Survivalist"]
+    const selectionTags = ["homebody", "casual walker", "hiker", "explorer", "nature-lover", "traveler",
+                            "adventurer", "thrill-seeker", "extreme sports enthusiast", "wanderer",
+                            "free spirit", "outdoorsy", "backpacker", "campfire lover", "mountain climber",
+                            "beach lover", "cyclist", "runner", "motorcyclist", "survivalist"]
 
     return (
         <div className="h-fit">
