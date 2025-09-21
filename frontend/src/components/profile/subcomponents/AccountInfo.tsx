@@ -15,7 +15,7 @@ const AccountInfo = () => {
                 {/* Start of Profile Picture Box*/}
                 <div className="flex flex-row">
                     <img
-                        className='rounded-full
+                        className='rounded-full object-center object-cover
                                     2xl:w-[9rem] 2xl:h-[9rem]
                                     3xl:w-[11rem] 3xl:h-[11rem]' 
                         src={userInfo.profilePicture as string ?? pp} 
