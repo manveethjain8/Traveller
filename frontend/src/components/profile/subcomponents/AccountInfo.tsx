@@ -54,7 +54,7 @@ const AccountInfo = () => {
                     <span className='text-red-500 2xl:text-[1.2rem]'> "</span>
                 </strong>
                 <div className='w-full flex flex-wrap justify-center font-[Avenir] 2xl:text-[1rem] 2xl:gap-x-2 gap-y-2'>
-                    {userInfo.tags.map((tag, idx) => (
+                    {userInfo?.tags?.map((tag, idx) => (
                         <div
                             key={idx}
                         >

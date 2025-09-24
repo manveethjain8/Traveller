@@ -8,7 +8,7 @@ const Sidebar = () => {
 
     const navigate = useNavigate()
 
-    const {sideBarCategory, setSideBarCategory} = useNavigationContext()
+    const {sideBarCategory, setSideBarCategory, setNavigationCategorytoLocalStorage} = useNavigationContext()
 
     return (
         <div className="fixed
@@ -21,6 +21,7 @@ const Sidebar = () => {
                     onClick={() => {
                         if(sideBarCategory !== 'home'){
                             setSideBarCategory('home')
+                            setNavigationCategorytoLocalStorage('home')
                             navigate('/home')
                         }
                     }}
@@ -40,6 +41,7 @@ const Sidebar = () => {
                     onClick={() => {
                         if(sideBarCategory !== 'explore'){
                             setSideBarCategory('explore')
+                            setNavigationCategorytoLocalStorage('explore')
                             navigate('/explore')
                         }
                     }} 
@@ -62,6 +64,7 @@ const Sidebar = () => {
                     onClick={() => {
                         if(sideBarCategory !== 'profile'){
                             setSideBarCategory('profile')
+                            setNavigationCategorytoLocalStorage('profile')
                             navigate('/profile')
                         }
                     }} 
