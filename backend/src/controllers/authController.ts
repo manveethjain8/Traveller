@@ -31,13 +31,13 @@ export const callback_from_google = [passport.authenticate('google', {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 1 * 60 * 1000
+                maxAge: 60 * 60 * 1000
             })
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 30 * 60 * 1000
+                maxAge: 24 * 60 * 60 * 1000
             })
 
             res.redirect('http://localhost:5173/home')
@@ -76,7 +76,7 @@ export const refreshAccessToken = async(req: Request, res: Response): Promise<an
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 1 * 60 * 1000
+            maxAge: 60 * 60 * 1000
         })
 
         res.status(200).json({accessToken})

@@ -7,13 +7,13 @@ import Account from '../models/accounts'
 
 // Generates JWT Access Token
 export const generateAccessToken = (payload: TokenPayload_Interface): string => {
-    return jwt.sign(payload, configurations.ACCESS_TOKEN_SECRET, {expiresIn: '1min'})
+    return jwt.sign(payload, configurations.ACCESS_TOKEN_SECRET, {expiresIn: '1hr'})
 }
 
 
 // Generates JWT Refresh Token
 export const generateRefreshToken = (payload: TokenPayload_Interface): string => {
-    return jwt.sign(payload, configurations.REFRESH_TOKEN_SECRET, {expiresIn: '30min'})
+    return jwt.sign(payload, configurations.REFRESH_TOKEN_SECRET, {expiresIn: '24h'})
 }
 
 // Verifies JWT Access Token

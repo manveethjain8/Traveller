@@ -85,8 +85,6 @@ export const getLimitedAccountInfo = async(req: Request, res: Response): Promise
 			res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})
 		}
 
-		console.log(account)
-
 
 		res.status(200).json(account)
 	}catch(err: unknown){
