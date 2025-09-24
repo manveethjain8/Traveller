@@ -19,16 +19,19 @@ export interface Error_Interface { // Error
     location: string 
 }
 
-export interface Account_Interface extends Document { // Accounts
+export interface LimitedAccountInfo_Interface extends Document {
     _id: ObjectId | string
+    userName: string
+    profilePicture: string
+}
+
+export interface Account_Interface extends LimitedAccountInfo_Interface { // Accounts
     googleId: string
     displayName: string
     email: string
-    profilePicture: string,
     profilePictureId: string,
     firstName: string
     lastName: string
-    userName: string
     tagline: string
     gender: string
     district: string
@@ -38,6 +41,7 @@ export interface Account_Interface extends Document { // Accounts
     tags: string[]
     createdAt: Date
 }
+
 
 export interface AuthenticatedRequestInterface extends Request{ // Google Authenticated Account Structure
     user: {

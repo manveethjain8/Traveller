@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
 import Account from "../models/accounts";
-import { Account_Interface, Error_Interface} from "../configs/types_and_interfaces";
-import { findAccount } from "../utils/accountUtils";
+import { Account_Interface, Error_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
+import { findAccount, returnLimitedAccountInfo } from "../utils/accountUtils";
 import { ObjectId } from "mongoose";
 
 
@@ -62,8 +62,30 @@ export const getAccountInfo = async(req: Request, res: Response): Promise<any> =
 		const account: Account_Interface| Error_Interface | null = await findAccount(mongoDbId)
 
 		if(!account || 'error' in account){
-			res.status(500).json({message: 'Failed to find the acciybt', location: 'accounts controller [Backend]'})
+			res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})
 		}
+
+
+		res.status(200).json(account)
+	}catch(err: unknown){
+		if(err instanceof Error){
+			res.status(500).json({message: 'Error while retriving account details', error: err.message})
+		}else{
+			res.status(500).json({message: 'Unknown Error while retriving account details'})
+		}
+	}
+}
+
+export const getLimitedAccountInfo = async(req: Request, res: Response): Promise<any> => {
+	try{
+		const mongoDbId: ObjectId | string = (req.user as any).mongoDbId
+		const account: LimitedAccountInfo_Interface| Error_Interface | null = await returnLimitedAccountInfo(mongoDbId)
+
+		if(!account || 'error' in account){
+			res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})
+		}
+
+		console.log(account)
 
 
 		res.status(200).json(account)

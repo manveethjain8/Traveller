@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { Account_Interface, Error_Interface, TokenPayload_Interface } from '../configs/types_and_interfaces'
+import { Account_Interface, Error_Interface, LimitedAccountInfo_Interface, TokenPayload_Interface } from '../configs/types_and_interfaces'
 import { configurations } from '../configs/connections'
 import { ObjectId } from 'mongoose'
 import Account from '../models/accounts'
@@ -29,6 +29,19 @@ export const verifyRefreshToken = (payload: string): TokenPayload_Interface => {
 export const findAccount = async(mongoDbId: ObjectId | string): Promise<Account_Interface | Error_Interface | null> => {
     try{
         const response = await Account.findOne<Account_Interface | null>({_id: mongoDbId}, 'firstName lastName profilePicture userName tagline gender district state country date_of_birth profilePictureId tags')
+        return response
+    }catch(err: unknown){
+        if(err instanceof Error){
+            return { message: 'Error retriving account', error: err.message, location: 'Accounts Utils'}
+        }else{
+            return { message: 'Unknown error has occured while retriving the account', error: err, location: 'Accounts Utils'}
+        }
+    }
+}
+
+export const returnLimitedAccountInfo = async(mongoDbId: ObjectId | string): Promise<LimitedAccountInfo_Interface | Error_Interface | null> => {
+    try{
+        const response = await Account.findOne<LimitedAccountInfo_Interface | null>({_id: mongoDbId}, 'profilePicture userName')
         return response
     }catch(err: unknown){
         if(err instanceof Error){
