@@ -24,7 +24,7 @@ const Home = () => {
                 {/* End of Sitrep display */}
                 {/* Start of Posts display */}
                 {sideBarCategory === 'home' ? (
-                    <div className="flex-1 flex">
+                    <div className="flex-1 flex overflow-y-auto">
                         <Posts/>
                     </div>
                 ) : ('')}
