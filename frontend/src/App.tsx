@@ -4,6 +4,8 @@ import Authenticate from "./components/authenticate/Authenticate"
 import Profile from "./components/profile/Profile"
 import Home from "./components/home/Home"
 import Explore from "./components/explore/Explore"
+import AddPosts from "./components/addPosts/AddPosts"
+import AddSitreps from "./components/addSitreps/AddSitreps"
 
 function App() {
 	return (
@@ -13,6 +15,8 @@ function App() {
 				<Route path="/home" element={<Home/>}/>
 				<Route path="/explore" element={<Explore/>}/>
 				<Route path="/profile" element={<Profile/>}/>
+				<Route path="/addPost" element={<AddPosts/>}/>
+				<Route path="/addSitrep" element={<AddSitreps/>}/>
 			</Routes>
 		</main>
 	)
