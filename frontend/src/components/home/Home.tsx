@@ -1,13 +1,9 @@
-import { useNavigationContext } from "../../contexts/navigationContext"
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 import Posts from "./subcomponents/Posts"
 import Sitrep from "./subcomponents/Sitrep"
 
 const Home = () => {
-
-    const {sideBarCategory} = useNavigationContext()
-
     return (
         <div className="w-screen h-screen">
             <TopBar/>
@@ -18,16 +14,12 @@ const Home = () => {
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
                 {/* Start of Sitrep display */}
-                {sideBarCategory === 'home' ? (
                     <Sitrep/>
-                ) : ('')}
                 {/* End of Sitrep display */}
                 {/* Start of Posts display */}
-                {sideBarCategory === 'home' ? (
-                    <div className="flex-1 flex overflow-y-auto">
-                        <Posts/>
-                    </div>
-                ) : ('')}
+                <div className="flex-1 flex overflow-y-auto">
+                    <Posts/>
+                </div>
                 {/* End of Posts display */}
             </div>
         </div>

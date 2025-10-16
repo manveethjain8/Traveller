@@ -14,8 +14,8 @@ interface ProfileContext_Interface {
     setEditProfileClicked: Dispatch<SetStateAction<boolean>>
     updating: boolean
     setUpdating: Dispatch<SetStateAction<boolean>>
-    userInfo: UserInfo_Type
-    setUserInfo: Dispatch<SetStateAction<UserInfo_Type>>
+    userInfo: Partial<UserInfo_Type>
+    setUserInfo: Dispatch<SetStateAction<Partial<UserInfo_Type>>>
     ppPreview: string | null
     setppPreview: Dispatch<SetStateAction<string | null>>
     handleInputChange: <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]) => void
@@ -40,7 +40,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
     // Edit Profile
     const [editProfileClicked, setEditProfileClicked] = useState<boolean>(false)
     const [updating, setUpdating] = useState<boolean>(false)
-    const [userInfo, setUserInfo] = useState<UserInfo_Type>(userInfo_Template)
+    const [userInfo, setUserInfo] = useState<Partial<UserInfo_Type>>(userInfo_Template)
     const [ppPreview, setppPreview] = useState<string | null>(null)
 
     const handleInputChange = <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]): void => {

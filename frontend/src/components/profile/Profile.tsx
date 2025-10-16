@@ -4,13 +4,12 @@ import AccountInfo from "./subcomponents/AccountInfo"
 import AccountPosts from "./subcomponents/AccountPosts"
 import { useProfileContext } from "../../contexts/profileContext"
 import EditProfile from "./subcomponents/EditProfile"
-import { useNavigationContext } from "../../contexts/navigationContext"
+
 import { useEffect } from "react"
 
 const Profile = () => {
 
     const {editProfileClicked, getAccountDetails} = useProfileContext()
-    const {sideBarCategory} = useNavigationContext()
 
     useEffect(() => {
         getAccountDetails()
@@ -26,12 +25,8 @@ const Profile = () => {
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
                 {/* Start of Profile Display */}
-                {sideBarCategory === 'profile' ? (
-                    <>
-                        <AccountInfo/>
-                        <AccountPosts/>
-                    </>
-                ) : ''}
+                <AccountInfo/>
+                <AccountPosts/>
                 {/* End of Profile Display */}
 
             </div>

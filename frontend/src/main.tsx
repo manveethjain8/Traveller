@@ -7,15 +7,18 @@ import App from './App.tsx'
 import { ProfileContextProvider } from './contexts/profileContext.tsx'
 import { NavigationContextProvider } from './contexts/navigationContext.tsx'
 import { StartupContextProvider } from './contexts/startupContext.tsx'
+import { AddPostContextProvider } from './contexts/addPostContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
 	<BrowserRouter>
 		<StrictMode>
 			<StartupContextProvider>
 				<NavigationContextProvider>
-					<ProfileContextProvider>
-						<App />
-					</ProfileContextProvider>
+					<AddPostContextProvider>
+						<ProfileContextProvider>
+							<App />
+						</ProfileContextProvider>
+					</AddPostContextProvider>
 				</NavigationContextProvider>
 			</StartupContextProvider>
 		</StrictMode>

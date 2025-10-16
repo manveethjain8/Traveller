@@ -24,3 +24,23 @@ export type UserInfo_Type = { // User Information
     tags: string[]
 }
 
+export type AddPost_Type = {
+    thumbnail: File | string | undefined
+    expeditionName: string
+    date: string,
+    introduction: string,
+    days: number | undefined
+    totalDistance: number | undefined
+    expenses: number | undefined
+    amenities: string
+    season: string
+    environment: string
+    transport: string
+    landscape: string
+    difficulty: string
+    location: string
+    footfall: string
+    healthRisks: string
+    description: string
+}
+
