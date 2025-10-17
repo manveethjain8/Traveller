@@ -52,7 +52,7 @@ const TopLayer = () => {
                         <img 
                             src={addIcon} 
                             alt='add icon'
-                            className='w-[1.5rem] h-[1.5rem] object-center object-fit'
+                            className='w-[1.5rem] h-[1.5rem] object-center object-fit cursor-pointer'
                         />
                     </label>
                 </div>
