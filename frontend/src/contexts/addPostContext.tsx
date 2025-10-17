@@ -8,6 +8,7 @@ interface AddPostContext_Interface {
     tnPreview: string | null
     setTnPreview: Dispatch<SetStateAction<string | null>>
     handleNewPostInputChange: <K extends keyof AddPost_Type>(field: K, value: AddPost_Type[K]) => void
+    handleThumbnailImageRemoval: () => void
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -35,12 +36,20 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         }
     } 
 
+    const handleThumbnailImageRemoval = (): void => {
+        if(tnPreview){
+            URL.revokeObjectURL(tnPreview)
+        }
+        handleNewPostInputChange('thumbnail', undefined)
+        setTnPreview(null)
+    }
+
     return(
         <AddPostContext.Provider value={
             {
                 newPost, setNewPost,
                 tnPreview, setTnPreview,
-                handleNewPostInputChange
+                handleNewPostInputChange, handleThumbnailImageRemoval
             }
         }>
             {children}
@@ -48,7 +57,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     )
 }
 
-export const useProfileContext = () => {
+export const useAddPostContext = () => {
     const context = useContext(AddPostContext)
     if (!context) {
         throw new Error("AddPostContext must be used within a ProfileContextProvider")
