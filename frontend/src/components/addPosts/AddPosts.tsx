@@ -1,7 +1,8 @@
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 import SecondLayer from "./subcomponents/SecondLayer"
-import TopLayer from "./subcomponents/TopLayer"
+import ThirdLayer from "./subcomponents/ThirdLayer"
+import FirstLayer from "./subcomponents/FirstLayer"
 
 
 const AddPosts = () => {
@@ -15,13 +16,15 @@ const AddPosts = () => {
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
                 <div className="flex flex-row">
-                    <TopLayer/>
+                    <FirstLayer/>
                 </div>
                 <div className="flex">
                     <SecondLayer/>
                 </div>
                     
-                <div className="bg-green-500"></div>
+                <div className="flex">
+                    <ThirdLayer/>
+                </div>
             </div>
         </div>
     )

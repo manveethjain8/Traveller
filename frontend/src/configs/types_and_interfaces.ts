@@ -24,6 +24,12 @@ export type UserInfo_Type = { // User Information
     tags: string[]
 }
 
+export type IndividualLeg_type = {
+    id: string,
+    name: string,
+    legData: {}
+}
+
 export type AddPost_Type = {
     thumbnail: File | string | undefined
     expeditionName: string

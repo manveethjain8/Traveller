@@ -1,4 +1,4 @@
-import type { AddPost_Type, UserInfo_Type } from "./types_and_interfaces";
+import type { AddPost_Type, IndividualLeg_type, UserInfo_Type } from "./types_and_interfaces";
 
 export const userInfo_Template: Partial<UserInfo_Type> = {
     profilePicture: undefined,
@@ -31,4 +31,8 @@ export const addPost_Template: AddPost_Type = {
     footfall: '',
     healthRisks: '',
     description: ''
+}
+
+export const individualLeg_Template: Partial<IndividualLeg_type> = {
+    legData: {}
 }

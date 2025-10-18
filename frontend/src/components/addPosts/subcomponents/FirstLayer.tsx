@@ -3,9 +3,9 @@ import addIcon from '../../../assets/icons/add_50dp_E3E3E3_FILL0_wght700_GRAD0_o
 import deleteIcon from '../../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 
 import { useAddPostContext } from '../../../contexts/addPostContext'
-import Baits from './topLayerSubcomponents/Baits'
+import Baits from './firstLayerSubcomponents/Baits'
 
-const TopLayer = () => {
+const FirstLayer = () => {
 
     const {tnPreview, handleNewPostInputChange, handleThumbnailImageRemoval} = useAddPostContext()
 
@@ -87,4 +87,4 @@ const TopLayer = () => {
     )
 }
 
-export default TopLayer
+export default FirstLayer
