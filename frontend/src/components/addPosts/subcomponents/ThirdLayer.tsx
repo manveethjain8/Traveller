@@ -5,7 +5,7 @@ import LegFirstLayer from './thirdLayerSubcomponents/LegFirstLayer'
 import LegSecondLayer from './thirdLayerSubcomponents/LegSecondLayer'
 
 const ThirdLayer = () => {
-    const {legs, setActiveLegId, activeLegId, handleSetLegs, handleDeleteLegs} = useAddPostContext()
+    const {legs, activeLeg ,setActiveLegId, activeLegId, handleSetLegs, handleDeleteLegs, handleLegInputChange} = useAddPostContext()
     return (
         <div className="w-full h-fit flex flex-col mt-10 p-4">
             <div className="w-full h-fit flex flex-row border-b-2 border-red-500 items-center">
@@ -13,7 +13,7 @@ const ThirdLayer = () => {
                     < div key={l.id} className='flex flex-row items-center'>
                         <div 
                             onClick={() => setActiveLegId(l.id)}
-                            className="rounded-xl py-[0.5rem] pl-[1.5rem] pr-[0.5rem] flex flex-row items-center "
+                            className="rounded-xl py-[0.5rem] pl-[1.5rem] pr-[0.5rem] flex flex-row items-center cursor-pointer"
                             style={l.id === activeLegId ? {backgroundColor: 'green'} : {backgroundColor: 'orange'}}
                         >
                             <p className='mr-[0.5rem]'>{l.name}</p>
@@ -37,7 +37,10 @@ const ThirdLayer = () => {
                 </div>
             </div>
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
-                <LegFirstLayer/>
+                <LegFirstLayer 
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
+                />
             </div>
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
                 <LegSecondLayer/>

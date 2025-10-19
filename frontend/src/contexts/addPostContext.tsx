@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
-import { addPost_Template, individualLeg_Template } from "../configs/templates"
+import { addPost_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
 
 interface AddPostContext_Interface {
     newPost: AddPost_Type
@@ -12,11 +12,12 @@ interface AddPostContext_Interface {
     setLegs: Dispatch<SetStateAction<IndividualLeg_type[]>>
     activeLegId: string
     setActiveLegId: Dispatch<SetStateAction<string>>
-    activeLeg: IndividualLeg_type | []
-    setActiveLeg: Dispatch<SetStateAction<IndividualLeg_type | []>>
+    activeLeg: IndividualLeg_type | null
+    setActiveLeg: Dispatch<SetStateAction<IndividualLeg_type | null>>
 
     handleNewPostInputChange: <K extends keyof AddPost_Type>(field: K, value: AddPost_Type[K]) => void
     handleThumbnailImageRemoval: () => void
+    handleLegInputChange: (legId: string, field: keyof IndividualLeg_type['legData'], value: any, index?: number) => void
 
     handleSetLegs: () => void
     handleDeleteLegs: (id: string) => void
@@ -32,9 +33,9 @@ interface AddPostProviderProps {
 export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => {
     const [newPost, setNewPost] = useState<AddPost_Type>(addPost_Template)
     const [tnPreview, setTnPreview] = useState<string | null>(null)
-    const [legs, setLegs] = useState<IndividualLeg_type[]>([{id: '1', name: 'Leg 1', legData: {...individualLeg_Template}}])
+    const [legs, setLegs] = useState<IndividualLeg_type[]>([{id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}}])
     const [activeLegId, setActiveLegId] = useState<string>('1')
-    const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | []>([])
+    const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
 
     const handleNewPostInputChange = <K extends keyof AddPost_Type>(field: K, value: AddPost_Type[K]):void => {
         if(field === 'thumbnail' && value instanceof File){
@@ -62,7 +63,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     const handleSetLegs = (): void => {
         const lastLeg = legs.at(-1) as IndividualLeg_type
         const newLegId = String(Number(lastLeg.id) + 1)
-        const newLeg = {id: newLegId, name: `Leg ${newLegId}`, legData: {...individualLeg_Template}}
+        const newLeg = {id: newLegId, name: `Leg ${newLegId}`, legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}}
         setActiveLegId(newLegId)
         setLegs(prevLegs => [...prevLegs, newLeg])
     }
@@ -100,6 +101,61 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         setActiveLeg(ActiveLeg)
     }
 
+    const handleLegInputChange = (
+        legId: string,
+        field: keyof IndividualLeg_type['legData'],
+        value: any,
+        index?: number
+    ): void => {
+        setLegs(prevLegs =>
+            prevLegs.map(l => {
+                if (l.id !== legId) return l;
+
+                const updatedLegData = { ...l.legData }
+                const updatedPreview = {...l.legPreview}
+
+                const stringFields: (keyof IndividualLeg_type['legData'])[] = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location"];
+                const numberFields: (keyof IndividualLeg_type['legData'])[] = ["legDistance"];
+
+                
+                    
+                if (field === "startPhoto" || field === "endPhoto") {
+                    const file = value
+                    updatedLegData[field] = file
+                    updatedPreview[field] = file ? URL.createObjectURL(file) : undefined;
+                    console.log(updatedPreview.startPhoto)
+                } else if (field === 'photoDump') {
+                    const files = Array.from(value || []) as File[]
+                    updatedLegData.photoDump = files
+                    updatedPreview.photoDump = files.map(file => URL.createObjectURL(file))
+                } else if (field === 'highlights' || field === 'challenges') {
+                    const points = [...(updatedLegData[field] || [])]
+                    if (typeof index === "number") {
+                        points[index] = value
+                    }
+                    else{ 
+                        points.push(value)
+                    }
+                    updatedLegData[field] = points
+                }else if(stringFields.includes(field)){
+                    (updatedLegData[field] as string) = value
+                } else if(numberFields.includes(field)) {
+                    (updatedLegData[field] as number) = value
+                }
+
+            
+                const updatedLeg: IndividualLeg_type = {
+                    ...l,
+                    legData: updatedLegData,
+                    legPreview: updatedPreview,
+                } as IndividualLeg_type;
+
+                return updatedLeg;
+            })
+        )
+    }
+
+
     return(
         <AddPostContext.Provider value={
             {
@@ -110,7 +166,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 activeLeg, setActiveLeg,
                 handleNewPostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
-                handleActiveLeg
+                handleActiveLeg, handleLegInputChange
             }
         }>
             {children}

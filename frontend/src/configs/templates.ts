@@ -30,9 +30,27 @@ export const addPost_Template: AddPost_Type = {
     location: '',
     footfall: '',
     healthRisks: '',
-    description: ''
+    description: '',
+    legs: []
 }
 
-export const individualLeg_Template: Partial<IndividualLeg_type> = {
-    legData: {}
+export const individualLeg_Template: IndividualLeg_type['legData'] = {
+    startPhoto: undefined,
+    legIntroduction: '',
+    startDate: '',
+    legDistance: undefined,
+    environment: '',
+    landscape: '',
+    weather: '',
+    location: '',
+    highlights: [''],
+    challenges: [''],
+    endPhoto: undefined,
+    photoDump: undefined
+}
+
+export const legPreview_Template: IndividualLeg_type['legPreview'] = {
+    startPhoto: undefined,
+    endPhoto: undefined,
+    photoDump: undefined
 }

@@ -27,7 +27,25 @@ export type UserInfo_Type = { // User Information
 export type IndividualLeg_type = {
     id: string,
     name: string,
-    legData: {}
+    legData: {
+        startPhoto: File | string | undefined,
+        legIntroduction: string,
+        startDate: string,
+        legDistance: number | undefined,
+        environment: string,
+        landscape: string,
+        weather: string,
+        location: string,
+        highlights: string[],
+        challenges: string[],
+        endPhoto: File | string | undefined,
+        photoDump: File[] | string[] | undefined 
+    },
+    legPreview: {
+        startPhoto: File | string | undefined,
+        endPhoto: File | string | undefined,
+        photoDump: File[] | string[] | undefined
+    }
 }
 
 export type AddPost_Type = {
@@ -48,5 +66,6 @@ export type AddPost_Type = {
     footfall: string
     healthRisks: string
     description: string
+    legs: IndividualLeg_type[]
 }
 
