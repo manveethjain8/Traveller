@@ -1,12 +1,10 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
-import { addPost_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
+import { addPost_Template, addPostPreview_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
 
 interface AddPostContext_Interface {
     newPost: AddPost_Type
     setNewPost: Dispatch<SetStateAction<AddPost_Type>>
-    tnPreview: string | null
-    setTnPreview: Dispatch<SetStateAction<string | null>>
 
     legs: IndividualLeg_type[]
     setLegs: Dispatch<SetStateAction<IndividualLeg_type[]>>
@@ -15,13 +13,14 @@ interface AddPostContext_Interface {
     activeLeg: IndividualLeg_type | null
     setActiveLeg: Dispatch<SetStateAction<IndividualLeg_type | null>>
 
-    handleNewPostInputChange: <K extends keyof AddPost_Type>(field: K, value: AddPost_Type[K]) => void
+    handleNewPostInputChange: <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]) => void
     handleThumbnailImageRemoval: () => void
     handleLegInputChange: (legId: string, field: keyof IndividualLeg_type['legData'], value: any, index?: number) => void
 
     handleSetLegs: () => void
     handleDeleteLegs: (id: string) => void
     handleActiveLeg: () => void 
+    handleLegPhotoDelete: (legId: string, index: number) => void 
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -31,33 +30,37 @@ interface AddPostProviderProps {
 }
 
 export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => {
-    const [newPost, setNewPost] = useState<AddPost_Type>(addPost_Template)
-    const [tnPreview, setTnPreview] = useState<string | null>(null)
+    const [newPost, setNewPost] = useState<AddPost_Type>({postData: {...addPost_Template}, postPreview: {...addPostPreview_Template}})
     const [legs, setLegs] = useState<IndividualLeg_type[]>([{id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}}])
     const [activeLegId, setActiveLegId] = useState<string>('1')
     const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
 
-    const handleNewPostInputChange = <K extends keyof AddPost_Type>(field: K, value: AddPost_Type[K]):void => {
-        if(field === 'thumbnail' && value instanceof File){
-            setTnPreview(URL.createObjectURL(value))
-            setNewPost(prev => ({
-                ...prev,
-                [field]: value
-            }))
-        }else{
-            setNewPost(prev => ({
-                ...prev,
-                [field]: value
-            }))
-        }
+    const handleNewPostInputChange = <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]):void => {
+        setNewPost(prev => {
+            const updatedPostData = {...prev.postData}
+            const updatedPostPreview = {...prev.postPreview}
+
+            if (field === 'thumbnail' && value instanceof File){
+                updatedPostData[field] = value
+                updatedPostPreview['thumbnail'] = URL.createObjectURL(value)
+            }else{
+                updatedPostData[field] = value
+            }
+            
+            const updatedPost: AddPost_Type = {
+                postData: updatedPostData,
+                postPreview: updatedPostPreview
+            }
+
+            return updatedPost
+        })
     } 
 
     const handleThumbnailImageRemoval = (): void => {
-        if(tnPreview){
-            URL.revokeObjectURL(tnPreview)
+        if(newPost.postPreview.thumbnail){
+            URL.revokeObjectURL(newPost.postPreview.thumbnail)
         }
         handleNewPostInputChange('thumbnail', undefined)
-        setTnPreview(null)
     }
 
     const handleSetLegs = (): void => {
@@ -148,8 +151,39 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     ...l,
                     legData: updatedLegData,
                     legPreview: updatedPreview,
-                } as IndividualLeg_type;
+                }
+                return updatedLeg;
+            })
+        )
+    }
 
+    const handleLegPhotoDelete = (
+        legId: string,
+        index: number
+    ):void => {
+        setLegs(prevLegs => 
+            prevLegs.map(l => {
+                if(l.id !== legId) return l
+
+                const updatedLegData = { ...l.legData }
+                const updatedPreview = {...l.legPreview}
+
+                if(index === 0 && l.legPreview.startPhoto){
+                    updatedPreview.startPhoto = undefined
+                    updatedLegData.startPhoto = undefined
+                }else if (index === 1 && l.legPreview.endPhoto){
+                    updatedPreview.endPhoto = undefined
+                    updatedLegData.endPhoto = undefined
+                }else if (index === 2 && l.legPreview.photoDump){
+                    updatedPreview.photoDump = undefined
+                    updatedLegData.photoDump = undefined
+                }
+
+                const updatedLeg: IndividualLeg_type = {
+                    ...l,
+                    legData: updatedLegData,
+                    legPreview: updatedPreview,
+                }
                 return updatedLeg;
             })
         )
@@ -160,13 +194,13 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         <AddPostContext.Provider value={
             {
                 newPost, setNewPost,
-                tnPreview, setTnPreview,
                 legs, setLegs,
                 activeLegId, setActiveLegId,
                 activeLeg, setActiveLeg,
                 handleNewPostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
-                handleActiveLeg, handleLegInputChange
+                handleActiveLeg, handleLegInputChange,
+                handleLegPhotoDelete
             }
         }>
             {children}

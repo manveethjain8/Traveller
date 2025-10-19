@@ -7,12 +7,12 @@ import Baits from './firstLayerSubcomponents/Baits'
 
 const FirstLayer = () => {
 
-    const {tnPreview, handleNewPostInputChange, handleThumbnailImageRemoval} = useAddPostContext()
+    const {newPost, handleNewPostInputChange, handleThumbnailImageRemoval} = useAddPostContext()
 
     return (
         <div className='flex h-[36rem] w-full flex-row'>
             <div className="relative flex-1 w-full h-full min-w-[22.6rem] min-h-[35.8rem] border border-red-500 border-2">
-                {tnPreview && 
+                {newPost.postPreview.thumbnail && 
                     <div className='z-100 absolute top-1 right-1 bg-red-500 w-[2.5rem] h-[2.5rem] rounded-full flex justify-center items-center hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'>
                         <img 
                             src={deleteIcon} 
@@ -22,9 +22,9 @@ const FirstLayer = () => {
                         />
                     </div>
                 }
-                {tnPreview ? (
+                {newPost.postPreview.thumbnail ? (
                     <img 
-                        src={tnPreview} 
+                        src={newPost.postPreview.thumbnail} 
                         alt='Post Image'
                         className='w-full h-full object-center object-cover '
                     />
@@ -65,22 +65,31 @@ const FirstLayer = () => {
                                 type="text"
                                 placeholder='Name of Expedition'
                                 className='bg-[#36454F] absolute left-[40%] text-center font-bold h-full placeholder:font-bold focus:outline-none rounded-3xl box-border'
+                                value={newPost.postData.expeditionName}
+                                onChange={(e) => handleNewPostInputChange('expeditionName', e.target.value)}
                             />
 
                             <input 
                                 type="date"
                                 className='bg-[#36454F] absolute right-[5%] text-center text-gray-400 h-full font-bold focus:outline-none rounded-3xl box-border px-2'
+                                value={newPost.postData.date}
+                                onChange={(e) => handleNewPostInputChange('date', e.target.value)}
                             />
                     </div>
                     <div className='flex-5 w-full'>
                         <textarea 
                             placeholder='Add an introduction'
                             className='bg-[#36454F] w-full h-full resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3'
+                            value={newPost.postData.introduction}
+                            onChange={(e) => handleNewPostInputChange('introduction', e.target.value)}
                         />
                     </div>
                 </div>
                 <div className='flex-1 grid grid-cols-4 gap-y-[1rem] gap-x-[3rem] justify-center place-items-end box-border pt-4 pr-5'>
-                    <Baits/>
+                    <Baits 
+                        newPost={newPost}
+                        handleNewPostInputChange={handleNewPostInputChange}
+                    />
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@ import addIcon from '../../../../assets/icons/add_50dp_E3E3E3_FILL0_wght700_GRAD
 import deleteIcon from '../../../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import DI from '../../../../assets/icons/image_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
 import type { IndividualLeg_type } from '../../../../configs/types_and_interfaces';
+import { useAddPostContext } from '../../../../contexts/addPostContext';
 
 type ThirdLayerProps = {
     activeLeg: IndividualLeg_type | null
@@ -15,6 +16,8 @@ type ThirdLayerProps = {
 
 const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
 
+    const {handleLegPhotoDelete} = useAddPostContext()
+
     return (
         <div className="flex flex-col gap-x-2">
             {activeLeg && 
@@ -26,6 +29,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                 src={deleteIcon} 
                                 alt='add icon'
                                 className='w-[1.5rem] h-[1.5rem] object-center object-fit'
+                                onClick={() => handleLegPhotoDelete(activeLeg.id, 0)}
                             />
                         </div>
                         }

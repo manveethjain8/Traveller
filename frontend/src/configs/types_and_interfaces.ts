@@ -42,30 +42,35 @@ export type IndividualLeg_type = {
         photoDump: File[] | string[] | undefined 
     },
     legPreview: {
-        startPhoto: File | string | undefined,
-        endPhoto: File | string | undefined,
-        photoDump: File[] | string[] | undefined
+        startPhoto:  string | undefined,
+        endPhoto:  string | undefined,
+        photoDump:  string[] | undefined
     }
 }
 
 export type AddPost_Type = {
-    thumbnail: File | string | undefined
-    expeditionName: string
-    date: string,
-    introduction: string,
-    days: number | undefined
-    totalDistance: number | undefined
-    expenses: number | undefined
-    amenities: string
-    season: string
-    environment: string
-    transport: string
-    landscape: string
-    difficulty: string
-    location: string
-    footfall: string
-    healthRisks: string
-    description: string
-    legs: IndividualLeg_type[]
+    postData: {
+        thumbnail: File | string | undefined
+        expeditionName: string
+        date: string,
+        introduction: string,
+        days: number | undefined
+        totalDistance: number | undefined
+        expenses: number | undefined
+        amenities: string
+        season: string
+        environment: string
+        transport: string
+        landscape: string
+        difficulty: string
+        location: string
+        footfall: string
+        healthRisks: string
+        description: string
+        legs: IndividualLeg_type[]
+    },
+    postPreview: {
+        thumbnail: string | undefined
+    }
 }
 

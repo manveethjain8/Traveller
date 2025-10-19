@@ -13,7 +13,7 @@ export const userInfo_Template: Partial<UserInfo_Type> = {
     date_of_birth: ''
 }
 
-export const addPost_Template: AddPost_Type = {
+export const addPost_Template: AddPost_Type['postData'] = {
     thumbnail: undefined,
     expeditionName: '',
     date: '',
@@ -32,6 +32,10 @@ export const addPost_Template: AddPost_Type = {
     healthRisks: '',
     description: '',
     legs: []
+}
+
+export const addPostPreview_Template: AddPost_Type['postPreview'] = {
+    thumbnail: undefined
 }
 
 export const individualLeg_Template: IndividualLeg_type['legData'] = {
