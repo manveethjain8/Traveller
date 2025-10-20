@@ -1,8 +1,11 @@
 import addIcon from '../../../assets/icons/add_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import deleteIcon from '../../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz20.png'
 import { useAddPostContext } from '../../../contexts/addPostContext'
+import LegFifthLayer from './thirdLayerSubcomponents/LegFifthLayer'
 import LegFirstLayer from './thirdLayerSubcomponents/LegFirstLayer'
+import LegFourthLayer from './thirdLayerSubcomponents/LegFourthLayer'
 import LegSecondLayer from './thirdLayerSubcomponents/LegSecondLayer'
+import LegSixthLayer from './thirdLayerSubcomponents/LegSixthLayer'
 import LegThirdLayer from './thirdLayerSubcomponents/LegThirdLayer'
 
 const ThirdLayer = () => {
@@ -51,7 +54,26 @@ const ThirdLayer = () => {
             </div>
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
                 <LegThirdLayer
-                    
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
+                />
+            </div>
+            <div className='flex flex-col w-full h-fit mt-[2rem]'>
+                <LegFourthLayer
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
+                />
+            </div>
+            <div className='flex flex-col w-full h-fit mt-[2rem]'>
+                <LegFifthLayer
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
+                />
+            </div>
+            <div className='flex flex-col w-full h-fit mt-[2rem]'>
+                <LegSixthLayer
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
                 />
             </div>
         </div>

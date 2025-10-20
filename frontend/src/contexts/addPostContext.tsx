@@ -20,7 +20,7 @@ interface AddPostContext_Interface {
     handleSetLegs: () => void
     handleDeleteLegs: (id: string) => void
     handleActiveLeg: () => void 
-    handleLegPhotoDelete: (legId: string, index: number) => void 
+    handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
     handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
 }
 
@@ -118,10 +118,14 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 const updatedLegData = { ...l.legData }
                 const updatedPreview = {...l.legPreview}
 
-                const stringFields: (keyof IndividualLeg_type['legData'])[] = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location"];
-                const numberFields: (keyof IndividualLeg_type['legData'])[] = ["legDistance"];
+                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions"] as const
+                type StringFields = typeof stringFields[number]
 
-                
+                const numberFields = ["legDistance", "expenses"]
+                type NumberFields = typeof numberFields[number]
+
+                const nestedFields = ["restaurants", "fuelAndServices", "stays", "network"] as const
+                type NestedFields = typeof nestedFields[number]
                     
                 if (field === "startPhoto" || field === "endPhoto") {
                     const file = value
@@ -129,9 +133,11 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     updatedPreview[field] = file ? URL.createObjectURL(file) : undefined;
                     console.log(updatedPreview.startPhoto)
                 } else if (field === 'photoDump') {
+                    const previousDump = updatedLegData.photoDump || []
                     const files = Array.from(value || []) as File[]
-                    updatedLegData.photoDump = files
-                    updatedPreview.photoDump = files.map(file => URL.createObjectURL(file))
+                    const finalFiles = [...previousDump , ...files];
+                    updatedPreview.photoDump = finalFiles.map(file =>  typeof file !== 'string' ? URL.createObjectURL(file) : file)
+                    updatedLegData.photoDump = finalFiles as (string[] | File [])
                 } else if (field === 'highlights' || field === 'challenges') {
                     if (Array.isArray(value)) {
                         updatedLegData[field] = value;
@@ -144,10 +150,17 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                         }
                         updatedLegData[field] = points;
                     }
-                }else if(stringFields.includes(field)){
-                    (updatedLegData[field] as string) = value
-                } else if(numberFields.includes(field)) {
-                    (updatedLegData[field] as number) = value
+                }else if (nestedFields.includes(field as NestedFields)) {
+                    const f = field as NestedFields
+                    updatedLegData[f] = {
+                        ...updatedLegData[f],
+                        availability: index === 0 ? value : updatedLegData[f].availability,
+                        recommendation: index !== 0 ? value : updatedLegData[f].recommendation
+                    }
+                }else if(stringFields.includes(field as StringFields)){
+                    (updatedLegData[field] as StringFields) = value
+                } else if(numberFields.includes(field as NumberFields)) {
+                    (updatedLegData[field] as NumberFields) = value
                 }
 
             
@@ -163,7 +176,8 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
 
     const handleLegPhotoDelete = (
         legId: string,
-        index: number
+        type: number,
+        index?: number
     ):void => {
         setLegs(prevLegs => 
             prevLegs.map(l => {
@@ -172,15 +186,15 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 const updatedLegData = { ...l.legData }
                 const updatedPreview = {...l.legPreview}
 
-                if(index === 0 && l.legPreview.startPhoto){
+                if(type === 0 && l.legPreview.startPhoto){
                     updatedPreview.startPhoto = undefined
                     updatedLegData.startPhoto = undefined
-                }else if (index === 1 && l.legPreview.endPhoto){
+                }else if (type === 1 && l.legPreview.endPhoto){
                     updatedPreview.endPhoto = undefined
                     updatedLegData.endPhoto = undefined
-                }else if (index === 2 && l.legPreview.photoDump){
-                    updatedPreview.photoDump = undefined
-                    updatedLegData.photoDump = undefined
+                }else if (type === 2 && l.legPreview.photoDump){
+                    updatedPreview.photoDump = updatedPreview.photoDump?.filter((_, idx) => idx !== index)
+                    updatedLegData.photoDump = (updatedLegData.photoDump?.filter((_, idx) => idx !== index)) as (string[] | File[])
                 }
 
                 const updatedLeg: IndividualLeg_type = {
