@@ -91,7 +91,6 @@ export type AddPost_Type = {
         footfall: string | undefined
         healthRisks: string | undefined
         description: string | undefined
-        legs: IndividualLeg_type[]
     },
     postPreview: {
         thumbnail: string | undefined

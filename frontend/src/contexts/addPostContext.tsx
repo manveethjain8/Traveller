@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
 import { addPost_Template, addPostPreview_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
+import customAPI from "../api/customAPI"
 
 interface AddPostContext_Interface {
     newPost: AddPost_Type
@@ -22,6 +23,8 @@ interface AddPostContext_Interface {
     handleActiveLeg: () => void 
     handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
     handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
+
+    handlePost: () => Promise<void>
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -225,6 +228,62 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
+    const handlePost = async(): Promise<void> => {
+        const postData  = new FormData()
+
+        Object.entries(newPost.postData).forEach(([key, value]) => {
+            if(value === undefined || value === null){
+                postData.append(key, String(value))
+            }else if(value instanceof File){
+                postData.append(key, value)
+            }else{
+                postData.append(key, String(value))
+            }
+        })
+
+        const legsWithoutFiles = legs.map(l =>{
+            const {startPhoto, endPhoto, photoDump, ...rest} = l.legData
+            return rest
+        })
+
+        postData.append('legsWithoutFiles', JSON.stringify(legsWithoutFiles))
+
+        legs.forEach((l, idx) => {
+            const {startPhoto, endPhoto, photoDump} = l.legData
+
+            if(startPhoto){
+                postData.append(`legStartPhoto_${idx}`, startPhoto)
+            }
+
+            if(endPhoto){
+                postData.append(`legEndPhoto_${idx}`, endPhoto)
+            }
+
+            if(photoDump){
+                const photoDumpArray = [...(photoDump ?? [])];
+                if(Array.isArray(photoDumpArray)){
+                    photoDumpArray.forEach(file => {
+                        postData.append(`photoDump_${idx}`, file)
+                    })
+                }
+            }
+        })
+
+        try{
+            await customAPI.post('/post/create-post', postData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+        }catch(err){
+            if (err instanceof Error){
+                console.log('Error while creating the post. Location: addPostContext[Frontend]', err)
+            }else{
+                console.log('Unknown error occured while creating a post. Location: addPostContext[Frontend]', err)
+            }
+        }
+    }
 
     return(
         <AddPostContext.Provider value={
@@ -236,7 +295,8 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 handleNewPostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
                 handleActiveLeg, handleLegInputChange,
-                handleLegPhotoDelete, handleDeleteLegPoints
+                handleLegPhotoDelete, handleDeleteLegPoints,
+                handlePost
             }
         }>
             {children}
