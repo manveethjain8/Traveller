@@ -12,7 +12,7 @@ type ThirdLayerProps = {
         value: any,
         index?: number
     ) => void;
-};
+}
 
 const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
 

@@ -13,7 +13,7 @@ const FirstLayer = () => {
         <div className='flex h-[36rem] w-full flex-row'>
             <div className="relative flex-1 w-full h-full min-w-[22.6rem] min-h-[35.8rem] border border-red-500 border-2">
                 {newPost.postPreview.thumbnail && 
-                    <div className='z-100 absolute top-1 right-1 bg-red-500 w-[2.5rem] h-[2.5rem] rounded-full flex justify-center items-center hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'>
+                    <div className=' absolute top-1 right-1 bg-red-500 w-[2.5rem] h-[2.5rem] rounded-full flex justify-center items-center hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'>
                         <img 
                             src={deleteIcon} 
                             alt='add icon'

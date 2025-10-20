@@ -21,6 +21,7 @@ interface AddPostContext_Interface {
     handleDeleteLegs: (id: string) => void
     handleActiveLeg: () => void 
     handleLegPhotoDelete: (legId: string, index: number) => void 
+    handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -132,14 +133,17 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     updatedLegData.photoDump = files
                     updatedPreview.photoDump = files.map(file => URL.createObjectURL(file))
                 } else if (field === 'highlights' || field === 'challenges') {
-                    const points = [...(updatedLegData[field] || [])]
-                    if (typeof index === "number") {
+                    if (Array.isArray(value)) {
+                        updatedLegData[field] = value;
+                    } else {
+                        const points: string[] = [...(l.legData[field]|| [])];
+                        if (typeof index === "number") {
                         points[index] = value
-                    }
-                    else{ 
+                        } else {
                         points.push(value)
+                        }
+                        updatedLegData[field] = points;
                     }
-                    updatedLegData[field] = points
                 }else if(stringFields.includes(field)){
                     (updatedLegData[field] as string) = value
                 } else if(numberFields.includes(field)) {
@@ -189,6 +193,24 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         )
     }
 
+    const handleDeleteLegPoints = (field: 'highlights' | 'challenges', idx: number): void => {
+        let updated: string[] = []
+        if(field === 'highlights'){
+            updated = [...(activeLeg?.legData.highlights ?? [])]
+
+        }else{
+            updated = [...(activeLeg?.legData.challenges ?? [])]
+        }
+
+        updated.splice(idx, 1)
+
+        if (updated.length === 0) {
+            updated.push('');
+        }
+
+        handleLegInputChange(activeLeg?.id as string, field, updated)
+    }
+
 
     return(
         <AddPostContext.Provider value={
@@ -200,7 +222,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 handleNewPostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
                 handleActiveLeg, handleLegInputChange,
-                handleLegPhotoDelete
+                handleLegPhotoDelete, handleDeleteLegPoints
             }
         }>
             {children}

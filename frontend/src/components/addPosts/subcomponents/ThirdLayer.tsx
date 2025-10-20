@@ -3,6 +3,7 @@ import deleteIcon from '../../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GR
 import { useAddPostContext } from '../../../contexts/addPostContext'
 import LegFirstLayer from './thirdLayerSubcomponents/LegFirstLayer'
 import LegSecondLayer from './thirdLayerSubcomponents/LegSecondLayer'
+import LegThirdLayer from './thirdLayerSubcomponents/LegThirdLayer'
 
 const ThirdLayer = () => {
     const {legs, activeLeg ,setActiveLegId, activeLegId, handleSetLegs, handleDeleteLegs, handleLegInputChange} = useAddPostContext()
@@ -43,7 +44,15 @@ const ThirdLayer = () => {
                 />
             </div>
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
-                <LegSecondLayer/>
+                <LegSecondLayer
+                    activeLeg={activeLeg}
+                    handleLegInputChange={handleLegInputChange}
+                />
+            </div>
+            <div className='flex flex-col w-full h-fit mt-[2rem]'>
+                <LegThirdLayer
+                    
+                />
             </div>
         </div>
     )
