@@ -24,7 +24,7 @@ interface AddPostContext_Interface {
     handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
     handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
 
-    handlePost: (domain: string) => Promise<void>
+    handlePost: (domain: 'public' | 'private') => Promise<void>
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
