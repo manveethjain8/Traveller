@@ -24,7 +24,7 @@ interface AddPostContext_Interface {
     handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
     handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
 
-    handlePost: () => Promise<void>
+    handlePost: (domain: string) => Promise<void>
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -228,7 +228,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
-    const handlePost = async(): Promise<void> => {
+    const handlePost = async(domain: string): Promise<void> => {
         const postData  = new FormData()
 
         Object.entries(newPost.postData).forEach(([key, value]) => {
@@ -268,6 +268,14 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 }
             }
         })
+
+        if(domain === 'public'){
+            postData.append('domain', 'public')
+        }else{
+            postData.append('domain', 'private')
+        }
+
+
 
         try{
             await customAPI.post('/post/create-post', postData, {

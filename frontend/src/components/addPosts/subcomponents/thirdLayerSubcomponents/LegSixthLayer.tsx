@@ -1,6 +1,7 @@
 import PhotoDumpIcon from '../../../../assets/icons/photo_library_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.png'
 import addIcon from '../../../../assets/icons/add_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import deleteIcon from '../../../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
+import uploadIcon from '../../../../assets/icons/upload_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz48.png'
 
 import type { IndividualLeg_type } from "../../../../configs/types_and_interfaces";
 import { useAddPostContext } from '../../../../contexts/addPostContext';
@@ -17,10 +18,10 @@ type ThirdLayerProps = {
 
 const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
 
-    const {handleLegPhotoDelete} = useAddPostContext()
+    const {handleLegPhotoDelete, handlePost} = useAddPostContext()
 
     return (
-        <div className="mt-[2rem] w-full min-h-[10rem] flex flex-col">
+        <div className=" w-full min-h-[10rem] flex flex-col gap-y-[2rem]">
             <div className='flex flex-row h-[4rem] items-center justify-center border-b-2 border-red-500 '>
                 <strong className='text-center mr-[2rem]'>Photo Dump</strong>
                 <div 
@@ -80,6 +81,27 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             />
                         </div>
                     )}
+            </div>
+            <div className='w-full min-h-[5rem] flex flex-row justify-center items-center gap-x-[3rem] border-t-2 border-red-500'>
+                    <button className='flex flex-row h-fit w-fit p-2 rounded-full gap-x-1 items-center bg-red-500 hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'>
+                        <strong>Private</strong>
+                        <img 
+                            src={uploadIcon} 
+                            alt='upload icon' 
+                            className='w-[2rem] h-[2rem]'
+                            onClick={() => handlePost('private')}
+                        />
+                    </button>
+
+                    <button className='flex flex-row h-fit w-fit p-2 rounded-full gap-x-1 items-center bg-red-500 hover:bg-red-700 active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'>
+                        <strong>Public</strong>
+                        <img 
+                            src={uploadIcon} 
+                            alt='upload icon' 
+                            className='w-[2rem] h-[2rem]'
+                            onClick={() => handlePost('public')}
+                        />
+                    </button>
             </div>
         </div>
     )
