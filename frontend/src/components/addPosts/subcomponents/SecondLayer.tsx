@@ -4,7 +4,7 @@ import { useAddPostContext } from "../../../contexts/addPostContext"
 
 const SecondLayer = () => {
 
-    const {newPost, handleNewPostInputChange} = useAddPostContext()
+    const {post, handlePostInputChange} = useAddPostContext()
 
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -27,8 +27,8 @@ const SecondLayer = () => {
                 placeholder="Add an description"
                 className='bg-[#36454F] w-full max-h-[50rem] resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3 overflow-y-auto'
                 onInput={handleInput}
-                value={newPost.postData.description}
-                onChange={(e) => handleNewPostInputChange('description', e.target.value)}
+                value={post.postData.description}
+                onChange={(e) => handlePostInputChange('description', e.target.value)}
             />
         </div>
     )

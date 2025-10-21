@@ -5,6 +5,7 @@ import uploadIcon from '../../../../assets/icons/upload_50dp_E3E3E3_FILL0_wght70
 
 import type { IndividualLeg_type } from "../../../../configs/types_and_interfaces";
 import { useAddPostContext } from '../../../../contexts/addPostContext';
+import { deleteDatabase } from '../../../../utils/temporaryStorage';
 
 type ThirdLayerProps = {
     activeLeg: IndividualLeg_type | null
@@ -89,7 +90,15 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             src={uploadIcon} 
                             alt='upload icon' 
                             className='w-[2rem] h-[2rem]'
-                            onClick={() => handlePost('private')}
+                            onClick={async() => {
+                                const response = await handlePost('private')
+                                if(response === 'success'){
+                                    localStorage.removeItem("postData")
+                                    localStorage.removeItem("legData")
+                                    deleteDatabase()
+                                }
+                                
+                            }}
                         />
                     </button>
 
@@ -99,7 +108,15 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             src={uploadIcon} 
                             alt='upload icon' 
                             className='w-[2rem] h-[2rem]'
-                            onClick={() => handlePost('public')}
+                            onClick={async() => {
+                                const response = await handlePost('public')
+                                if(response === 'success'){
+                                    localStorage.removeItem("postData")
+                                    localStorage.removeItem("legData")
+                                    deleteDatabase()
+                                }
+                                
+                            }}
                         />
                     </button>
             </div>

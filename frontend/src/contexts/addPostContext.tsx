@@ -1,11 +1,12 @@
-import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
+import { createContext, useContext, useEffect, useRef, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
 import { addPost_Template, addPostPreview_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
 import customAPI from "../api/customAPI"
+import { loadFromLocalStorage, saveToLocalStorage } from "../utils/temporaryStorage"
 
 interface AddPostContext_Interface {
-    newPost: AddPost_Type
-    setNewPost: Dispatch<SetStateAction<AddPost_Type>>
+    post: AddPost_Type
+    setPost: Dispatch<SetStateAction<AddPost_Type>>
 
     legs: IndividualLeg_type[]
     setLegs: Dispatch<SetStateAction<IndividualLeg_type[]>>
@@ -14,7 +15,7 @@ interface AddPostContext_Interface {
     activeLeg: IndividualLeg_type | null
     setActiveLeg: Dispatch<SetStateAction<IndividualLeg_type | null>>
 
-    handleNewPostInputChange: <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]) => void
+    handlePostInputChange: <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]) => void
     handleThumbnailImageRemoval: () => void
     handleLegInputChange: (legId: string, field: keyof IndividualLeg_type['legData'], value: any, index?: number) => void
 
@@ -24,7 +25,7 @@ interface AddPostContext_Interface {
     handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
     handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
 
-    handlePost: (domain: 'public' | 'private') => Promise<void>
+    handlePost: (domain: 'public' | 'private') => Promise<string>
 }
 
 const AddPostContext = createContext<AddPostContext_Interface | undefined>(undefined)
@@ -34,13 +35,45 @@ interface AddPostProviderProps {
 }
 
 export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => {
-    const [newPost, setNewPost] = useState<AddPost_Type>({postData: {...addPost_Template}, postPreview: {...addPostPreview_Template}})
+    const [post, setPost] = useState<AddPost_Type>({postData: {...addPost_Template}, postPreview: {...addPostPreview_Template}})
     const [legs, setLegs] = useState<IndividualLeg_type[]>([structuredClone({id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}})])
     const [activeLegId, setActiveLegId] = useState<string>('1')
     const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
 
-    const handleNewPostInputChange = <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]):void => {
-        setNewPost(prev => {
+    const isInitialMount = useRef(true)
+
+    useEffect(() => {
+        const saveData = async () => {
+            if (isInitialMount.current) {
+                isInitialMount.current = false
+                return
+            }
+            const hasPostData = post && Object.keys(post.postData).length > 0;
+            const hasLegsData = legs && legs.length > 0;
+
+            if (hasPostData || hasLegsData) {
+                await saveToLocalStorage(post, legs)
+            }
+        }
+
+        saveData()
+    }, [post, legs])
+
+
+    useEffect(() => {
+        const loadData = async () => {
+            const { post: savedPost, legs: savedLegs } = await loadFromLocalStorage()
+
+            if (savedPost && Object.keys(savedPost.postData).length > 0) setPost(savedPost)
+            if (savedLegs && savedLegs.length > 0) setLegs(savedLegs)
+        }
+
+        loadData()
+    }, [])
+
+
+    const handlePostInputChange = <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]):void => {
+       setPost(prev => {
             const updatedPostData = {...prev.postData}
             const updatedPostPreview = {...prev.postPreview}
 
@@ -61,10 +94,10 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     } 
 
     const handleThumbnailImageRemoval = (): void => {
-        if(newPost.postPreview.thumbnail){
-            URL.revokeObjectURL(newPost.postPreview.thumbnail)
+        if(post.postPreview.thumbnail){
+            URL.revokeObjectURL(post.postPreview.thumbnail)
         }
-        handleNewPostInputChange('thumbnail', undefined)
+        handlePostInputChange('thumbnail', undefined)
     }
 
     const handleSetLegs = (): void => {
@@ -109,8 +142,6 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
 
     useEffect(() => {
         handleActiveLeg()
-        console.log("All legs updated:", legs);
-        console.log("Active leg:", legs.find(l => l.id === activeLegId));
     },[legs, activeLegId])
     
     const handleActiveLeg = (): void => {
@@ -176,10 +207,8 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                         nested.recommendation = value;
                     }
 
-                    // Assign the fully updated object
                     updatedLegData[f] = nested;
 
-                    console.log(`Updated ${f} for leg ${legId}:`, nested);
                 }else if(stringFields.includes(field as StringFields)){
                     (updatedLegData[field] as StringFields) = value
                 } else if(numberFields.includes(field as NumberFields)) {
@@ -248,10 +277,10 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
-    const handlePost = async(domain: 'public' | 'private'): Promise<void> => {
+    const handlePost = async(domain: 'public' | 'private'): Promise<string> => {
         const postData  = new FormData()
 
-        Object.entries(newPost.postData).forEach(([key, value]) => {
+        Object.entries(post.postData).forEach(([key, value]) => {
             if(value === undefined || value === null){
                 postData.append(key, String(value))
             }else if(value instanceof File){
@@ -304,23 +333,25 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     'Content-Type': 'multipart/form-data'
                 }
             })
+            return("success")
         }catch(err){
             if (err instanceof Error){
                 console.log('Error while creating the post. Location: addPostContext[Frontend]', err)
             }else{
                 console.log('Unknown error occured while creating a post. Location: addPostContext[Frontend]', err)
             }
+            return('failure')
         }
     }
 
     return(
         <AddPostContext.Provider value={
             {
-                newPost, setNewPost,
+                post,setPost,
                 legs, setLegs,
                 activeLegId, setActiveLegId,
                 activeLeg, setActiveLeg,
-                handleNewPostInputChange, handleThumbnailImageRemoval,
+                handlePostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
                 handleActiveLeg, handleLegInputChange,
                 handleLegPhotoDelete, handleDeleteLegPoints,
