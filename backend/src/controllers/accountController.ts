@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinarySingleFileUtils";
+import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUploadUtils";
 import Account from "../models/accounts";
-import { Account_Interface, Error_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
+import { Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
 import { findAccount, returnLimitedAccountInfo } from "../utils/accountUtils";
 import { ObjectId } from "mongoose";
 
@@ -27,10 +27,10 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 				}
 			}
 
-			const uploadResult = await uploadToCloudinary(fileData.buffer)
+			const uploadResult: FilesUploadResult_Interface = await uploadSingleFile(fileData.buffer, 'profile_pictures')
 	
-			updatedFields.profilePicture = uploadResult.secure_url
-			updatedFields.profilePictureId = uploadResult.public_id
+			updatedFields.profilePicture = uploadResult.url
+			updatedFields.profilePictureId = uploadResult.publicId
 		}
 
 
@@ -95,3 +95,6 @@ export const getLimitedAccountInfo = async(req: Request, res: Response): Promise
 		}
 	}
 }
+
+
+ 

@@ -1,7 +1,7 @@
 import express from 'express'
 import { authorizeAccount } from '../middlewares/accountMiddlewares';
-import { upload } from '../utils/cloudinarySingleFileUtils';
-import { getAccountInfo, getLimitedAccountInfo, updateUserInfo } from '../controllers/accountController';
+import { upload } from '../utils/cloudinaryUploadUtils';
+import { getAccountInfo, getLimitedAccountInfo, updateUserInfo} from '../controllers/accountController';
 
 const router = express.Router()
 
@@ -9,6 +9,7 @@ const router = express.Router()
 router.patch('/update-user-account', authorizeAccount, upload.single('profilePicture'), updateUserInfo)
 router.get('/fetch-account-details', authorizeAccount, getAccountInfo)
 router.get('/fetch-limited-account-details', authorizeAccount, getLimitedAccountInfo)
+
 
 
 export default router

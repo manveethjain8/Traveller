@@ -98,7 +98,12 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 }
             })
 
-            await customAPI.patch('/account/update-user-account', formData, { withCredentials: true })
+            await customAPI.patch('/account/update-user-account', formData, { 
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
             getAccountDetails()
             setUpdating(false)
             setEditProfileClicked(false)

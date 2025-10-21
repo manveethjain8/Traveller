@@ -228,7 +228,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
-    const handlePost = async(domain: string): Promise<void> => {
+    const handlePost = async(domain: 'public' | 'private'): Promise<void> => {
         const postData  = new FormData()
 
         Object.entries(newPost.postData).forEach(([key, value]) => {
@@ -278,7 +278,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
 
 
         try{
-            await customAPI.post('/post/create-post', postData, {
+            await customAPI.post('/post/upload-post', postData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'
