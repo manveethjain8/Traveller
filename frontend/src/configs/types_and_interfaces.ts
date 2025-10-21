@@ -60,9 +60,9 @@ export type IndividualLeg_type = {
         difficulty: string | undefined,
         expenses: number | undefined,
         traffic: string | undefined,
-        roadConditions: string | undefined
+        roadConditions: string | undefined,
         endPhoto: File | string | undefined,
-        notes: string | undefined
+        notes: string | undefined,
         photoDump: File[] | string[] | undefined 
     },
     legPreview: {

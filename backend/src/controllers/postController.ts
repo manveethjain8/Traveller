@@ -16,9 +16,18 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
             }
         })
 
-        const legs = JSON.parse(body.legs || [])
+
+        let legs = body.legsWithoutFiles
+        if (typeof legs === 'string') {
+            try {
+                legs = JSON.parse(legs)
+            } catch {
+                legs = []
+            }
+        }
 
         for (let index = 0; index < legs.length; index++) {
+            console.log(`Processing leg ${index}`) 
             if (!legs[index]) legs[index] = {}
 
             
@@ -51,12 +60,18 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
             postData.thumbnail = uploadResult.url
         }
 
+
         postData.legs = legs
 
-        await Post.create({
-            ...postData,
-            accountId: (req.user as any).mongoDbId
-        })
+
+        try {
+            const newPost = await Post.create({
+                ...postData,
+                accountId: (req.user as any).mongoDbId
+            })
+        } catch (err) {
+            console.error("🔥 Error during Post.create():", err)
+        }
 
         res.status(201).json({message: 'Post uploaded successfully'})
 

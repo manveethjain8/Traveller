@@ -19,6 +19,7 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
     footfall: {type: String, required: true},
     healthRisks: {type: String, required: true},
     description: {type: String || null, required: false, default: null},
+    domain: {type: String || null, required: true, default: 'public'},
 
     legs: [{
         startPhoto: {type: String || null, default: null},
@@ -29,8 +30,8 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
         landscape: {type: String || null, default: null},
         weather: {type: String || null, default: null},
         location: {type: String || null, default: null},
-        highlights: {type: String || null, default: null},
-        challenges: {type: String || null, default: null},
+        highlights: {type: [String] , default: []},
+        challenges: {type: [String] , default: []},
         restaurants: {
             availability: {type: String || null, default: null},
             recommendation: {type: String || null, default: null}

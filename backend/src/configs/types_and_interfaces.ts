@@ -131,6 +131,7 @@ export interface Posts_Interface {
     footfall: string | null
     healthRisks: string | null
     description: string | null
+    domain: string | null
     legs: IndividualLeg_Interface[]
     createdAt: Date
 }

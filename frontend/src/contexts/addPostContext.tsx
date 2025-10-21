@@ -35,7 +35,7 @@ interface AddPostProviderProps {
 
 export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => {
     const [newPost, setNewPost] = useState<AddPost_Type>({postData: {...addPost_Template}, postPreview: {...addPostPreview_Template}})
-    const [legs, setLegs] = useState<IndividualLeg_type[]>([{id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}}])
+    const [legs, setLegs] = useState<IndividualLeg_type[]>([structuredClone({id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}})])
     const [activeLegId, setActiveLegId] = useState<string>('1')
     const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
 
@@ -70,10 +70,18 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     const handleSetLegs = (): void => {
         const lastLeg = legs.at(-1) as IndividualLeg_type
         const newLegId = String(Number(lastLeg.id) + 1)
-        const newLeg = {id: newLegId, name: `Leg ${newLegId}`, legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}}
+        const newLeg: IndividualLeg_type = structuredClone({
+            id: newLegId,
+            name: `Leg ${newLegId}`,
+            legData: individualLeg_Template,
+            legPreview: legPreview_Template
+        });
         setActiveLegId(newLegId)
         setLegs(prevLegs => [...prevLegs, newLeg])
+
     }
+
+    
 
     const handleDeleteLegs = (id: string): void => {
         setLegs(prevLegs => {
@@ -101,6 +109,8 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
 
     useEffect(() => {
         handleActiveLeg()
+        console.log("All legs updated:", legs);
+        console.log("Active leg:", legs.find(l => l.id === activeLegId));
     },[legs, activeLegId])
     
     const handleActiveLeg = (): void => {
@@ -118,10 +128,10 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
             prevLegs.map(l => {
                 if (l.id !== legId) return l;
 
-                const updatedLegData = { ...l.legData }
-                const updatedPreview = {...l.legPreview}
+                const updatedLegData = {...l.legData,}
+                const updatedPreview = { ...l.legPreview }
 
-                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions"] as const
+                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions", "notes"] as const
                 type StringFields = typeof stringFields[number]
 
                 const numberFields = ["legDistance", "expenses"]
@@ -155,11 +165,21 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     }
                 }else if (nestedFields.includes(field as NestedFields)) {
                     const f = field as NestedFields
-                    updatedLegData[f] = {
-                        ...updatedLegData[f],
-                        availability: index === 0 ? value : updatedLegData[f].availability,
-                        recommendation: index !== 0 ? value : updatedLegData[f].recommendation
+                    const nested = { 
+                        availability: updatedLegData[f]?.availability ?? undefined,
+                        recommendation: updatedLegData[f]?.recommendation ?? undefined
+                    };
+
+                    if (index === 0) {
+                        nested.availability = value;
+                    } else if (index === 1) {
+                        nested.recommendation = value;
                     }
+
+                    // Assign the fully updated object
+                    updatedLegData[f] = nested;
+
+                    console.log(`Updated ${f} for leg ${legId}:`, nested);
                 }else if(stringFields.includes(field as StringFields)){
                     (updatedLegData[field] as StringFields) = value
                 } else if(numberFields.includes(field as NumberFields)) {

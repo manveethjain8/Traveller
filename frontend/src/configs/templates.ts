@@ -31,7 +31,6 @@ export const addPost_Template: AddPost_Type['postData'] = {
     footfall: undefined,
     healthRisks: undefined,
     description: undefined,
-    legs: []
 }
 
 export const addPostPreview_Template: AddPost_Type['postPreview'] = {

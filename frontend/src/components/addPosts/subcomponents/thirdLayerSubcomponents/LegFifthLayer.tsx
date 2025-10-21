@@ -30,12 +30,13 @@ const LegFifthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
             <div className="max-h-[50rem] w-full pr-3">
                 {activeLeg && 
                     <textarea 
+                    key={activeLeg.id}
                     ref={textareaRef} 
                     placeholder="Add notes"
                     className='bg-[#36454F] w-full max-h-[50rem] resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3 overflow-y-auto'
                     onInput={handleInput}
                     value={activeLeg.legData.notes}
-                    onChange={(e) => handleLegInputChange(activeLeg.id, 'notes',e.target.value)}
+                    onChange={(e) => handleLegInputChange(activeLeg.id, 'notes', e.target.value)}
                 />
                 }
             </div>
