@@ -1,6 +1,6 @@
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces";
 
-// Convert File to Base64 if needed
+// 🧩 Convert File to Base64 if needed
 export const fileToBase64 = async (file: File): Promise<string> => {
     return new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -10,7 +10,7 @@ export const fileToBase64 = async (file: File): Promise<string> => {
     });
 };
 
-// IndexedDB helpers
+// 🗄️ IndexedDB helpers
 const openDB = (): Promise<IDBDatabase> => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("TravellerDB", 1);
@@ -47,102 +47,135 @@ const getImage = async (key: string): Promise<File | string | undefined> => {
     });
 };
 
-// Save post and legs to localStorage and IndexedDB
+const deleteImage = async (key: string): Promise<void> => {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction("images", "readwrite");
+        const store = tx.objectStore("images");
+        const request = store.delete(key);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+};
+
+// 🧠 Manage replacement or deletion of images in IndexedDB
+const manageImageReplacement = async (
+    oldKey: string | undefined,
+    newFile?: File | string,
+    newKeyPrefix?: string
+): Promise<string | undefined> => {
+    // 🗑️ Delete old image if exists
+    if (oldKey && typeof oldKey === "string") {
+        await deleteImage(oldKey);
+    }
+
+    // 🚫 User deleted the image manually
+    if (!newFile) return undefined;
+
+    // 💾 Save new file
+    if (newFile instanceof File) {
+        const newKey = `${newKeyPrefix}-${Date.now()}`;
+        await saveImage(newKey, newFile);
+        return newKey;
+    }
+
+    // 🧠 Already a string (Base64 or URL)
+    return newFile;
+};
+
+// 💾 Save post + legs
 export const saveToLocalStorage = async (newPost: AddPost_Type, legs: IndividualLeg_type[]) => {
     const postCopy = { ...newPost };
-    const legsCopy = legs.map(l => ({ ...l, legData: { ...l.legData }, legPreview: { ...l.legPreview } }));
+    const legsCopy = legs.map((l) => ({
+        ...l,
+        legData: { ...l.legData },
+        legPreview: { ...l.legPreview },
+    }));
 
-    // Save main post images
-    if (postCopy.postData.thumbnail instanceof File) {
-        await saveImage("post-thumbnail", postCopy.postData.thumbnail);
-        postCopy.postData.thumbnail = "post-thumbnail";
-    }
-    if (postCopy.postPreview.thumbnail) {
-        await saveImage("preview-thumbnail", postCopy.postPreview.thumbnail);
-        postCopy.postPreview.thumbnail = "preview-thumbnail";
-    }
+    // 🖼️ Main post images
+    postCopy.postData.thumbnail = await manageImageReplacement(
+        typeof postCopy.postData.thumbnail === "string" ? postCopy.postData.thumbnail : undefined,
+        postCopy.postData.thumbnail instanceof File ? postCopy.postData.thumbnail : undefined,
+        "post-thumbnail"
+    );
 
-    // Save legs images
+    postCopy.postPreview.thumbnail = await manageImageReplacement(
+        typeof postCopy.postPreview.thumbnail === "string" ? postCopy.postPreview.thumbnail : undefined,
+        postCopy.postPreview.thumbnail, // Already string in your case
+        "preview-thumbnail"
+    );
+
+    // 🦵 Handle legs
     for (const leg of legsCopy) {
         const { id, legData, legPreview } = leg;
 
-        if (legData.startPhoto instanceof File) {
-            await saveImage(`${id}-startPhoto`, legData.startPhoto);
-            legData.startPhoto = `${id}-startPhoto`;
-        }
-        if (legData.endPhoto instanceof File) {
-            await saveImage(`${id}-endPhoto`, legData.endPhoto);
-            legData.endPhoto = `${id}-endPhoto`;
-        }
+        legData.startPhoto = await manageImageReplacement(
+            typeof legData.startPhoto === "string" ? legData.startPhoto : undefined,
+            legData.startPhoto instanceof File ? legData.startPhoto : undefined,
+            `${id}-startPhoto`
+        );
+
+        legData.endPhoto = await manageImageReplacement(
+            typeof legData.endPhoto === "string" ? legData.endPhoto : undefined,
+            legData.endPhoto instanceof File ? legData.endPhoto : undefined,
+            `${id}-endPhoto`
+        );
 
         if (Array.isArray(legData.photoDump)) {
-            legData.photoDump = await Promise.all(legData.photoDump.map(async (item, i) => {
-                if (item instanceof File) {
-                    const key = `${id}-photoDump-${i}`;
-                    await saveImage(key, item);
-                    return key;
-                }
-                return item;
-            }));
+            const newDump: string[] = [];
+            for (let i = 0; i < legData.photoDump.length; i++) {
+                const item = legData.photoDump[i];
+                if (!item) continue;
+                const newKey = await manageImageReplacement(
+                    typeof item === "string" ? item : undefined,
+                    item instanceof File ? item : undefined,
+                    `${id}-photoDump-${i}`
+                );
+                if (newKey) newDump.push(newKey);
+            }
+            legData.photoDump = newDump;
         }
 
-        if (legPreview.startPhoto ) {
-            await saveImage(`${id}-preview-startPhoto`, legPreview.startPhoto);
-            legPreview.startPhoto = `${id}-preview-startPhoto`;
-        }
-        if (legPreview.endPhoto) {
-            await saveImage(`${id}-preview-endPhoto`, legPreview.endPhoto);
-            legPreview.endPhoto = `${id}-preview-endPhoto`;
-        }
+        legPreview.startPhoto = await manageImageReplacement(
+            typeof legPreview.startPhoto === "string" ? legPreview.startPhoto : undefined,
+            legPreview.startPhoto,
+            `${id}-preview-startPhoto`
+        );
+
+        legPreview.endPhoto = await manageImageReplacement(
+            typeof legPreview.endPhoto === "string" ? legPreview.endPhoto : undefined,
+            legPreview.endPhoto,
+            `${id}-preview-endPhoto`
+        );
 
         if (Array.isArray(legPreview.photoDump)) {
-            legPreview.photoDump = legPreview.photoDump.map((item, i) => {
-                if (item ) return `${id}-preview-photoDump-${i}`;
-                return item;
-            });
+            const newPreviewDump: string[] = [];
+            for (let i = 0; i < legPreview.photoDump.length; i++) {
+                const item = legPreview.photoDump[i];
+                if (!item) continue;
+                const newKey = await manageImageReplacement(
+                    typeof item === "string" ? item : undefined,
+                    item,
+                    `${id}-preview-photoDump-${i}`
+                );
+                if (newKey) newPreviewDump.push(newKey);
+            }
+            legPreview.photoDump = newPreviewDump;
         }
     }
 
-    // Save to localStorage
+    // 🧱 Save to localStorage
     try {
-
-        const postToStore = {
-            ...postCopy,
-            postData: {
-                ...postCopy.postData,
-                thumbnail: postCopy.postData.thumbnail ? "post-thumbnail" : undefined
-            },
-            postPreview: {
-                ...postCopy.postPreview,
-                thumbnail: postCopy.postPreview.thumbnail ? "preview-thumbnail" : undefined
-            }
-        };
-
-        localStorage.setItem("postData", JSON.stringify(postToStore));
-
-
-        const legsToStore = legsCopy.map(leg => ({
-            ...leg,
-            legData: {
-                ...leg.legData,
-                startPhoto: leg.legData.startPhoto ? `${leg.id}-startPhoto` : undefined,
-                endPhoto: leg.legData.endPhoto ? `${leg.id}-endPhoto` : undefined,
-                photoDump: leg.legData.photoDump?.map((_, i) => `${leg.id}-photoDump-${i}`)
-            },
-            legPreview: {
-                ...leg.legPreview,
-                startPhoto: leg.legPreview.startPhoto ? `${leg.id}-preview-startPhoto` : undefined,
-                endPhoto: leg.legPreview.endPhoto ? `${leg.id}-preview-endPhoto` : undefined,
-                photoDump: leg.legPreview.photoDump?.map((_, i) => `${leg.id}-preview-photoDump-${i}`)
-            }
-        }));
-        localStorage.setItem("legData", JSON.stringify(legsToStore));
+        localStorage.setItem("postData", JSON.stringify(postCopy));
+        localStorage.setItem("legData", JSON.stringify(legsCopy));
     } catch (e) {
-        console.warn("LocalStorage quota exceeded, consider storing large images in IndexedDB only.");
+        console.warn(
+            "LocalStorage quota exceeded, consider storing large images in IndexedDB only."
+        );
     }
 };
 
-// Load post and legs from localStorage + IndexedDB
+// 📦 Load post + legs from storage
 export const loadFromLocalStorage = async (): Promise<{ post: AddPost_Type; legs: IndividualLeg_type[] }> => {
     const savedPost = localStorage.getItem("postData");
     const savedLegs = localStorage.getItem("legData");
@@ -154,14 +187,21 @@ export const loadFromLocalStorage = async (): Promise<{ post: AddPost_Type; legs
     const loadImage = async (key?: string): Promise<string | undefined> => {
         if (!key) return undefined;
         const img = await getImage(key);
-        return img instanceof File ? await fileToBase64(img) : (img as string | undefined);
+        if (img instanceof File) {
+            return await fileToBase64(img);
+        } 
+        if (typeof img === 'string') {
+            return img;
+        }
+        // fallback: return key itself if nothing is in IndexedDB
+        return key;
     };
 
-    // Load main post images
+    // Post thumbnails
     post.postData.thumbnail = await loadImage(post.postData.thumbnail as string);
     post.postPreview.thumbnail = await loadImage(post.postPreview.thumbnail as string);
 
-    // Load legs images
+    // Legs
     for (const leg of legs) {
         const { legData, legPreview } = leg;
 
@@ -174,7 +214,7 @@ export const loadFromLocalStorage = async (): Promise<{ post: AddPost_Type; legs
                     if (typeof item === "string") {
                         return await loadImage(item);
                     }
-                    return undefined; // ignore Files
+                    return undefined;
                 })
             );
             legData.photoDump = loaded.filter((img): img is string => !!img);
@@ -192,7 +232,7 @@ export const loadFromLocalStorage = async (): Promise<{ post: AddPost_Type; legs
     return { post, legs };
 };
 
-// Delete database
+// 🧹 Delete entire IndexedDB (for full reset)
 export const deleteDatabase = async (dbName = "TravellerDB") => {
     return new Promise<void>((resolve, reject) => {
         const request = indexedDB.deleteDatabase(dbName);

@@ -98,6 +98,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
             URL.revokeObjectURL(post.postPreview.thumbnail)
         }
         handlePostInputChange('thumbnail', undefined)
+        post.postPreview.thumbnail = undefined
     }
 
     const handleSetLegs = (): void => {
@@ -324,8 +325,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
             postData.append('domain', 'private')
         }
 
-
-
+        
         try{
             await customAPI.post('/post/upload-post', postData, {
                 withCredentials: true,
@@ -343,6 +343,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
             return('failure')
         }
     }
+
 
     return(
         <AddPostContext.Provider value={
