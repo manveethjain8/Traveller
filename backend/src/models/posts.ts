@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { Posts_Interface } from "../configs/types_and_interfaces"
+import Account from "../models/accounts"
 
 const postsSchema = new mongoose.Schema<Posts_Interface>({
     thumbnail: {type: String, required: true},
@@ -65,9 +66,9 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
         default: Date.now,
     },
 
-    accountId: {
+    account: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account'
+        ref: Account
     }
 })
 

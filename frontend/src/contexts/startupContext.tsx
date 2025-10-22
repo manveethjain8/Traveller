@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { LimitedAccountInfo_Type } from "../configs/types_and_interfaces";
 import customAPI from "../api/customAPI";
+import { useDisplayPostContext } from "./displayPostContext";
 
 interface StartupContext_Interface {
     limitedUserInfo: LimitedAccountInfo_Type | undefined
@@ -14,6 +15,9 @@ interface StartupProviderProps {
 }
 
 export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => {
+
+    const {getAllPosts} = useDisplayPostContext()
+
     const [limitedUserInfo, setLimitedUserInfo] = useState<LimitedAccountInfo_Type | undefined>(undefined)
 
     const getLimmitedAccountInfo = async(): Promise<void> => {
@@ -31,6 +35,7 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
 
     useEffect(() => {
         getLimmitedAccountInfo()
+        getAllPosts()
     }, [])
 
     return (

@@ -112,8 +112,10 @@ export interface IndividualLeg_Interface {
     photoDump: string[] | null 
 }
 
+
+
 export interface Posts_Interface extends Document {
-    accountId: string | ObjectId
+    account: LimitedAccountInfo_Interface
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,

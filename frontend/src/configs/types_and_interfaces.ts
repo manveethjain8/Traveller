@@ -97,3 +97,67 @@ export type AddPost_Type = {
     }
 }
 
+export interface IndividualLeg_Interface {
+    startPhoto: string | null,
+    legIntroduction: string | null,
+    startDate: string | null,
+    legDistance: number | null,
+    environment: string | null,
+    landscape: string | null,
+    weather: string | null,
+    location: string | null,
+    highlights: string[],
+    challenges: string[],
+    restaurants: {
+        availability: string | null,
+        recommendation: string | null
+    },
+    fuelAndServices: {
+        availability: string | null,
+        recommendation: string | null
+    },
+    stays: {
+        availability: string | null,
+        recommendation: string | null
+    },
+    network: {
+        availability: string | null,
+        recommendation: string | null
+    },
+    conclusion: string | null,
+    startTime: string | null,
+    endTime: string | null,
+    difficulty: string | null,
+    expenses: number | null,
+    traffic: string | null,
+    roadConditions: string | null
+    endPhoto: File | string | null,
+    notes: string | null
+    photoDump: string[] | null 
+}
+
+
+export interface Posts_Interface {
+    _id: string
+    account: LimitedAccountInfo_Type
+    thumbnail: string | null
+    expeditionName: string | null
+    date: string | null,
+    introduction: string | null,
+    days: number | null
+    totalDistance: number | null
+    expenses: number | null
+    amenities: string | null
+    season: string | null
+    environment: string | null
+    transport: string | null
+    landscape: string | null
+    difficulty: string | null
+    locationString: string | null
+    footfall: string | null
+    healthRisks: string | null
+    description: string | null
+    domainString: string | null
+    legs: IndividualLeg_Interface[]
+    createdAt: Date
+}

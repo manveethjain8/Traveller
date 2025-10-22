@@ -9,7 +9,7 @@ const Home = () => {
             <TopBar/>
             <Sidebar/>
             <div 
-                className="fixed bottom-0 right-0 flex flex-col
+                className="fixed h-[90%] bottom-0 right-0 flex flex-col
                             2xl:top-[4rem] 2xl:left-[15rem]
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
@@ -17,7 +17,7 @@ const Home = () => {
                     <Sitrep/>
                 {/* End of Sitrep display */}
                 {/* Start of Posts display */}
-                <div className="flex-1 flex overflow-y-auto">
+                <div className="flex-1 h-full flex overflow-y-auto">
                     <Posts/>
                 </div>
                 {/* End of Posts display */}
