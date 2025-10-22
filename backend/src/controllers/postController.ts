@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
-import { FilesUploadResult_Interface} from "../configs/types_and_interfaces"
+import { Error_Interface, FilesUploadResult_Interface, Posts_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
+import { fetchAllPosts } from "../utils/postUtils"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
     try{
@@ -81,5 +82,24 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
 		}else{
 			res.status(500).json({message: 'Unknown Error while uploading the post'})
 		}
+    }
+}
+
+export const getAllPosts = async(req: Request, res: Response): Promise<void> => {
+    try{
+        const recentPosts: Posts_Interface[] | Error_Interface = await fetchAllPosts()
+
+        if(!recentPosts || 'error' in recentPosts){
+			res.status(500).json({message: 'Failed to fetch recent posts', location: 'posts controller [Backend]'})
+		}
+
+        res.status(200).json(recentPosts)
+
+    }catch(err: unknown){
+        if(err instanceof Error){
+            res.status(500).json({message: 'Error while retriving posts', error: err.message})
+        }else{
+            res.status(500).json({message: 'Unknown Error while retriving posts'})
+        }
     }
 }

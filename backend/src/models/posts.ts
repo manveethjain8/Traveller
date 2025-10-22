@@ -15,11 +15,11 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
     transport: {type: String, required: true},
     landscape: {type: String, required: true},
     difficulty: {type: String, required: true},
-    location: {type: String, required: true},
+    locationString: {type: String, required: true},
     footfall: {type: String, required: true},
     healthRisks: {type: String, required: true},
     description: {type: String || null, required: false, default: null},
-    domain: {type: String || null, required: true, default: 'public'},
+    domainString: {type: String || null, required: true, default: 'public'},
 
     legs: [{
         startPhoto: {type: String || null, default: null},

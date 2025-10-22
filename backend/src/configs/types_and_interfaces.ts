@@ -112,7 +112,7 @@ export interface IndividualLeg_Interface {
     photoDump: string[] | null 
 }
 
-export interface Posts_Interface {
+export interface Posts_Interface extends Document {
     accountId: string | ObjectId
     thumbnail: string | null
     expeditionName: string | null
@@ -127,11 +127,11 @@ export interface Posts_Interface {
     transport: string | null
     landscape: string | null
     difficulty: string | null
-    location: string | null
+    locationString: string | null
     footfall: string | null
     healthRisks: string | null
     description: string | null
-    domain: string | null
+    domainString: string | null
     legs: IndividualLeg_Interface[]
     createdAt: Date
 }
