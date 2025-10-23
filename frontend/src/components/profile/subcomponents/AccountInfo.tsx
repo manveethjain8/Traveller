@@ -1,9 +1,24 @@
+import { useEffect, useState } from 'react'
 import pp from '../../../assets/background_images/authenticate_page_background.jpg'
 import { useProfileContext } from '../../../contexts/profileContext'
+import { useDisplayPostContext } from '../../../contexts/displayPostContext'
 
 const AccountInfo = () => {
 
     const {setEditProfileClicked, userInfo} = useProfileContext()
+    const {accountAllPosts} = useDisplayPostContext()
+
+    const [postsCount, setPostsCount] = useState<number>(0)
+
+    useEffect(() => {
+        const postsCounter = (): void => {
+            if(accountAllPosts && accountAllPosts.length > 0){
+                setPostsCount(accountAllPosts.length)
+            }
+        }
+
+        postsCounter()
+    }, [accountAllPosts])
 
     return (
         <div className="flex flex-1 w-full justify-center items-center
@@ -72,15 +87,15 @@ const AccountInfo = () => {
                             2xl:p-2 2xl:gap-x-5
                             3xl:text-[1.1rem]">
                 <div className='flex flex-col items-center'>
-                    <p>Posts</p>
+                    <strong>Posts</strong>
+                    <p>{postsCount}</p>
+                </div>
+                <div className='flex flex-col items-center'>
+                    <strong>Followers</strong>
                     <p>0</p>
                 </div>
                 <div className='flex flex-col items-center'>
-                    <p>Followers</p>
-                    <p>0</p>
-                </div>
-                <div className='flex flex-col items-center'>
-                    <p>Following</p>
+                    <strong>Following</strong>
                     <p>0</p>
                 </div>
             </div>
