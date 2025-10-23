@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { Error_Interface, FilesUploadResult_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
+import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
-import { fetchAllPosts, fetchAllPostsOfSpecificAccount } from "../utils/postUtils"
+import { fetchAllPosts, fetchAllPostsOfSpecificAccount, fetchSpecificPost } from "../utils/postUtils"
 import { ObjectId } from "mongoose"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
@@ -111,7 +111,7 @@ export const getAllPostsOfSpecificAccount = async(req: Request, res: Response): 
         const allPosts: PostSummarySpecificAccount_Interface[] | Error_Interface = await fetchAllPostsOfSpecificAccount(accountId)
 
         if(!allPosts || 'error' in allPosts){
-			res.status(500).json({message: 'Failed to fetch recent posts', location: 'posts controller [Backend]'})
+			res.status(500).json({message: 'Failed to fetch posts of the account', location: 'posts controller [Backend]'})
 		}
 
         res.status(200).json(allPosts)
@@ -121,6 +121,26 @@ export const getAllPostsOfSpecificAccount = async(req: Request, res: Response): 
             res.status(500).json({message: "Error while retriving the post of the account", error: err.message})
         }else{
             res.status(500).json({message: "Unknown Error while retriving the post of the account"})
+        }
+    }
+}
+
+export const getSpecificPost = async(req: Request, res: Response): Promise<void> => {
+    try{
+        const {postId} = req.params
+        const post: Posts_Interface | Error_Interface | null = await fetchSpecificPost(postId)
+
+        if(!post || 'error' in post){
+			res.status(500).json({message: 'Failed to fetch specific posts', location: 'posts controller [Backend]'})
+		}
+
+        res.status(200).json(post)
+
+    }catch(err: unknown){
+        if(err instanceof Error){
+            res.status(500).json({message: "Error while retriving specific post", error: err.message})
+        }else{
+            res.status(500).json({message: "Unknown Error while retriving specific post"})
         }
     }
 }
