@@ -6,13 +6,16 @@ import { useProfileContext } from "../../contexts/profileContext"
 import EditProfile from "./subcomponents/EditProfile"
 
 import { useEffect } from "react"
+import { useDisplayPostContext } from "../../contexts/displayPostContext"
 
 const Profile = () => {
 
     const {editProfileClicked, getAccountDetails} = useProfileContext()
+    const {getAllPostsOfSpecificAccount} = useDisplayPostContext()
 
     useEffect(() => {
         getAccountDetails()
+        getAllPostsOfSpecificAccount()
     }, [])
 
     return (

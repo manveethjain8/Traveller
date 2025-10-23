@@ -161,3 +161,9 @@ export interface Posts_Interface {
     legs: IndividualLeg_Interface[]
     createdAt: Date
 }
+
+export type PostSummarySpecificAccount_Type = {
+    _id: string
+    thumbnail: string | null
+    domainString: string | null
+}

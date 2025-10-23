@@ -137,3 +137,8 @@ export interface Posts_Interface extends Document {
     legs: IndividualLeg_Interface[]
     createdAt: Date
 }
+
+export interface PostSummarySpecificAccount_Interface extends Document  {
+    thumbnail: string | null
+    domainString: string | null
+}
