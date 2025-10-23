@@ -138,7 +138,29 @@ export interface Posts_Interface extends Document {
     createdAt: Date
 }
 
-export interface PostSummarySpecificAccount_Interface extends Document  {
+export interface PostsSummary_Interface extends Document {
+    account: LimitedAccountInfo_Interface
+    thumbnail: string | null
+    expeditionName: string | null
+    date: string | null,
+    introduction: string | null,
+    days: number | null
+    totalDistance: number | null
+    expenses: number | null
+    amenities: string | null
+    season: string | null
+    environment: string | null
+    transport: string | null
+    landscape: string | null
+    difficulty: string | null
+    locationString: string | null
+    footfall: string | null
+    healthRisks: string | null
+    description: string | null
+    domainString: string | null
+}
+
+export interface PostSummarySpecificAccount_Interface extends Document {
     thumbnail: string | null
     domainString: string | null
 }

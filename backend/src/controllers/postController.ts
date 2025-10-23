@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
+import { Error_Interface, FilesUploadResult_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
 import { fetchAllPosts, fetchAllPostsOfSpecificAccount } from "../utils/postUtils"
@@ -88,7 +88,7 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
 
 export const getAllPosts = async(req: Request, res: Response): Promise<void> => {
     try{
-        const recentPosts: Posts_Interface[] | Error_Interface = await fetchAllPosts()
+        const recentPosts: PostsSummary_Interface[] | Error_Interface = await fetchAllPosts()
 
         if(!recentPosts || 'error' in recentPosts){
 			res.status(500).json({message: 'Failed to fetch recent posts', location: 'posts controller [Backend]'})

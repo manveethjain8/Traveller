@@ -1,7 +1,7 @@
-import type { Posts_Interface } from "../../../../configs/types_and_interfaces"
+import type { PostsSummary_Type } from "../../../../configs/types_and_interfaces"
 
 type PostsProviderProps = {
-    post: Posts_Interface
+    post: PostsSummary_Type
 }
 
 const PostQuickSummary = ({post}: PostsProviderProps) => {

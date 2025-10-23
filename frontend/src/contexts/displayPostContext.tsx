@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
-import type { Posts_Interface, PostSummarySpecificAccount_Type } from "../configs/types_and_interfaces";
+import type { PostsSummary_Type, PostSummarySpecificAccount_Type } from "../configs/types_and_interfaces";
 import customAPI from "../api/customAPI";
 
 interface DisplayPostContext_Interface {
-    allPosts: Posts_Interface[] | undefined
-    setAllPosts: Dispatch<SetStateAction<Posts_Interface[] | undefined>>
+    allPosts: PostsSummary_Type[] | undefined
+    setAllPosts: Dispatch<SetStateAction<PostsSummary_Type[] | undefined>>
 
     accountAllPosts: PostSummarySpecificAccount_Type[] | undefined
     setAccountAllPosts: Dispatch<SetStateAction<PostSummarySpecificAccount_Type[] | undefined>>
@@ -20,12 +20,12 @@ interface DisplayPostProviderProps {
 }
 
 export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({children}) => {
-    const [allPosts, setAllPosts] = useState<Posts_Interface[] | undefined>(undefined)
+    const [allPosts, setAllPosts] = useState<PostsSummary_Type[] | undefined>(undefined)
     const [accountAllPosts, setAccountAllPosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
 
     const getAllPosts = async(): Promise<void> => {
         try{
-            const result = await customAPI.get<Posts_Interface[] | undefined>('post/all-posts', {withCredentials: true})
+            const result = await customAPI.get<PostsSummary_Type[] | undefined>('post/all-posts', {withCredentials: true})
             setAllPosts(result.data)
         }catch(err){
             if (err instanceof Error){

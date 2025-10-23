@@ -1,10 +1,10 @@
 import { ObjectId } from "mongoose"
-import { Error_Interface, Posts_Interface, PostSummarySpecificAccount_Interface } from "../configs/types_and_interfaces"
+import { Error_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface } from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 
-export const fetchAllPosts = async(): Promise<Posts_Interface[] | Error_Interface> => {
+export const fetchAllPosts = async(): Promise<PostsSummary_Interface[] | Error_Interface> => {
     try{
-        const response: Posts_Interface[] = await Post.find({}, '_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall healthRisks').populate("account", "_id profilePicture userName").sort({ createdAt: -1 })
+        const response: PostsSummary_Interface[] = await Post.find({}, '_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall healthRisks').populate("account", "_id profilePicture userName").sort({ createdAt: -1 })
         return response
     }catch(err: unknown){
         if(err instanceof Error){

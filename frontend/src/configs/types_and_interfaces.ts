@@ -167,3 +167,26 @@ export type PostSummarySpecificAccount_Type = {
     thumbnail: string | null
     domainString: string | null
 }
+
+export type PostsSummary_Type = {
+    _id: string
+    account: LimitedAccountInfo_Type
+    thumbnail: string | null
+    expeditionName: string | null
+    date: string | null,
+    introduction: string | null,
+    days: number | null
+    totalDistance: number | null
+    expenses: number | null
+    amenities: string | null
+    season: string | null
+    environment: string | null
+    transport: string | null
+    landscape: string | null
+    difficulty: string | null
+    locationString: string | null
+    footfall: string | null
+    healthRisks: string | null
+    description: string | null
+    domainString: string | null
+}
