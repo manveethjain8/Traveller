@@ -7,7 +7,12 @@ import { FilesUploadResult_Interface } from "../configs/types_and_interfaces";
 
 
 
-export const upload = multer({storage: multer.memoryStorage()})
+export const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+    fieldSize: 10 * 1024 * 1024 // 10 MB for text fields
+  }
+})
 
 export const uploadSingleFile = async (buffer: Buffer, folder: string): Promise<FilesUploadResult_Interface> => {
     return uploadToCloudinary(buffer, folder)

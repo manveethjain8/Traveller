@@ -65,14 +65,14 @@ const FirstLayer = () => {
                                 type="text"
                                 placeholder='Name of Expedition'
                                 className='bg-[#36454F] absolute left-[40%] text-center font-bold h-full placeholder:font-bold focus:outline-none rounded-3xl box-border'
-                                value={post.postData.expeditionName}
+                                value={post.postData.expeditionName ?? ''}
                                 onChange={(e) => handlePostInputChange('expeditionName', e.target.value)}
                             />
 
                             <input 
                                 type="date"
                                 className='bg-[#36454F] absolute right-[5%] text-center text-gray-400 h-full font-bold focus:outline-none rounded-3xl box-border px-2'
-                                value={post.postData.date}
+                                value={post.postData.date ?? ''}
                                 onChange={(e) => handlePostInputChange('date', e.target.value)}
                             />
                     </div>

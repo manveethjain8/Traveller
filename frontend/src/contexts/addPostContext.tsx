@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState, type Dispatch, 
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
 import { addPost_Template, addPostPreview_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
 import customAPI from "../api/customAPI"
-import { loadFromLocalStorage, saveToLocalStorage } from "../utils/temporaryStorage"
+import {loadFromLocalStorage, saveToLocalStorage } from "../utils/temporaryStorage"
 
 interface AddPostContext_Interface {
     post: AddPost_Type
@@ -40,36 +40,65 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     const [activeLegId, setActiveLegId] = useState<string>('1')
     const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
 
-    const isInitialMount = useRef(true)
+
+    const [isRefreshed, setIsRefreshed] = useState(false);
+
+
+    useEffect(() => {
+        let refreshed = false;
+
+        // Modern API
+        const navEntries = performance.getEntriesByType("navigation");
+        if (navEntries.length > 0 && (navEntries[0] as any).type === "reload") {
+            refreshed = true;
+        }
+
+        // Fallback for older browsers
+        else if ((performance as any).navigation?.type === 1) {
+            refreshed = true;
+        }
+
+        setIsRefreshed(refreshed);
+    }, []);
+
+    const isInitialMount = useRef(true);
 
     useEffect(() => {
         const saveData = async () => {
             if (isInitialMount.current) {
-                isInitialMount.current = false
-                return
+                isInitialMount.current = false;
+                return;
             }
+
             const hasPostData = post && Object.keys(post.postData).length > 0;
             const hasLegsData = legs && legs.length > 0;
 
             if (hasPostData || hasLegsData) {
-                await saveToLocalStorage(post, legs)
+                await saveToLocalStorage(post, legs);
             }
-        }
+        };
 
-        saveData()
-    }, [post, legs])
+        saveData();
+    }, [post, legs]);
 
 
     useEffect(() => {
         const loadData = async () => {
-            const { post: savedPost, legs: savedLegs } = await loadFromLocalStorage()
+            if (!isRefreshed) return;
 
-            if (savedPost && Object.keys(savedPost.postData).length > 0) setPost(savedPost)
-            if (savedLegs && savedLegs.length > 0) setLegs(savedLegs)
-        }
+            const { post: savedPost, legs: savedLegs } = await loadFromLocalStorage(true);
 
-        loadData()
-    }, [])
+
+
+
+            setPost(savedPost )
+            if (savedLegs && savedLegs.length > 0) setLegs(savedLegs);
+        };
+
+        loadData();
+    }, [isRefreshed]);
+
+
 
 
     const handlePostInputChange = <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]):void => {
@@ -163,7 +192,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 const updatedLegData = {...l.legData,}
                 const updatedPreview = { ...l.legPreview }
 
-                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "location", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions", "notes"] as const
+                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "locationString", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions", "notes"] as const
                 type StringFields = typeof stringFields[number]
 
                 const numberFields = ["legDistance", "expenses"]
@@ -176,7 +205,6 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     const file = value
                     updatedLegData[field] = file
                     updatedPreview[field] = file ? URL.createObjectURL(file) : undefined;
-                    console.log(updatedPreview.startPhoto)
                 } else if (field === 'photoDump') {
                     const previousDump = updatedLegData.photoDump || []
                     const files = Array.from(value || []) as File[]
@@ -278,71 +306,57 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
         handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
-    const handlePost = async(domain: 'public' | 'private'): Promise<string> => {
-        const postData  = new FormData()
+    const handlePost = async (domain: "public" | "private"): Promise<string> => {
+        if (!post.postData.thumbnail) {
+            throw new Error("Thumbnail is required"); // ensures backend validation passes
+        }
 
+        const formData = new FormData();
+
+        // Append postData fields
         Object.entries(post.postData).forEach(([key, value]) => {
-            if(value === undefined || value === null){
-                postData.append(key, String(value))
-            }else if(value instanceof File){
-                postData.append(key, value)
-            }else{
-                postData.append(key, String(value))
-            }
-        })
+            if (value instanceof File) formData.append(key, value);
+            else formData.append(key, String(value));
+        });
 
-        const legsWithoutFiles = legs.map(l =>{
-            const {startPhoto, endPhoto, photoDump, ...rest} = l.legData
-            return rest
-        })
+        // Append legs metadata (without images)
+        const legsWithoutFiles = legs.map(l => {
+            const { startPhoto, endPhoto, photoDump, ...rest } = l.legData;
+            return rest;
+        });
+        formData.append("legsWithoutFiles", JSON.stringify(legsWithoutFiles));
 
-        postData.append('legsWithoutFiles', JSON.stringify(legsWithoutFiles))
-
+        // Append leg images only (startPhoto, endPhoto, photoDump)
         legs.forEach((l, idx) => {
-            const {startPhoto, endPhoto, photoDump} = l.legData
+            const { startPhoto, endPhoto, photoDump } = l.legData;
 
-            if(startPhoto){
-                postData.append(`legStartPhoto_${idx}`, startPhoto)
+            if (startPhoto instanceof File) formData.append(`legStartPhoto_${idx}`, startPhoto);
+            if (endPhoto instanceof File) formData.append(`legEndPhoto_${idx}`, endPhoto);
+
+            if (Array.isArray(photoDump)) {
+                photoDump.forEach(file => {
+                    if (file instanceof File) formData.append(`photoDump_${idx}`, file);
+                });
             }
+        });
 
-            if(endPhoto){
-                postData.append(`legEndPhoto_${idx}`, endPhoto)
-            }
+        // Domain
+        formData.append("domainString", domain);
 
-            if(photoDump){
-                const photoDumpArray = [...(photoDump ?? [])];
-                if(Array.isArray(photoDumpArray)){
-                    photoDumpArray.forEach(file => {
-                        postData.append(`photoDump_${idx}`, file)
-                    })
-                }
-            }
-        })
-
-        if(domain === 'public'){
-            postData.append('domain', 'public')
-        }else{
-            postData.append('domain', 'private')
-        }
-
-        
-        try{
-            await customAPI.post('/post/upload-post', postData, {
+        try {
+            await customAPI.post("/post/upload-post", formData, {
                 withCredentials: true,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            return("success")
-        }catch(err){
-            if (err instanceof Error){
-                console.log('Error while creating the post. Location: addPostContext[Frontend]', err)
-            }else{
-                console.log('Unknown error occured while creating a post. Location: addPostContext[Frontend]', err)
-            }
-            return('failure')
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            return "success";
+        } catch (err) {
+            console.error("Error creating post:", err);
+            return "failure";
         }
-    }
+    };
+
+
+
 
 
     return(

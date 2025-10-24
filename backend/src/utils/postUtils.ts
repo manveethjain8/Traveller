@@ -4,7 +4,7 @@ import Post from "../models/posts"
 
 export const fetchAllPosts = async(): Promise<PostsSummary_Interface[] | Error_Interface> => {
     try{
-        const response: PostsSummary_Interface[] = await Post.find({}, '_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall healthRisks').populate("account", "_id profilePicture userName").sort({ createdAt: -1 })
+        const response = await Post.find({}, '_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall healthRisks account').populate("account", "_id profilePicture userName").sort({ createdAt: -1 })
         return response
     }catch(err: unknown){
         if(err instanceof Error){

@@ -36,7 +36,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Start Time</p>
                                 <input 
-                                    value={activeLeg.legData.startTime}
+                                    value={activeLeg.legData.startTime ?? ''}
                                     type="time" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border px-15 py-[0.4rem]'
@@ -46,7 +46,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>End Time</p>
                                 <input 
-                                    value={activeLeg.legData.endTime}
+                                    value={activeLeg.legData.endTime ?? ''}
                                     type="time" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border px-15 py-[0.4rem]'
@@ -56,7 +56,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Difficulty</p>
                                 <input 
-                                    value={activeLeg.legData.difficulty}
+                                    value={activeLeg.legData.difficulty ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1
@@ -71,7 +71,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Expenses</p>
                                 <input 
-                                    value={activeLeg.legData.expenses}
+                                    value={activeLeg.legData.expenses ?? ''}
                                     type="number" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1
@@ -87,7 +87,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Traffic</p>
                                 <input 
-                                    value={activeLeg.legData.traffic}
+                                    value={activeLeg.legData.traffic ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'
@@ -98,7 +98,7 @@ const LegFourthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Road Conditions</p>
                                 <input 
-                                    value={activeLeg.legData.roadConditions}
+                                    value={activeLeg.legData.roadConditions ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'

@@ -35,7 +35,7 @@ export type IndividualLeg_type = {
         environment: string | undefined,
         landscape: string | undefined,
         weather: string | undefined,
-        location: string | undefined,
+        locationString: string | undefined,
         highlights: string[],
         challenges: string[],
         restaurants: {
@@ -87,7 +87,7 @@ export type AddPost_Type = {
         transport: string | undefined
         landscape: string | undefined
         difficulty: string | undefined
-        location: string | undefined
+        locationString: string | undefined
         footfall: string | undefined
         healthRisks: string | undefined
         description: string | undefined
@@ -98,6 +98,7 @@ export type AddPost_Type = {
 }
 
 export interface IndividualLeg_Interface {
+    _id: string,
     startPhoto: string | null,
     legIntroduction: string | null,
     startDate: string | null,
@@ -105,7 +106,7 @@ export interface IndividualLeg_Interface {
     environment: string | null,
     landscape: string | null,
     weather: string | null,
-    location: string | null,
+    locationString: string | null,
     highlights: string[],
     challenges: string[],
     restaurants: {

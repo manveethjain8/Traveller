@@ -19,7 +19,7 @@ type ThirdLayerProps = {
 
 const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
 
-    const {handleLegPhotoDelete, handlePost} = useAddPostContext()
+    const {handleLegPhotoDelete, handlePost, post} = useAddPostContext()
 
     return (
         <div className=" w-full min-h-[10rem] flex flex-col gap-y-[2rem]">

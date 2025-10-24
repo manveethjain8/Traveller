@@ -29,12 +29,11 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
         }
 
         for (let index = 0; index < legs.length; index++) {
-            console.log(`Processing leg ${index}`) 
             if (!legs[index]) legs[index] = {}
 
             
-            const startPhotoFile = filesArray.find(f => f.fieldname === `startPhoto_${index}`)
-            const endPhotoFile = filesArray.find(f => f.fieldname === `endPhoto_${index}`)
+            const startPhotoFile = filesArray.find(f => f.fieldname === `legStartPhoto_${index}`)
+            const endPhotoFile = filesArray.find(f => f.fieldname === `legEndPhoto_${index}`)
 
             if (startPhotoFile) {
                 const uploaded = await uploadSingleFile(startPhotoFile.buffer, "posts/legs")
@@ -65,11 +64,10 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
 
         postData.legs = legs
 
-
         try {
             const newPost = await Post.create({
                 ...postData,
-                accountId: (req.user as any).mongoDbId
+                account: (req.user as any).mongoDbId
             })
         } catch (err) {
             console.error("🔥 Error during Post.create():", err)

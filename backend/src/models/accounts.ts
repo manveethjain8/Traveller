@@ -22,6 +22,6 @@ const accountSchema = new mongoose.Schema<Account_Interface>({
 })
 
 //Model the structure
-const Account = mongoose.model<Account_Interface>('accounts', accountSchema)
+const Account = mongoose.model<Account_Interface>('Account', accountSchema)
 
 export default Account

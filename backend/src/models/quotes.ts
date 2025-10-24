@@ -8,6 +8,6 @@ const quotesSchema = new mongoose.Schema<Quotes_Interface>({
 })
 
 //Model the structure
-const Quotes = mongoose.model<Quotes_Interface>('quotes', quotesSchema)
+const Quotes = mongoose.model<Quotes_Interface>('Quote', quotesSchema)
 
 export default Quotes

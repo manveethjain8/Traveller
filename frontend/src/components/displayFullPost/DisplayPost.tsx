@@ -1,11 +1,11 @@
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
-import FirstLayer from "./subcomponents/FirstLayer"
-import SecondLayer from "./subcomponents/SecondLayer"
-import ThirdLayer from "./subcomponents/ThirdLayer"
+import DisplaySecondLayer from "./subcomponents/DisplaySecondLayer"
+import DisplayThirdLayer from "./subcomponents/DisplayThirdLayer"
+import DisplayFirstLayer from "./subcomponents/DisplayFirstLayer"
 
 
-const AddPosts = () => {
+const DisplayPost = () => {
     return (
         <div className="w-screen h-screen">
             <TopBar/>
@@ -16,18 +16,18 @@ const AddPosts = () => {
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
                 <div className="flex flex-row">
-                    <FirstLayer/>
+                    <DisplayFirstLayer/>
                 </div>
                 <div className="flex">
-                    <SecondLayer/>
+                    <DisplaySecondLayer/>
                 </div>
                     
                 <div className="flex">
-                    <ThirdLayer/>
+                    <DisplayThirdLayer/>
                 </div>
             </div>
         </div>
     )
 }
 
-export default AddPosts
+export default DisplayPost

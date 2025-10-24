@@ -6,11 +6,14 @@ import { useDisplayPostContext } from '../../../contexts/displayPostContext'
 import defaultTNP from '../../../assets/icons/image_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
 import { useProfileContext } from '../../../contexts/profileContext'
 import type { PostSummarySpecificAccount_Type } from '../../../configs/types_and_interfaces'
+import {useNavigate } from 'react-router-dom'
 
 const AccountPosts = () => {
 
+    const navigate = useNavigate()
+
     const {postsCategory, setPostCategory} = useProfileContext()
-    const {accountAllPosts} = useDisplayPostContext()
+    const {accountAllPosts, getSpecificPost} = useDisplayPostContext()
 
     const [publicPosts, setPublicPosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
     const [privatePosts, setPrivatePosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
@@ -96,7 +99,12 @@ const AccountPosts = () => {
                                 <div 
                                     key={p._id}
                                     className='2xl:w-[17rem] 2xl:h-[25rem]
-                                            3xl:w-[25rem] 3xl:h-[29rem]'
+                                            3xl:w-[25rem] 3xl:h-[29rem]
+                                            hover:cursor-pointer'
+                                    onClick={() => {
+                                        getSpecificPost(p._id)
+                                        navigate('/displayPost')
+                                    }}
                                 >
                                     <img 
                                         src={p.thumbnail ?? defaultTNP}
@@ -121,7 +129,12 @@ const AccountPosts = () => {
                                 <div 
                                     key={p._id}
                                     className='2xl:w-[17rem] 2xl:h-[25rem]
-                                            3xl:w-[25rem] 3xl:h-[29rem]'
+                                            3xl:w-[25rem] 3xl:h-[29rem]
+                                            hover:cursor-pointer'
+                                    onClick={() => {
+                                        getSpecificPost(p._id)
+                                        navigate('/displayPost')
+                                    }}
                                 >
                                     <img 
                                         src={p.thumbnail ?? defaultTNP}

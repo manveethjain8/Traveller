@@ -21,7 +21,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     [appearance:textfield]
                     [&::-webkit-inner-spin-button]:appearance-none
                     [&::-webkit-outer-spin-button]:appearance-none'
-                    value={post.postData.days}
+                    value={post.postData.days ?? ''}
                     onChange={(e) => handlePostInputChange('days', Number(e.target.value))}
                 />
             </div>
@@ -38,7 +38,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     [appearance:textfield]
                     [&::-webkit-inner-spin-button]:appearance-none
                     [&::-webkit-outer-spin-button]:appearance-none'
-                    value={post.postData.totalDistance}
+                    value={post.postData.totalDistance ?? ''}
                     onChange={(e) => handlePostInputChange('totalDistance', Number(e.target.value))}
                 />
             </div>
@@ -55,7 +55,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     [appearance:textfield]
                     [&::-webkit-inner-spin-button]:appearance-none
                     [&::-webkit-outer-spin-button]:appearance-none'
-                    value={post.postData.expenses}
+                    value={post.postData.expenses ?? ''}
                     onChange={(e) => handlePostInputChange('expenses', Number(e.target.value))}
                 />
             </div>
@@ -67,7 +67,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.amenities}
+                    value={post.postData.amenities ?? ''}
                     onChange={(e) => handlePostInputChange('amenities', e.target.value)}
                 />
             </div>
@@ -79,7 +79,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.season}
+                    value={post.postData.season ?? ''}
                     onChange={(e) => handlePostInputChange('season', e.target.value)}
                 />
             </div>
@@ -91,7 +91,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.environment}
+                    value={post.postData.environment ?? ''}
                     onChange={(e) => handlePostInputChange('environment', e.target.value)}
                 />
             </div>
@@ -103,7 +103,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.transport}
+                    value={post.postData.transport ?? ''}
                     onChange={(e) => handlePostInputChange('transport', e.target.value)}
                 />
             </div>
@@ -115,7 +115,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.landscape}
+                    value={post.postData.landscape ?? ''}
                     onChange={(e) => handlePostInputChange('landscape', e.target.value)}
                 />
             </div>
@@ -127,7 +127,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.difficulty}
+                    value={post.postData.difficulty ?? ''}
                     onChange={(e) => handlePostInputChange('difficulty', e.target.value)}
                 />
             </div>
@@ -139,8 +139,8 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.location}
-                    onChange={(e) => handlePostInputChange('location', e.target.value)}
+                    value={post.postData.locationString ?? ''}
+                    onChange={(e) => handlePostInputChange('locationString', e.target.value)}
                 />
             </div>
 
@@ -151,7 +151,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.footfall}
+                    value={post.postData.footfall ?? ''}
                     onChange={(e) => handlePostInputChange('footfall', e.target.value)}
                 />
             </div>
@@ -163,7 +163,7 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.healthRisks}
+                    value={post.postData.healthRisks ?? ''}
                     onChange={(e) => handlePostInputChange('healthRisks', e.target.value)}
                 />
             </div>

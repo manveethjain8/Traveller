@@ -10,6 +10,6 @@ const accountInteractionSchema  = new mongoose.Schema<AccountInteraction_Interfa
 // Indexing allows to retrieve the documemts quicker. It also ensures that a user can follow other user once by combining follower and following. It throws an duplicate key error if a user tries to follow the same user more than once
 accountInteractionSchema.index({followers: 1, followings: 1}, {unique: true})
 
-const AccountInteraction = mongoose.model<AccountInteraction_Interface>('accountInteractions', accountInteractionSchema)
+const AccountInteraction = mongoose.model<AccountInteraction_Interface>('AccountInteraction', accountInteractionSchema)
 
 export default AccountInteraction

@@ -72,7 +72,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                     <div className='flex-1 flex flex-col'>
                         <div className='flex-4 w-full box-border p-2'>
                             <textarea 
-                                value={activeLeg.legData.legIntroduction}
+                                value={activeLeg.legData.legIntroduction ?? ''}
                                 placeholder='Add an introduction'
                                 className='bg-[#36454F] w-full h-full resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3 overflow-y-auto'
                                 onChange={(e) => handleLegInputChange(activeLeg.id, 'legIntroduction', e.target.value)}
@@ -82,7 +82,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Leg Start Date</p>
                                 <input 
-                                    value={activeLeg.legData.startDate}
+                                    value={activeLeg.legData.startDate ?? ''}
                                     type="date" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border px-6 py-[0.4rem]'
@@ -92,7 +92,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Leg Distance (KM)</p>
                                 <input 
-                                    value={activeLeg.legData.legDistance}
+                                    value={activeLeg.legData.legDistance ?? ''}
                                     type="number" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1
@@ -107,7 +107,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Environment</p>
                                 <input 
-                                    value={activeLeg.legData.environment}
+                                    value={activeLeg.legData.environment ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'
@@ -117,7 +117,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Landscape</p>
                                 <input 
-                                    value={activeLeg.legData.landscape}
+                                    value={activeLeg.legData.landscape ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'
@@ -127,7 +127,7 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Weather</p>
                                 <input 
-                                    value={activeLeg.legData.weather}
+                                    value={activeLeg.legData.weather ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'
@@ -137,11 +137,11 @@ const LegFirstLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             <div className='w-fit h-fit'>
                                 <p className='text-center font-bold'>Location</p>
                                 <input 
-                                    value={activeLeg.legData.location}
+                                    value={activeLeg.legData.locationString ?? ''}
                                     type="text" 
                                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                                     focus:outline-none text-center box-border p-1'
-                                    onChange={(e) => handleLegInputChange(activeLeg.id, 'location', e.target.value)}
+                                    onChange={(e) => handleLegInputChange(activeLeg.id, 'locationString', e.target.value)}
                                 />
                             </div>
                         </div>

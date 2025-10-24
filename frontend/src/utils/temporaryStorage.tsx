@@ -10,6 +10,18 @@ export const fileToBase64 = async (file: File): Promise<string> => {
     });
 };
 
+export const base64ToFile = (base64: string, filename: string): File => {
+    const arr = base64.split(",");
+    const mime = arr[0].match(/:(.*?);/)?.[1] || "image/jpeg";
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+};
+
 // 🗄️ IndexedDB helpers
 const openDB = (): Promise<IDBDatabase> => {
     return new Promise((resolve, reject) => {
@@ -36,13 +48,18 @@ const saveImage = async (key: string, file: File | string) => {
     });
 };
 
-const getImage = async (key: string): Promise<File | string | undefined> => {
+const getImage = async (key: string): Promise<File | undefined> => {
     const db = await openDB();
     return new Promise((resolve, reject) => {
         const tx = db.transaction("images", "readonly");
         const store = tx.objectStore("images");
         const request = store.get(key);
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+            // Note: IndexedDB stores Files as Blobs, so we reconstruct the File
+            const blob = request.result;
+            if (!blob) return resolve(undefined);
+            resolve(new File([blob], key, { type: blob.type || "image/jpeg" }));
+        };
         request.onerror = () => reject(request.error);
     });
 };
@@ -58,181 +75,157 @@ const deleteImage = async (key: string): Promise<void> => {
     });
 };
 
-// 🧠 Manage replacement or deletion of images in IndexedDB
+// 🧠 Manage replacement or deletion of images in IndexedDB (key only)
 const manageImageReplacement = async (
     oldKey: string | undefined,
     newFile?: File | string,
     newKeyPrefix?: string
 ): Promise<string | undefined> => {
-    // 🗑️ Delete old image if exists
     if (oldKey && typeof oldKey === "string") {
         await deleteImage(oldKey);
     }
 
-    // 🚫 User deleted the image manually
     if (!newFile) return undefined;
 
-    // 💾 Save new file
     if (newFile instanceof File) {
         const newKey = `${newKeyPrefix}-${Date.now()}`;
         await saveImage(newKey, newFile);
         return newKey;
     }
 
-    // 🧠 Already a string (Base64 or URL)
+    // If newFile is already a string, assume it's a key and just return it
     return newFile;
 };
 
 // 💾 Save post + legs
 export const saveToLocalStorage = async (newPost: AddPost_Type, legs: IndividualLeg_type[]) => {
-    const postCopy = { ...newPost };
+    // Create copies to avoid mutating the original state objects
+    const postCopy = { 
+        ...newPost, 
+        postData: { ...newPost.postData },
+        postPreview: { ...newPost.postPreview }
+    };
     const legsCopy = legs.map((l) => ({
         ...l,
         legData: { ...l.legData },
         legPreview: { ...l.legPreview },
     }));
 
-    // 🖼️ Main post images
-    postCopy.postData.thumbnail = await manageImageReplacement(
-        typeof postCopy.postData.thumbnail === "string" ? postCopy.postData.thumbnail : undefined,
-        postCopy.postData.thumbnail instanceof File ? postCopy.postData.thumbnail : undefined,
-        "post-thumbnail"
-    );
+    // -------------------
+    // Post main image
+    // -------------------
+    // If it's a File, it's new/updated. Save to IDB and store the *key*.
+    if (postCopy.postData.thumbnail instanceof File) {
+        // We pass undefined for oldKey because this is a simple save, not a replacement
+        const newKey = await manageImageReplacement(undefined, postCopy.postData.thumbnail, "post-thumbnail");
+        postCopy.postData.thumbnail = newKey; // <-- THE FIX
+    }
+    // If it's a string, it's already a key. Do nothing.
 
-    postCopy.postPreview.thumbnail = await manageImageReplacement(
-        typeof postCopy.postPreview.thumbnail === "string" ? postCopy.postPreview.thumbnail : undefined,
-        postCopy.postPreview.thumbnail, // Already string in your case
-        "preview-thumbnail"
-    );
-
-    // 🦵 Handle legs
+    // -------------------
+    // Legs
+    // -------------------
     for (const leg of legsCopy) {
-        const { id, legData, legPreview } = leg;
+        const { id, legData } = leg;
 
-        legData.startPhoto = await manageImageReplacement(
-            typeof legData.startPhoto === "string" ? legData.startPhoto : undefined,
-            legData.startPhoto instanceof File ? legData.startPhoto : undefined,
-            `${id}-startPhoto`
-        );
+        // startPhoto
+        if (legData.startPhoto instanceof File) {
+            legData.startPhoto = await manageImageReplacement(undefined, legData.startPhoto, `${id}-startPhoto`); // <-- THE FIX
+        }
 
-        legData.endPhoto = await manageImageReplacement(
-            typeof legData.endPhoto === "string" ? legData.endPhoto : undefined,
-            legData.endPhoto instanceof File ? legData.endPhoto : undefined,
-            `${id}-endPhoto`
-        );
+        // endPhoto
+        if (legData.endPhoto instanceof File) {
+            legData.endPhoto = await manageImageReplacement(undefined, legData.endPhoto, `${id}-endPhoto`); // <-- THE FIX
+        }
 
+        // photoDump
         if (Array.isArray(legData.photoDump)) {
-            const newDump: string[] = [];
+            const newKeyDump: (string | undefined)[] = [];
             for (let i = 0; i < legData.photoDump.length; i++) {
                 const item = legData.photoDump[i];
-                if (!item) continue;
-                const newKey = await manageImageReplacement(
-                    typeof item === "string" ? item : undefined,
-                    item instanceof File ? item : undefined,
-                    `${id}-photoDump-${i}`
-                );
-                if (newKey) newDump.push(newKey);
+                if (item instanceof File) {
+                    // It's a new file, save it and store the key
+                    const newKey = await manageImageReplacement(undefined, item, `${id}-photoDump-${i}`);
+                    newKeyDump.push(newKey);
+                } else if (typeof item === "string") {
+                    // It's already a key, just keep it
+                    newKeyDump.push(item);
+                }
             }
-            legData.photoDump = newDump;
+            // Replace the array of [File, string, File] with an array of [string, string, string]
+            legData.photoDump = newKeyDump.filter((f): f is string => !!f); // <-- THE FIX
         }
 
-        legPreview.startPhoto = await manageImageReplacement(
-            typeof legPreview.startPhoto === "string" ? legPreview.startPhoto : undefined,
-            legPreview.startPhoto,
-            `${id}-preview-startPhoto`
-        );
-
-        legPreview.endPhoto = await manageImageReplacement(
-            typeof legPreview.endPhoto === "string" ? legPreview.endPhoto : undefined,
-            legPreview.endPhoto,
-            `${id}-preview-endPhoto`
-        );
-
-        if (Array.isArray(legPreview.photoDump)) {
-            const newPreviewDump: string[] = [];
-            for (let i = 0; i < legPreview.photoDump.length; i++) {
-                const item = legPreview.photoDump[i];
-                if (!item) continue;
-                const newKey = await manageImageReplacement(
-                    typeof item === "string" ? item : undefined,
-                    item,
-                    `${id}-preview-photoDump-${i}`
-                );
-                if (newKey) newPreviewDump.push(newKey);
-            }
-            legPreview.photoDump = newPreviewDump;
-        }
+        // Previews remain strings (Blob URLs) and will be saved as such.
+        // They will be undefined on load and need to be regenerated.
     }
 
-    // 🧱 Save to localStorage
+    // Save structure in localStorage (images are now string keys)
     try {
         localStorage.setItem("postData", JSON.stringify(postCopy));
         localStorage.setItem("legData", JSON.stringify(legsCopy));
     } catch (e) {
-        console.warn(
-            "LocalStorage quota exceeded, consider storing large images in IndexedDB only."
-        );
+        console.warn("LocalStorage quota exceeded, consider storing large images in IndexedDB only.", e);
     }
 };
 
 // 📦 Load post + legs from storage
-export const loadFromLocalStorage = async (): Promise<{ post: AddPost_Type; legs: IndividualLeg_type[] }> => {
+export const loadFromLocalStorage = async (
+    isRefreshed: boolean
+): Promise<{ post: AddPost_Type; legs: IndividualLeg_type[] }> => {
     const savedPost = localStorage.getItem("postData");
     const savedLegs = localStorage.getItem("legData");
 
     const post: AddPost_Type = savedPost ? JSON.parse(savedPost) : { postData: {}, postPreview: {} };
     const legs: IndividualLeg_type[] = savedLegs ? JSON.parse(savedLegs) : [];
 
-    // Helper to fetch image and convert File to Base64 if needed
-    const loadImage = async (key?: string): Promise<string | undefined> => {
+    // If not a refresh, we're just loading the in-memory state, which might
+    // still have File objects. Return as-is.
+    if (!isRefreshed) return { post, legs };
+
+    // If it is a refresh, all image properties will be string keys
+    // and we need to load them from IndexedDB.
+
+    const loadImageAsFile = async (key?: string): Promise<File | undefined> => {
         if (!key) return undefined;
-        const img = await getImage(key);
-        if (img instanceof File) {
-            return await fileToBase64(img);
-        } 
-        if (typeof img === 'string') {
-            return img;
-        }
-        // fallback: return key itself if nothing is in IndexedDB
-        return key;
+        return await getImage(key);
     };
 
-    // Post thumbnails
-    post.postData.thumbnail = await loadImage(post.postData.thumbnail as string);
-    post.postPreview.thumbnail = await loadImage(post.postPreview.thumbnail as string);
+    // Convert main post image
+    if (typeof post.postData.thumbnail === "string") {
+        const file = await loadImageAsFile(post.postData.thumbnail);
+        if (file) post.postData.thumbnail = file;
+    }
 
-    // Legs
+    // Convert leg images
     for (const leg of legs) {
-        const { legData, legPreview } = leg;
+        const { legData } = leg;
 
-        legData.startPhoto = await loadImage(legData.startPhoto as string);
-        legData.endPhoto = await loadImage(legData.endPhoto as string);
+        if (typeof legData.startPhoto === "string") {
+            const file = await loadImageAsFile(legData.startPhoto);
+            if (file) legData.startPhoto = file;
+        }
+
+        if (typeof legData.endPhoto === "string") {
+            const file = await loadImageAsFile(legData.endPhoto);
+            if (file) legData.endPhoto = file;
+        }
 
         if (Array.isArray(legData.photoDump)) {
             const loaded = await Promise.all(
-                legData.photoDump.map(async (item) => {
-                    if (typeof item === "string") {
-                        return await loadImage(item);
-                    }
-                    return undefined;
-                })
+                legData.photoDump.map((item) =>
+                    // Item should always be a string key here, but we check just in case
+                    typeof item === "string" ? loadImageAsFile(item) : Promise.resolve(item)
+                )
             );
-            legData.photoDump = loaded.filter((img): img is string => !!img);
-        }
-
-        legPreview.startPhoto = await loadImage(legPreview.startPhoto as string);
-        legPreview.endPhoto = await loadImage(legPreview.endPhoto as string);
-
-        if (Array.isArray(legPreview.photoDump)) {
-            const loaded = await Promise.all(legPreview.photoDump.map(loadImage));
-            legPreview.photoDump = loaded.filter((img): img is string => !!img);
+            legData.photoDump = loaded.filter((f): f is File => !!f);
         }
     }
 
     return { post, legs };
 };
 
-// 🧹 Delete entire IndexedDB (for full reset)
+// 🧹 Delete entire IndexedDB
 export const deleteDatabase = async (dbName = "TravellerDB") => {
     return new Promise<void>((resolve, reject) => {
         const request = indexedDB.deleteDatabase(dbName);

@@ -24,7 +24,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                     type="text"
                                     placeholder="Enter status" 
                                     className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2"
-                                    value={activeLeg.legData.restaurants.availability}
+                                    value={activeLeg.legData.restaurants.availability ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, 'restaurants', e.target.value, 0)}
                                 />
                             </div>
@@ -33,7 +33,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                 <strong >Recommendation</strong>
                                 <textarea 
                                     className="bg-[#36454F] min-h-[8rem] w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
-                                    value={activeLeg.legData.restaurants.recommendation}
+                                    value={activeLeg.legData.restaurants.recommendation ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, 'restaurants', e.target.value, 1)}
                                 />
                             </div>
@@ -49,7 +49,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                     type="text"
                                     placeholder="Enter status" 
                                     className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2"
-                                    value={activeLeg.legData.fuelAndServices.availability}
+                                    value={activeLeg.legData.fuelAndServices.availability ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "fuelAndServices", e.target.value, 0)}
                                 />
                             </div>
@@ -58,7 +58,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                 <strong >Recommendation</strong>
                                 <textarea 
                                     className="bg-[#36454F] h-full w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
-                                    value={activeLeg.legData.fuelAndServices.recommendation}
+                                    value={activeLeg.legData.fuelAndServices.recommendation ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "fuelAndServices", e.target.value, 1)}
                                 />
                             </div>
@@ -74,7 +74,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                     type="text"
                                     placeholder="Enter status" 
                                     className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2"
-                                    value={activeLeg.legData.stays.availability}
+                                    value={activeLeg.legData.stays.availability ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "stays", e.target.value, 0)}
                                 />
                             </div>
@@ -83,7 +83,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                 <strong >Recommendation</strong>
                                 <textarea 
                                     className="bg-[#36454F] h-full w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
-                                    value={activeLeg.legData.stays.recommendation}
+                                    value={activeLeg.legData.stays.recommendation ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "stays", e.target.value, 1)}
                                 />
                             </div>
@@ -99,7 +99,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                     type="text"
                                     placeholder="Enter status" 
                                     className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2"
-                                    value={activeLeg.legData.network.availability}
+                                    value={activeLeg.legData.network.availability ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "network", e.target.value, 0)}
                                 />
                             </div>
@@ -108,7 +108,7 @@ const LegThirdLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                                 <strong >Recommendation</strong>
                                 <textarea 
                                     className="bg-[#36454F] h-full w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
-                                    value={activeLeg.legData.network.recommendation}
+                                    value={activeLeg.legData.network.recommendation ?? ''}
                                     onChange={(e) => handleLegInputChange(activeLeg.id, "network", e.target.value, 1)}
                                 />
                             </div>

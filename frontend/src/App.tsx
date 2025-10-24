@@ -6,6 +6,7 @@ import Home from "./components/home/Home"
 import Explore from "./components/explore/Explore"
 import AddPosts from "./components/addPosts/AddPosts"
 import AddSitreps from "./components/addSitreps/AddSitreps"
+import DisplayPost from "./components/displayFullPost/DisplayPost"
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 				<Route path="/profile" element={<Profile/>}/>
 				<Route path="/addPost" element={<AddPosts/>}/>
 				<Route path="/addSitrep" element={<AddSitreps/>}/>
+				<Route path="/displayPost" element={<DisplayPost/>}/>
 			</Routes>
 		</main>
 	)
