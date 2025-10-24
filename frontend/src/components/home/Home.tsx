@@ -1,9 +1,13 @@
+import { useRef } from "react"
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 import Posts from "./subcomponents/Posts"
 import Sitrep from "./subcomponents/Sitrep"
 
 const Home = () => {
+
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null)
+
     return (
         <div className="w-screen h-screen">
             <TopBar/>
@@ -17,8 +21,10 @@ const Home = () => {
                     <Sitrep/>
                 {/* End of Sitrep display */}
                 {/* Start of Posts display */}
-                <div className="flex-1 h-full flex overflow-y-auto">
-                    <Posts/>
+                <div
+                    ref={scrollContainerRef} 
+                    className="flex-1 h-full flex overflow-y-auto">
+                    <Posts scrollContainerRef={scrollContainerRef}/>
                 </div>
                 {/* End of Posts display */}
             </div>

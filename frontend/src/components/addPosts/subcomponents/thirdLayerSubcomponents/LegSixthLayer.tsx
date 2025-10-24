@@ -6,6 +6,8 @@ import uploadIcon from '../../../../assets/icons/upload_50dp_E3E3E3_FILL0_wght70
 import type { IndividualLeg_type } from "../../../../configs/types_and_interfaces";
 import { useAddPostContext } from '../../../../contexts/addPostContext';
 import { deleteDatabase } from '../../../../utils/temporaryStorage';
+import { useNavigate } from 'react-router-dom';
+import { useDisplayPostContext } from '../../../../contexts/displayPostContext';
 
 type ThirdLayerProps = {
     activeLeg: IndividualLeg_type | null
@@ -19,7 +21,10 @@ type ThirdLayerProps = {
 
 const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
 
-    const {handleLegPhotoDelete, handlePost, post} = useAddPostContext()
+    const {handleLegPhotoDelete, handlePost, setUploading, uploading} = useAddPostContext()
+    const {getAllPosts} = useDisplayPostContext()
+
+    const navigate = useNavigate()
 
     return (
         <div className=" w-full min-h-[10rem] flex flex-col gap-y-[2rem]">
@@ -92,10 +97,13 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             className='w-[2rem] h-[2rem]'
                             onClick={async() => {
                                 const response = await handlePost('private')
-                                if(response === 'success'){
+                                setUploading(true)
+                                if(response === 'success' && uploading === false){
                                     localStorage.removeItem("postData")
                                     localStorage.removeItem("legData")
                                     deleteDatabase()
+                                    getAllPosts()
+                                    navigate('/home')
                                 }
                                 
                             }}
@@ -110,10 +118,13 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             className='w-[2rem] h-[2rem]'
                             onClick={async() => {
                                 const response = await handlePost('public')
-                                if(response === 'success'){
+                                setUploading(true)
+                                if(response === 'success' && uploading === false){
                                     localStorage.removeItem("postData")
                                     localStorage.removeItem("legData")
                                     deleteDatabase()
+                                    getAllPosts()
+                                    navigate('/home')
                                 }
                                 
                             }}

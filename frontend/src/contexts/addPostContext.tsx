@@ -15,6 +15,9 @@ interface AddPostContext_Interface {
     activeLeg: IndividualLeg_type | null
     setActiveLeg: Dispatch<SetStateAction<IndividualLeg_type | null>>
 
+    uploading: boolean
+    setUploading: Dispatch<SetStateAction<boolean>>
+
     handlePostInputChange: <K extends keyof AddPost_Type['postData']>(field: K, value: AddPost_Type['postData'][K]) => void
     handleThumbnailImageRemoval: () => void
     handleLegInputChange: (legId: string, field: keyof IndividualLeg_type['legData'], value: any, index?: number) => void
@@ -39,6 +42,8 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
     const [legs, setLegs] = useState<IndividualLeg_type[]>([structuredClone({id: '1', name: 'Leg 1', legData: {...individualLeg_Template}, legPreview: {...legPreview_Template}})])
     const [activeLegId, setActiveLegId] = useState<string>('1')
     const [activeLeg, setActiveLeg] = useState<IndividualLeg_type | null>(null)
+
+    const [uploading, setUploading] = useState<boolean>(false)
 
 
     const [isRefreshed, setIsRefreshed] = useState(false);
@@ -348,6 +353,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 withCredentials: true,
                 headers: { "Content-Type": "multipart/form-data" },
             });
+            setUploading(false)
             return "success";
         } catch (err) {
             console.error("Error creating post:", err);
@@ -366,6 +372,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 legs, setLegs,
                 activeLegId, setActiveLegId,
                 activeLeg, setActiveLeg,
+                uploading, setUploading,
                 handlePostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
                 handleActiveLeg, handleLegInputChange,

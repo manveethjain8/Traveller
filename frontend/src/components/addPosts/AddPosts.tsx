@@ -1,3 +1,4 @@
+import { useAddPostContext } from "../../contexts/addPostContext"
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 import FirstLayer from "./subcomponents/FirstLayer"
@@ -6,8 +7,16 @@ import ThirdLayer from "./subcomponents/ThirdLayer"
 
 
 const AddPosts = () => {
+
+    const {uploading} = useAddPostContext()
+
     return (
         <div className="w-screen h-screen">
+            {uploading && 
+                <div className='z-100 fixed w-screen h-screen bg-black/70 flex justify-center items-center'>
+                    <strong className="text-[2rem]">Uploading...</strong>
+                </div>
+            }
             <TopBar/>
             <Sidebar/>
             <div 
