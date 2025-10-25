@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react'
 import pp from '../../../assets/background_images/authenticate_page_background.jpg'
 import { useProfileContext } from '../../../contexts/profileContext'
 import { useDisplayPostContext } from '../../../contexts/displayPostContext'
+import { useStartupContext } from '../../../contexts/startupContext'
+import { useInteractionsContext } from '../../../contexts/interactionsContext'
 
 const AccountInfo = () => {
 
-    const {setEditProfileClicked, userInfo} = useProfileContext()
+    const {setEditProfileClicked, userInfo, getAccountDetails} = useProfileContext()
     const {accountAllPosts} = useDisplayPostContext()
+    const {activeAccountId} = useStartupContext()
+    const {handleRelationship} = useInteractionsContext()
 
     const [postsCount, setPostsCount] = useState<number>(0)
 
@@ -19,6 +23,8 @@ const AccountInfo = () => {
 
         postsCounter()
     }, [accountAllPosts])
+
+    console.log(userInfo)
 
     return (
         <div className="flex flex-1 w-full justify-center items-center
@@ -50,13 +56,32 @@ const AccountInfo = () => {
                         <p className='h-fit w-fit 2xl:mt-[-1.4rem] 2xl:text-[2rem] 3xl:mt-[-1.3rem]'>.</p>
                         <p className='3xl:text-[1rem]'>{userInfo.lastName ?? "last name"}</p>
                     </div>
-                    <button
-                        onClick={() => setEditProfileClicked(prev => !prev)}
-                        className='bg-red-500 w-full rounded-2xl mt-[0.2rem] hover:bg-white hover:text-red-500 active:text-white active:bg-red-700 transition-all duration-300 cursor-pointer
-                                    2xl:h-[1.5rem]'
-                    >
-                        Edit Profile
-                    </button>
+                    <div className='flex'>
+                        {activeAccountId === userInfo._id ? (
+                            <button
+                                onClick={() => setEditProfileClicked(prev => !prev)}
+                                className='bg-red-500 w-full rounded-2xl mt-[0.2rem] hover:bg-white hover:text-red-500 active:text-white active:bg-red-700 transition-all duration-300 cursor-pointer
+                                            2xl:h-[1.5rem]'
+                            >
+                                Edit Profile
+                            </button>
+                        ) : (
+                            <button
+                                className='bg-orange-500 w-full rounded-2xl mt-[0.2rem] hover:bg-white hover:text-orange-500 active:text-white active:bg-orange-700 transition-all duration-300 cursor-pointer
+                                            2xl:h-[1.5rem]'
+                                            onClick={async () => {
+                                                if(userInfo._id && activeAccountId){
+                                                    const response = await handleRelationship(userInfo?._id, activeAccountId)
+                                                    if(response === 'success'){
+                                                        getAccountDetails()
+                                                    }
+                                                }
+                                            }}
+                            >
+                                Follow
+                            </button>
+                        )}
+                    </div>
                 </div>
                 {/* End of User's Name and Native*/}
             </div>
@@ -92,11 +117,11 @@ const AccountInfo = () => {
                 </div>
                 <div className='flex flex-col items-center'>
                     <strong>Followers</strong>
-                    <p>0</p>
+                    <p>{userInfo.followers && userInfo.followers.length}</p>
                 </div>
                 <div className='flex flex-col items-center'>
                     <strong>Following</strong>
-                    <p>0</p>
+                    <p>{userInfo.followings && userInfo.followings.length}</p>
                 </div>
             </div>
             {/* Start of Accounts Statisticks */}

@@ -19,15 +19,16 @@ export interface Error_Interface { // Error
     location: string 
 }
 
-export interface LimitedAccountInfo_Interface extends Document {
-    _id: ObjectId | string
-    userName: string
-    profilePicture: string
-}
 
 export interface FilesUploadResult_Interface {
   url: string;
   publicId: string;
+}
+
+export interface LimitedAccountInfo_Interface {
+    _id: ObjectId | string
+    userName: string
+    profilePicture: string
 }
 
 export interface Account_Interface extends LimitedAccountInfo_Interface { // Accounts
@@ -45,6 +46,11 @@ export interface Account_Interface extends LimitedAccountInfo_Interface { // Acc
     date_of_birth: string
     tags: string[]
     createdAt: Date
+}
+
+export interface Complex_Account_Interface extends Account_Interface{
+    followers: LimitedAccountInfo_Interface[]
+    followings: LimitedAccountInfo_Interface[]
 }
 
 
@@ -66,9 +72,9 @@ export interface TokenPayload_Interface {
     googleId: string
 }
 
-export interface AccountInteraction_Interface extends Document {
-    followers: ObjectId | string
-    followings: ObjectId | string
+export interface FandUF_Interface extends Document {
+    follower: ObjectId | string
+    following: ObjectId | string
     createdAt: Date
 }
 

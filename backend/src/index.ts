@@ -12,6 +12,7 @@ import authRoutes from './routes/authRoutes'
 import accountRoutes from './routes/accountRoutes'
 import quoteRoutes from './routes/quotesRoutes'
 import postRoutes from './routes/postRoutes'
+import accountInteractionRoutes from './routes/accountInteractionsRoutes'
 
 //Provides access to ENV'S
 dotenv.config()
@@ -48,6 +49,7 @@ app.use('/auth', authRoutes)
 app.use('/account', accountRoutes)
 app.use('/quote', quoteRoutes)
 app.use('/post', postRoutes)
+app.use('/interaction', accountInteractionRoutes)
 
 //Provides the means to connect to the server
 const PORT: number = configurations.PORT

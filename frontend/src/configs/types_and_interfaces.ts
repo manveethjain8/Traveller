@@ -22,6 +22,8 @@ export type UserInfo_Type = { // User Information
     country: string | undefined
     date_of_birth: string | undefined
     tags: string[] | undefined
+    followers: LimitedAccountInfo_Type[] | undefined
+    followings: LimitedAccountInfo_Type[] | undefined
 }
 
 export type IndividualLeg_type = {

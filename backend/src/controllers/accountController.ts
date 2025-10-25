@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUploadUtils";
 import Account from "../models/accounts";
-import { Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
-import { findAccount, returnLimitedAccountInfo } from "../utils/accountUtils";
+import { Account_Interface, Complex_Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
+import { findAccount, findAccountForInternal, returnLimitedAccountInfo } from "../utils/accountUtils";
 import { ObjectId } from "mongoose";
 
 
@@ -17,7 +17,7 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 
 		if(fileData){
 			const mongoDbId: ObjectId | string = (req.user as any).mongoDbId
-			const account: Account_Interface| null | Error_Interface= await findAccount(mongoDbId)
+			const account: Account_Interface | null | Error_Interface= await findAccountForInternal(mongoDbId)
 
 			if (account && "profilePictureId" in account) {
 				try {
@@ -59,7 +59,7 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 export const getAccountInfo = async(req: Request, res: Response): Promise<any> => {
 	try{
 		const mongoDbId: ObjectId | string = (req.user as any).mongoDbId
-		const account: Account_Interface| Error_Interface | null = await findAccount(mongoDbId)
+		const account: Partial<Complex_Account_Interface> | Error_Interface | null = await findAccount(mongoDbId)
 
 		if(!account || 'error' in account){
 			res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})

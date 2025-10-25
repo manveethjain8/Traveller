@@ -9,21 +9,25 @@ import { NavigationContextProvider } from './contexts/navigationContext.tsx'
 import { StartupContextProvider } from './contexts/startupContext.tsx'
 import { AddPostContextProvider } from './contexts/addPostContext.tsx'
 import { DisplayPostContextProvider } from './contexts/displayPostContext.tsx'
+import { InteractionsContextProvider } from './contexts/interactionsContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
-	<BrowserRouter>
+  <BrowserRouter>
 		<StrictMode>
-			<DisplayPostContextProvider>
-				<StartupContextProvider>
-					<NavigationContextProvider>
-						<AddPostContextProvider>
-							<ProfileContextProvider>
-								<App />
-							</ProfileContextProvider>
-						</AddPostContextProvider>
-					</NavigationContextProvider>
-				</StartupContextProvider>
-			</DisplayPostContextProvider>
+			<NavigationContextProvider>
+					<InteractionsContextProvider>
+						<DisplayPostContextProvider>
+								<StartupContextProvider>
+									<AddPostContextProvider>
+										<ProfileContextProvider>
+											<App />
+										</ProfileContextProvider>
+									</AddPostContextProvider>
+								</StartupContextProvider>
+						</DisplayPostContextProvider>
+					</InteractionsContextProvider>
+			</NavigationContextProvider>
 		</StrictMode>
-	</BrowserRouter>
-)
+  </BrowserRouter>
+);
+

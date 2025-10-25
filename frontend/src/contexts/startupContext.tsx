@@ -6,6 +6,9 @@ import { useDisplayPostContext } from "./displayPostContext";
 interface StartupContext_Interface {
     limitedUserInfo: LimitedAccountInfo_Type | undefined
     setLimitedUserInfo: Dispatch<SetStateAction<LimitedAccountInfo_Type | undefined>>
+
+    activeAccountId: string | undefined
+    setActiveAccountId: Dispatch<SetStateAction<string | undefined>>
 }
 
 const StartupContext = createContext<StartupContext_Interface | undefined>(undefined)
@@ -20,10 +23,13 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
 
     const [limitedUserInfo, setLimitedUserInfo] = useState<LimitedAccountInfo_Type | undefined>(undefined)
 
-    const getLimmitedAccountInfo = async(): Promise<void> => {
+    const [activeAccountId, setActiveAccountId] = useState<string | undefined>(undefined)
+
+    const getLimitedAccountInfo = async(): Promise<void> => {
         try{
             const result = await customAPI.get<LimitedAccountInfo_Type>('/account/fetch-limited-account-details', {withCredentials: true})
             setLimitedUserInfo(result.data)
+            setActiveAccountId(result.data._id)
         }catch(err){
             if (err instanceof Error){
                 console.log('Error retrieving account details. Location: profileContext[Frontend]', err)
@@ -34,14 +40,15 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
     }
 
     useEffect(() => {
-        getLimmitedAccountInfo()
+        getLimitedAccountInfo()
         getAllPosts()
     }, [])
 
     return (
         <StartupContext.Provider value={
             {
-                limitedUserInfo, setLimitedUserInfo
+                limitedUserInfo, setLimitedUserInfo,
+                activeAccountId, setActiveAccountId
             }
         }>
             {children}
