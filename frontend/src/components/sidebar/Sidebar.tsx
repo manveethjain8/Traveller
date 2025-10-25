@@ -3,6 +3,7 @@ import exploreIcon from '../../assets/icons/explore_50dp_E3E3E3_FILL0_wght400_GR
 import profileIcon from '../../assets/icons/account_circle_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
 import addPostIcon from '../../assets/icons/post_add_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
 import addSitRepIcon from '../../assets/icons/amp_stories_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
+import travellerIcon from '../../assets/icons/hiking_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz40.png'
 
 import { useNavigationContext } from '../../contexts/navigationContext'
 import { useNavigate } from 'react-router-dom'
@@ -60,6 +61,27 @@ const Sidebar = () => {
                         alt="Explore Icon"
                     />
                     <p className='font-semibold'>Explore</p>
+                </button> 
+
+                <button 
+                    onClick={() => {
+                        if(sideBarCategory !== 'travellers'){
+                            setSideBarCategory('travellers')
+                            setNavigationCategorytoLocalStorage('travellers')
+                            navigate('/travellers')
+                        }
+                    }} 
+                    className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
+                    2xl:px-5 2xl:py-2 2xl:h-[6%]
+                    3xl:px-6 3xl:py-3 3xl:text-[1.2rem]"
+                    style={sideBarCategory === 'travellers' ? {backgroundColor: "red"} : {}}
+                >   
+                    <img 
+                        className='align-center 2xl:w-[2rem] 3xl:w-[1.7rem] 3xl:h-[1.7rem]' 
+                        src={travellerIcon} 
+                        alt="Travellers Icon"
+                    />
+                    <p className='font-semibold'>Travellers</p>
                 </button> 
 
                 <div className='bg-red-500 h-[0.1rem] w-[90%] my-[1rem]'></div>

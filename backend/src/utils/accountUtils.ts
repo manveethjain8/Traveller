@@ -90,3 +90,16 @@ export const returnLimitedAccountInfo = async(mongoDbId: ObjectId | string): Pro
         }
     }
 }
+
+export const returnMultipleLimitedAccountInfo = async(searchText: RegExp): Promise<LimitedAccountInfo_Interface[] | Error_Interface | null> => {
+    try{
+        const response = await Account.find<LimitedAccountInfo_Interface[] | null>({userName: {$regex: searchText}}, 'profilePicture userName').lean()
+        return response
+    }catch(err: unknown){
+        if(err instanceof Error){
+            return { message: 'Error retriving accounts', error: err.message, location: 'Accounts Utils'}
+        }else{
+            return { message: 'Unknown error has occured while retriving the accounts', error: err, location: 'Accounts Utils'}
+        }
+    }
+}

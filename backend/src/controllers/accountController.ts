@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUploadUtils";
 import Account from "../models/accounts";
 import { Account_Interface, Complex_Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
-import { findAccount, findAccountForInternal, returnLimitedAccountInfo } from "../utils/accountUtils";
+import { findAccount, findAccountForInternal, returnLimitedAccountInfo, returnMultipleLimitedAccountInfo } from "../utils/accountUtils";
 import { ObjectId } from "mongoose";
 
 
@@ -92,6 +92,29 @@ export const getLimitedAccountInfo = async(req: Request, res: Response): Promise
 			res.status(500).json({message: 'Error while retriving account details', error: err.message})
 		}else{
 			res.status(500).json({message: 'Unknown Error while retriving account details'})
+		}
+	}
+}
+
+export const searchAccountByName = async(req: Request, res: Response): Promise<any> => {
+	try{
+		const {searchText} = req.body as { searchText: string }
+
+		const regex = new RegExp(searchText, "i")
+
+		const response: LimitedAccountInfo_Interface[] | Error_Interface | null = await returnMultipleLimitedAccountInfo(regex)
+
+		if(!response || 'error' in response){
+			res.status(500).json({message: 'Failed to find the accounts', location: 'accounts controller [Backend]'})
+		}
+
+
+		res.status(200).json(response)
+	}catch(err: unknown){
+		if(err instanceof Error){
+			res.status(500).json({message: 'Error while retriving matching accounts', error: err.message})
+		}else{
+			res.status(500).json({message: 'Unknown Error while retriving matching accounts'})
 		}
 	}
 }
