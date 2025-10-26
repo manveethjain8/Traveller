@@ -66,6 +66,7 @@ const Travellers = () => {
                                             className="w-full h-full rounded-full object-center object-cover"
                                             onClick={() => {
                                                 getAccountDetails(s._id)
+                                                sessionStorage.setItem('searchedAccountId', s._id)
                                                 navigate('/profile')
                                             }}
                                         />
@@ -74,6 +75,7 @@ const Travellers = () => {
                                         className="w-fit hover:cursor-pointer"
                                         onClick={() => {
                                             getAccountDetails(s._id)
+                                            sessionStorage.setItem('searchedAccountId', s._id)
                                             navigate('/profile')
                                         }}
                                     >

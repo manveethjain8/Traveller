@@ -74,6 +74,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
             const endPoint = `/account/fetch-account-details/${reqAccountId}`
             const response = await customAPI.get<UserInfo_Type>(endPoint, {withCredentials: true})
             setUserInfo(response.data)
+            sessionStorage.setItem('searchedAccountId', response.data._id)
         }catch(err){
             if (err instanceof Error){
                 console.log('Error retrieving account details. Location: profileContext[Frontend]', err)
@@ -123,7 +124,6 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
         <ProfileContext.Provider value = {
             {
                 postsCategory, setPostCategory,
-
                 editProfileClicked, setEditProfileClicked,
                 updating, setUpdating,
                 userInfo, setUserInfo,

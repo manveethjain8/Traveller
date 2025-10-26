@@ -51,6 +51,7 @@ export interface Account_Interface extends LimitedAccountInfo_Interface { // Acc
 export interface Complex_Account_Interface extends Account_Interface{
     followers: LimitedAccountInfo_Interface[]
     followings: LimitedAccountInfo_Interface[]
+    posts: PostSummarySpecificAccount_Interface[]
 }
 
 

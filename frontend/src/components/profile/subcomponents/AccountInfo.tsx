@@ -1,28 +1,14 @@
-import { useEffect, useState } from 'react'
 import pp from '../../../assets/background_images/authenticate_page_background.jpg'
 import { useProfileContext } from '../../../contexts/profileContext'
-import { useDisplayPostContext } from '../../../contexts/displayPostContext'
+
 import { useStartupContext } from '../../../contexts/startupContext'
 import { useInteractionsContext } from '../../../contexts/interactionsContext'
 
 const AccountInfo = () => {
 
     const {setEditProfileClicked, userInfo, getAccountDetails} = useProfileContext()
-    const {accountAllPosts} = useDisplayPostContext()
     const {activeAccountId} = useStartupContext()
     const {handleRelationship} = useInteractionsContext()
-
-    const [postsCount, setPostsCount] = useState<number>(0)
-
-    useEffect(() => {
-        const postsCounter = (): void => {
-            if(accountAllPosts && accountAllPosts.length > 0){
-                setPostsCount(accountAllPosts.length)
-            }
-        }
-
-        postsCounter()
-    }, [accountAllPosts])
 
     return (
         <div className="flex flex-1 w-full justify-center items-center
@@ -111,7 +97,7 @@ const AccountInfo = () => {
                             3xl:text-[1.1rem]">
                 <div className='flex flex-col items-center'>
                     <strong>Posts</strong>
-                    <p>{postsCount}</p>
+                    <p>{userInfo.posts?.length && userInfo.posts?.length}</p>
                 </div>
                 <div className='flex flex-col items-center'>
                     <strong>Followers</strong>

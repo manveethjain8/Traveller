@@ -4,19 +4,24 @@ import AccountInfo from "./subcomponents/AccountInfo"
 import AccountPosts from "./subcomponents/AccountPosts"
 import { useProfileContext } from "../../contexts/profileContext"
 import EditProfile from "./subcomponents/EditProfile"
-
 import { useEffect } from "react"
-import { useDisplayPostContext } from "../../contexts/displayPostContext"
+
 
 const Profile = () => {
 
     const {editProfileClicked, getAccountDetails} = useProfileContext()
-    const {getAllPostsOfSpecificAccount} = useDisplayPostContext()
 
     useEffect(() => {
-        getAccountDetails()
-        getAllPostsOfSpecificAccount()
-    }, [])
+        const surviveRefresh = (): void => {
+            const saved = sessionStorage.getItem('searchedAccountId')
+            if(saved){
+                getAccountDetails(saved)
+            }
+        }
+        setTimeout(() => {
+            surviveRefresh()
+        }, 1)
+    },[])
 
     return (
         <div className="w-screen h-screen">

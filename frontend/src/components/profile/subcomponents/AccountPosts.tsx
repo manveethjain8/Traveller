@@ -7,13 +7,15 @@ import defaultTNP from '../../../assets/icons/image_50dp_E3E3E3_FILL0_wght400_GR
 import { useProfileContext } from '../../../contexts/profileContext'
 import type { PostSummarySpecificAccount_Type } from '../../../configs/types_and_interfaces'
 import {useNavigate } from 'react-router-dom'
+import { useStartupContext } from '../../../contexts/startupContext'
 
 const AccountPosts = () => {
 
     const navigate = useNavigate()
 
-    const {postsCategory, setPostCategory} = useProfileContext()
-    const {accountAllPosts, getSpecificPost} = useDisplayPostContext()
+    const {postsCategory, setPostCategory, userInfo} = useProfileContext()
+    const {getSpecificPost} = useDisplayPostContext()
+    const {activeAccountId} = useStartupContext()
 
     const [publicPosts, setPublicPosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
     const [privatePosts, setPrivatePosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
@@ -22,7 +24,7 @@ const AccountPosts = () => {
         const postSeparator = (): void => {
             let pb: PostSummarySpecificAccount_Type[] = []
             let pr: PostSummarySpecificAccount_Type[] = []
-            accountAllPosts?.forEach(p => {
+            userInfo.posts?.forEach(p => {
                 if(p.domainString === 'public'){
                     pb.push(p)
                 }else{
@@ -34,7 +36,7 @@ const AccountPosts = () => {
         }
 
         postSeparator()
-    }, [accountAllPosts])
+    }, [userInfo.posts])
 
 
     return (
@@ -57,34 +59,40 @@ const AccountPosts = () => {
                         src={publicIcon} alt="Public" 
                     />
                 </button>
-                <button
-                    onClick={() => {
-                        if(postsCategory !== 'private'){
-                            setPostCategory('private')
-                        }
-                    }}
-                >
-                    <img 
-                        className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
-                                2xl:p-1'
-                        style={postsCategory === 'private' ? {backgroundColor: 'red', padding: '5px'} : {}}
-                        src={privateIcon} alt="Private" 
-                    />
-                </button>
-                <button
-                    onClick={() => {
-                        if(postsCategory !== 'star'){
-                            setPostCategory('star')
-                        }
-                    }}
-                >
-                    <img 
-                        className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
-                                2xl:p-1'
-                        style={postsCategory === 'star' ? {backgroundColor: 'red', padding: '5px'} : {}}
-                        src={starIcon} alt="Star" 
-                    />
-                </button>
+
+                {activeAccountId === userInfo._id &&
+                    <button
+                        onClick={() => {
+                            if(postsCategory !== 'private'){
+                                setPostCategory('private')
+                            }
+                        }}
+                    >
+                        <img 
+                            className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
+                                    2xl:p-1'
+                            style={postsCategory === 'private' ? {backgroundColor: 'red', padding: '5px'} : {}}
+                            src={privateIcon} alt="Private" 
+                        />
+                    </button>
+                }
+                {activeAccountId === userInfo._id &&
+                    <button
+                        onClick={() => {
+                            if(postsCategory !== 'star'){
+                                setPostCategory('star')
+                            }
+                        }}
+                    >
+                        <img 
+                            className='rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer 
+                                    2xl:p-1'
+                            style={postsCategory === 'star' ? {backgroundColor: 'red', padding: '5px'} : {}}
+                            src={starIcon} alt="Star" 
+                        />
+                    </button>
+                }
+
             </div>
             {/* End of switch bar */}
 

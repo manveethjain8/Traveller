@@ -15,7 +15,7 @@ export const fetchAllPosts = async(): Promise<PostsSummary_Interface[] | Error_I
     }
 }
 
-export const fetchAllPostsOfSpecificAccount = async(accountId: string | ObjectId): Promise<PostSummarySpecificAccount_Interface[] | Error_Interface> => {
+export const fetchAllPostsOfSpecificAccount = async(accountId: string | ObjectId): Promise<PostSummarySpecificAccount_Interface[] | Error_Interface | null> => {
     try{
         const response: PostSummarySpecificAccount_Interface[] = await Post.find({account: accountId}, '_id thumbnail domainString').sort({ createdAt: -1 })
         return response

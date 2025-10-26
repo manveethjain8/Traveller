@@ -103,25 +103,6 @@ export const getAllPosts = async(req: Request, res: Response): Promise<void> => 
     }
 }
 
-export const getAllPostsOfSpecificAccount = async(req: Request, res: Response): Promise<void> => {
-    try{
-        const accountId: string | ObjectId = (req.user as any).mongoDbId
-        const allPosts: PostSummarySpecificAccount_Interface[] | Error_Interface = await fetchAllPostsOfSpecificAccount(accountId)
-
-        if(!allPosts || 'error' in allPosts){
-			res.status(500).json({message: 'Failed to fetch posts of the account', location: 'posts controller [Backend]'})
-		}
-
-        res.status(200).json(allPosts)
-
-    }catch(err: unknown){
-        if(err instanceof Error){
-            res.status(500).json({message: "Error while retriving the post of the account", error: err.message})
-        }else{
-            res.status(500).json({message: "Unknown Error while retriving the post of the account"})
-        }
-    }
-}
 
 export const getSpecificPost = async(req: Request, res: Response): Promise<void> => {
     try{

@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
 import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUploadUtils";
 import Account from "../models/accounts";
-import { Account_Interface, Complex_Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface} from "../configs/types_and_interfaces";
+import { Account_Interface, Complex_Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces";
 import { findAccount, findAccountForInternal, returnLimitedAccountInfo, returnMultipleLimitedAccountInfo } from "../utils/accountUtils";
 import { ObjectId } from "mongoose";
+import { fetchAllPostsOfSpecificAccount } from "../utils/postUtils";
 
 
 export const updateUserInfo = async(req: Request, res: Response) => {
@@ -60,7 +61,14 @@ export const getAccountInfo = async(req: Request, res: Response): Promise<any> =
 	try{
 		const {accountId} = req.params
 		const reqAccountId = (accountId && accountId !== 'undefined') ? accountId : (req.user as any).mongoDbId
-		const account: Partial<Complex_Account_Interface> | Error_Interface | null = await findAccount(reqAccountId)
+		const accountData: Partial<Complex_Account_Interface> | Error_Interface | null = await findAccount(reqAccountId)
+		const accountPosts: PostSummarySpecificAccount_Interface[] | Error_Interface | null = await fetchAllPostsOfSpecificAccount(reqAccountId)
+
+		const account = {
+			...accountData,
+			posts: accountPosts
+		}
+		
 
 		if(!account || 'error' in account){
 			return res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})

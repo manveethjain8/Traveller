@@ -24,6 +24,7 @@ export type UserInfo_Type = { // User Information
     tags: string[] | undefined
     followers: LimitedAccountInfo_Type[] | undefined
     followings: LimitedAccountInfo_Type[] | undefined
+    posts: PostSummarySpecificAccount_Type[] | undefined
 }
 
 export type IndividualLeg_type = {

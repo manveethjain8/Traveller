@@ -18,7 +18,6 @@ interface DisplayPostContext_Interface {
     setActiveDisplayLeg: Dispatch<SetStateAction<IndividualLeg_Interface | undefined>>
 
     getAllPosts: () => Promise<void> 
-    getAllPostsOfSpecificAccount: () =>  Promise<void>
     getSpecificPost: (postId: string) => Promise<void>
 }
 
@@ -45,19 +44,6 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
                 console.log('Error retrieving recent posts. Location: displayPostContext[Frontend]', err)
             }else{
                 console.log('Unknown error occured while retrieving recent posts. Location: displayPostContext[Frontend]', err)
-            }
-        }
-    }
-
-    const getAllPostsOfSpecificAccount = async(): Promise<void> => {
-        try{
-            const result = await customAPI.get<PostSummarySpecificAccount_Type[] | undefined>('post/all-posts-specific-account', {withCredentials: true})
-            setAccountAllPosts(result.data)
-        }catch(err){
-            if (err instanceof Error){
-                console.log('Error retrieving recent posts of specific account. Location: displayPostContext[Frontend]', err)
-            }else{
-                console.log('Unknown error occured while retrieving recent posts of specific account. Location: displayPostContext[Frontend]', err)
             }
         }
     }
@@ -94,8 +80,7 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
                 fullPost, setFullPost,
                 activeDisplayLegId, setActiveDisplayLegId,
                 activeDisplayLeg, setActiveDisplayLeg,
-                getAllPosts, getAllPostsOfSpecificAccount,
-                getSpecificPost
+                getAllPosts, getSpecificPost
             }
         }>
             {children}
