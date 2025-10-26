@@ -5,12 +5,15 @@ import searchIcon from '../../assets/icons/search_50dp_E3E3E3_FILL0_wght700_GRAD
 import deleteIcon from '../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz20.png'
 
 import { useInteractionsContext } from "../../contexts/interactionsContext"
+import { useProfileContext } from "../../contexts/profileContext"
+import { useNavigate } from "react-router-dom"
 
 const Travellers = () => {
 
     const {searchedAccounts, setSearchedAccounts, handleAccountSearch, setAccountSearchText, accountSearchText} = useInteractionsContext()
+    const {getAccountDetails} = useProfileContext()
 
-    console.log(searchedAccounts)
+    const navigate = useNavigate()
 
     return (
         <div className="w-screen h-screen">
@@ -54,16 +57,26 @@ const Travellers = () => {
                             {searchedAccounts.map(s => (
                                 <div 
                                     key={s._id}
-                                    className="h-[5rem] box-border p-2 px-5 flex flex-row items-center gap-x-3 hover:cursor-pointer"
+                                    className="h-[5rem] box-border p-2 px-5 flex flex-row items-center gap-x-3"
                                 >
-                                    <div className="w-[4rem] rounded-full h-full">
+                                    <div className="w-[4rem] rounded-full h-full hover:cursor-pointer">
                                         <img 
                                             src={s.profilePicture} 
                                             alt="profile picture" 
                                             className="w-full h-full rounded-full object-center object-cover"
+                                            onClick={() => {
+                                                getAccountDetails(s._id)
+                                                navigate('/profile')
+                                            }}
                                         />
                                     </div>
-                                    <strong>
+                                    <strong
+                                        className="w-fit hover:cursor-pointer"
+                                        onClick={() => {
+                                            getAccountDetails(s._id)
+                                            navigate('/profile')
+                                        }}
+                                    >
                                         {s.userName}
                                     </strong>
                                 </div>

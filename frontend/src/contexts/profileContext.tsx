@@ -20,7 +20,7 @@ interface ProfileContext_Interface {
     setppPreview: Dispatch<SetStateAction<string | null>>
     handleInputChange: <K extends keyof UserInfo_Type>(field: K, value: UserInfo_Type[K]) => void
     handleSaveChanges: () => void
-    getAccountDetails: () => void
+    getAccountDetails: (accountId?: string) => void
     handleTagToggle: (tag: string) => void
     // Edit Profile
 }
@@ -68,10 +68,12 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
         })
     }
 
-    const getAccountDetails = async(): Promise<void> => {
+    const getAccountDetails = async(accountId?: string): Promise<void> => {
         try{
-            const result = await customAPI.get<UserInfo_Type>('/account/fetch-account-details', {withCredentials: true})
-            setUserInfo(result.data)
+            const reqAccountId = accountId ? accountId : undefined
+            const endPoint = `/account/fetch-account-details/${reqAccountId}`
+            const response = await customAPI.get<UserInfo_Type>(endPoint, {withCredentials: true})
+            setUserInfo(response.data)
         }catch(err){
             if (err instanceof Error){
                 console.log('Error retrieving account details. Location: profileContext[Frontend]', err)

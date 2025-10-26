@@ -7,12 +7,14 @@ import travellerIcon from '../../assets/icons/hiking_50dp_E3E3E3_FILL0_wght700_G
 
 import { useNavigationContext } from '../../contexts/navigationContext'
 import { useNavigate } from 'react-router-dom'
+import { useProfileContext } from '../../contexts/profileContext'
 
 const Sidebar = () => {
 
     const navigate = useNavigate()
 
     const {sideBarCategory, setSideBarCategory, setNavigationCategorytoLocalStorage} = useNavigationContext()
+    const {getAccountDetails} = useProfileContext()
 
     return (
         <div className="fixed
@@ -135,6 +137,7 @@ const Sidebar = () => {
                         if(sideBarCategory !== 'profile'){
                             setSideBarCategory('profile')
                             setNavigationCategorytoLocalStorage('profile')
+                            getAccountDetails()
                             navigate('/profile')
                         }
                     }} 

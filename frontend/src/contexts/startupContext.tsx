@@ -28,8 +28,11 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
     const getLimitedAccountInfo = async(): Promise<void> => {
         try{
             const result = await customAPI.get<LimitedAccountInfo_Type>('/account/fetch-limited-account-details', {withCredentials: true})
-            setLimitedUserInfo(result.data)
-            setActiveAccountId(result.data._id)
+            if(result.data._id !== undefined){
+                setLimitedUserInfo(result.data)
+                setActiveAccountId(result.data._id)
+            }
+            
         }catch(err){
             if (err instanceof Error){
                 console.log('Error retrieving account details. Location: profileContext[Frontend]', err)

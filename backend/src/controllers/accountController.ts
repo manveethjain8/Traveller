@@ -58,11 +58,12 @@ export const updateUserInfo = async(req: Request, res: Response) => {
 
 export const getAccountInfo = async(req: Request, res: Response): Promise<any> => {
 	try{
-		const mongoDbId: ObjectId | string = (req.user as any).mongoDbId
-		const account: Partial<Complex_Account_Interface> | Error_Interface | null = await findAccount(mongoDbId)
+		const {accountId} = req.params
+		const reqAccountId = (accountId && accountId !== 'undefined') ? accountId : (req.user as any).mongoDbId
+		const account: Partial<Complex_Account_Interface> | Error_Interface | null = await findAccount(reqAccountId)
 
 		if(!account || 'error' in account){
-			res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})
+			return res.status(500).json({message: 'Failed to find the account', location: 'accounts controller [Backend]'})
 		}
 
 

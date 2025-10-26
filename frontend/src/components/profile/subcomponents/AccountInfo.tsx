@@ -24,8 +24,6 @@ const AccountInfo = () => {
         postsCounter()
     }, [accountAllPosts])
 
-    console.log(userInfo)
-
     return (
         <div className="flex flex-1 w-full justify-center items-center
                         2xl:max-h-[10rem] 2xl:gap-x-10
