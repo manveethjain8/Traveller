@@ -2,11 +2,13 @@ import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 
 import searchIcon from '../../assets/icons/search_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
+import deleteIcon from '../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz20.png'
+
 import { useInteractionsContext } from "../../contexts/interactionsContext"
 
 const Travellers = () => {
 
-    const {searchedAccounts, handleAccountSearch, setAccountSearchText, accountSearchText} = useInteractionsContext()
+    const {searchedAccounts, setSearchedAccounts, handleAccountSearch, setAccountSearchText, accountSearchText} = useInteractionsContext()
 
     console.log(searchedAccounts)
 
@@ -32,8 +34,17 @@ const Travellers = () => {
                             type="text" 
                             placeholder="Search for travellers"
                             className="h-full w-full flex-1 focus:outline-none"
-                            value={accountSearchText}
+                            value={accountSearchText !== undefined ? accountSearchText : ''}
                             onChange={(e) => setAccountSearchText(e.target.value)}
+                        />
+                        <img 
+                            src={deleteIcon} 
+                            alt="close icon" 
+                            className="max-w-[2rem] flex-1 rounded-full hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer"
+                            onClick={() => {
+                                setAccountSearchText(undefined)
+                                setSearchedAccounts([])
+                            }}
                         />
                     </div>
                 </div>
