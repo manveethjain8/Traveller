@@ -50,11 +50,9 @@ const Posts = ({scrollContainerRef}: PostsProps) => {
 
         return () => {
             sessionStorage.setItem(`scroll-${location.pathname}`, scrollRefY.current.toString())
-            console.log("Saving Scrolled Down:", scrollRefY.current)
         }
     }, [location.pathname, scrollContainerRef])
 
-    console.log(window.scrollY)
 
     return (
         <div className="w-screen h-full">
