@@ -94,7 +94,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
                 }else if (typeof value === 'string'){
                     formData.append(key, value)
                 }else if (Array.isArray(value)) {
-                    value.forEach(item => formData.append(key, item))
+                    value.forEach(item => formData.append(key, item as any))
                 }
             })
 

@@ -98,7 +98,7 @@ export const getLimitedAccountInfo = async(req: Request, res: Response): Promise
 
 export const searchAccountByName = async(req: Request, res: Response): Promise<any> => {
 	try{
-		const {searchText} = req.body as { searchText: string }
+		const {accountSearchText: searchText} = req.params
 
 		const regex = new RegExp(searchText, "i")
 

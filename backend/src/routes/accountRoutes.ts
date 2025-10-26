@@ -9,7 +9,7 @@ const router = express.Router()
 router.patch('/update-user-account', authorizeAccount, upload.single('profilePicture'), updateUserInfo)
 router.get('/fetch-account-details', authorizeAccount, getAccountInfo)
 router.get('/fetch-limited-account-details', authorizeAccount, getLimitedAccountInfo)
-router.post('/fetch-accounts-by-name', authorizeAccount, searchAccountByName)
+router.get('/fetch-accounts-by-name/:accountSearchText', authorizeAccount, searchAccountByName)
 
 
 
