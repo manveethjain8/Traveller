@@ -1,6 +1,6 @@
 import express from 'express'
 import { authorizeAccount } from '../middlewares/accountMiddlewares'
-import { handleFollowingAndUnfollowing } from '../controllers/accountInteractions'
+import { handleFollowingAndUnfollowing } from '../controllers/accountInteractionsController'
 
 const router = express.Router()
 

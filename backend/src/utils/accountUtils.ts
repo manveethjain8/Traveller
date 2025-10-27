@@ -27,7 +27,7 @@ export const verifyRefreshToken = (payload: string): TokenPayload_Interface => {
     return jwt.verify(payload, configurations.REFRESH_TOKEN_SECRET) as TokenPayload_Interface
 }
 
-export const findAccount = async(mongoDbId: ObjectId | string): Promise<Complex_Account_Interface | Error_Interface | null> => {
+export const findAccount = async(mongoDbId: ObjectId | string): Promise<Partial<Complex_Account_Interface> | Error_Interface | null> => {
     try{
         const firstResponse = await Account.findOne<Account_Interface | null>({_id: mongoDbId}, 'firstName lastName profilePicture userName tagline gender district state country date_of_birth profilePictureId tags').lean()
 

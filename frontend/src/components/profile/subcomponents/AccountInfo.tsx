@@ -55,10 +55,7 @@ const AccountInfo = () => {
                                             2xl:h-[1.5rem]'
                                             onClick={async () => {
                                                 if(userInfo._id && activeAccountId){
-                                                    const response = await handleRelationship(userInfo?._id, activeAccountId)
-                                                    if(response === 'success'){
-                                                        getAccountDetails()
-                                                    }
+                                                    await handleRelationship(userInfo?._id, activeAccountId)
                                                 }
                                             }}
                             >
