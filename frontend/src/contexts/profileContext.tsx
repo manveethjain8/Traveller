@@ -5,8 +5,8 @@ import customAPI from "../api/customAPI";
 
 interface ProfileContext_Interface {
     // Profile Posts Category
-    postsCategory: string
-    setPostCategory: Dispatch<SetStateAction<string>> 
+    profileCategory: string
+    setProfileCategory: Dispatch<SetStateAction<string>> 
     // Profile Posts Category
 
     // Edit Profile
@@ -34,7 +34,7 @@ interface ProfileProviderProps {
 export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => {
 
     // Profile Posts Category
-    const [postsCategory, setPostCategory] = useState<string>('public')
+    const [profileCategory, setProfileCategory] = useState<string>('public')
     // Profile Posts Category
 
     // Edit Profile
@@ -123,7 +123,7 @@ export const ProfileContextProvider: FC<ProfileProviderProps> = ({children}) => 
     return(
         <ProfileContext.Provider value = {
             {
-                postsCategory, setPostCategory,
+                profileCategory, setProfileCategory,
                 editProfileClicked, setEditProfileClicked,
                 updating, setUpdating,
                 userInfo, setUserInfo,

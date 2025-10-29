@@ -8,6 +8,7 @@ import travellerIcon from '../../assets/icons/hiking_50dp_E3E3E3_FILL0_wght700_G
 import { useNavigationContext } from '../../contexts/navigationContext'
 import { useNavigate } from 'react-router-dom'
 import { useProfileContext } from '../../contexts/profileContext'
+import { useStartupContext } from '../../contexts/startupContext'
 
 const Sidebar = () => {
 
@@ -15,6 +16,7 @@ const Sidebar = () => {
 
     const {sideBarCategory, setSideBarCategory, setNavigationCategorytoLocalStorage} = useNavigationContext()
     const {getAccountDetails} = useProfileContext()
+    const {activeAccountId} = useStartupContext()
 
     return (
         <div className="fixed
@@ -25,11 +27,9 @@ const Sidebar = () => {
                             3xl:px-5">
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'home'){
-                            setSideBarCategory('home')
-                            setNavigationCategorytoLocalStorage('home')
-                            navigate('/home')
-                        }
+                        setSideBarCategory('home')
+                        setNavigationCategorytoLocalStorage('home')
+                        navigate('/home')
                     }}
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
@@ -46,11 +46,9 @@ const Sidebar = () => {
 
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'explore'){
-                            setSideBarCategory('explore')
-                            setNavigationCategorytoLocalStorage('explore')
-                            navigate('/explore')
-                        }
+                        setSideBarCategory('explore')
+                        setNavigationCategorytoLocalStorage('explore')
+                        navigate('/explore')
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
@@ -67,11 +65,9 @@ const Sidebar = () => {
 
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'travellers'){
-                            setSideBarCategory('travellers')
-                            setNavigationCategorytoLocalStorage('travellers')
-                            navigate('/travellers')
-                        }
+                        setSideBarCategory('travellers')
+                        setNavigationCategorytoLocalStorage('travellers')
+                        navigate('/travellers')
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
@@ -90,11 +86,9 @@ const Sidebar = () => {
 
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'addSitrep'){
-                            setSideBarCategory('addSitrep')
-                            setNavigationCategorytoLocalStorage('addSitrep')
-                            navigate('/addSitrep')
-                        }
+                        setSideBarCategory('addSitrep')
+                        setNavigationCategorytoLocalStorage('addSitrep')
+                        navigate('/addSitrep')
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
@@ -111,11 +105,9 @@ const Sidebar = () => {
 
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'addPost'){
-                            setSideBarCategory('addPost')
-                            setNavigationCategorytoLocalStorage('addPost')
-                            navigate('/addPost')
-                        }
+                        setSideBarCategory('addPost')
+                        setNavigationCategorytoLocalStorage('addPost')
+                        navigate('/addPost')
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
@@ -134,12 +126,12 @@ const Sidebar = () => {
 
                 <button 
                     onClick={() => {
-                        if(sideBarCategory !== 'profile'){
-                            setSideBarCategory('profile')
-                            setNavigationCategorytoLocalStorage('profile')
-                            getAccountDetails()
-                            navigate('/profile')
-                        }
+                        setSideBarCategory('profile')
+                        setNavigationCategorytoLocalStorage('profile')
+                        sessionStorage.removeItem('searchedAccountId')
+                        getAccountDetails(activeAccountId)
+                        navigate('/profile')
+
                     }} 
                     className="w-full flex justify-start items-center gap-x-5 p-1 rounded-2xl hover:bg-red-500 active:bg-red-700 transition-all duration-300 ease-in-out cursor-pointer
                     2xl:px-5 2xl:py-2 2xl:h-[6%]
