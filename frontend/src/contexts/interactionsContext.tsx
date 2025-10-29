@@ -10,6 +10,7 @@ interface Interactions_Interface {
 
     handleRelationship: (toBeFollowedId: string, followerId: string) => Promise<string>
     handleAccountSearch: () => Promise<void>
+    getRelationship: (followingId: string, followerId: string) => Promise<string>
 }
 
 const InteractionContext = createContext<Interactions_Interface | undefined>(undefined)
@@ -30,9 +31,24 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
             return('success')
         }catch(err){
             if (err instanceof Error){
-                console.log('Error retrieving account details. Location: interaction context[Frontend]', err)
+                console.log('Error updating relationship. Location: interaction context[Frontend]', err)
             }else{
-                console.log('Unknown error occured while retrieving account details. Location: interaction context[Frontend]', err)
+                console.log('Unknown error occured while updating relationship. Location: interaction context[Frontend]', err)
+            }
+            return('failure')
+        }
+    }
+
+    const getRelationship = async(following: string, follower: string): Promise<any> => {
+        try{
+            const relationship = {following, follower}
+            const response = await customAPI.post('/interaction/check-relationship', relationship, {withCredentials: true})
+            return(response.data.message)
+        }catch(err){
+            if (err instanceof Error){
+                console.log('Error retrieving relationship. Location: interaction context[Frontend]', err)
+            }else{
+                console.log('Unknown error occured while retrieving relationship. Location: interaction context[Frontend]', err)
             }
             return('failure')
         }
@@ -62,7 +78,8 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
             {
                 accountSearchText, setAccountSearchText,
                 searchedAccounts, setSearchedAccounts,
-                handleRelationship, handleAccountSearch
+                handleRelationship, handleAccountSearch,
+                getRelationship
             }
         }>
             {children}

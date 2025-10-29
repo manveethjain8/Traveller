@@ -3,12 +3,35 @@ import { useProfileContext } from '../../../contexts/profileContext'
 
 import { useStartupContext } from '../../../contexts/startupContext'
 import { useInteractionsContext } from '../../../contexts/interactionsContext'
+import { useEffect, useState } from 'react'
 
 const AccountInfo = () => {
 
     const {setEditProfileClicked, userInfo, getAccountDetails} = useProfileContext()
     const {activeAccountId} = useStartupContext()
-    const {handleRelationship} = useInteractionsContext()
+    const {handleRelationship, getRelationship} = useInteractionsContext()
+
+    const [relationExists, setRelationExists] = useState<boolean>(false)
+    const [trigger, setTrigger] = useState<boolean>(false)
+
+    useEffect(() => {
+        const getRelation = (): void => {
+            setTimeout(async() => {
+               if(userInfo._id && activeAccountId){
+                    const response = await getRelationship(userInfo._id, activeAccountId)
+                    if(response === 'relation'){
+                        setRelationExists(true)
+                    }
+               }
+            }, 10)
+        }
+        getRelation()
+    }, [userInfo, activeAccountId])
+
+    useEffect(() => {
+        getAccountDetails(userInfo._id)
+    }, [trigger])
+
 
     return (
         <div className="flex flex-1 w-full justify-center items-center
@@ -55,11 +78,18 @@ const AccountInfo = () => {
                                             2xl:h-[1.5rem]'
                                             onClick={async () => {
                                                 if(userInfo._id && activeAccountId){
-                                                    await handleRelationship(userInfo?._id, activeAccountId)
+                                                    const response = await handleRelationship(userInfo?._id, activeAccountId)
+                                                    if(response === 'success'){
+                                                        setTrigger(prev => !prev)
+                                                    }
                                                 }
                                             }}
                             >
-                                Follow
+                                {relationExists ? (
+                                    'Unfollow'
+                                ) : (
+                                    'Follow'
+                                )}
                             </button>
                         )}
                     </div>
