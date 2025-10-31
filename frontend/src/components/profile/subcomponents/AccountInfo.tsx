@@ -21,6 +21,8 @@ const AccountInfo = () => {
                     const response = await getRelationship(userInfo._id, activeAccountId)
                     if(response === 'relation'){
                         setRelationExists(true)
+                    }else{
+                        setRelationExists(false)
                     }
                }
             }, 10)
@@ -85,11 +87,7 @@ const AccountInfo = () => {
                                                 }
                                             }}
                             >
-                                {relationExists ? (
-                                    'Unfollow'
-                                ) : (
-                                    'Follow'
-                                )}
+                                {relationExists ? 'Unfollow' : 'Follow'}
                             </button>
                         )}
                     </div>
