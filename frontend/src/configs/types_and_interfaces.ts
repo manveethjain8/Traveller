@@ -194,3 +194,15 @@ export type PostsSummary_Type = {
     description: string | null
     domainString: string | null
 }
+
+export type AddSitrep_Type = {
+    sitrepInputs:{
+        sitrepData: {
+            images: File[] | string[] | undefined,
+            description: string | undefined
+        },
+        sitrepPreview: {
+            images: string[] | undefined
+        }
+    }
+}

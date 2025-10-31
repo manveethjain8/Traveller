@@ -1,4 +1,4 @@
-import type { AddPost_Type, IndividualLeg_type, UserInfo_Type } from "./types_and_interfaces";
+import type { AddPost_Type, AddSitrep_Type, IndividualLeg_type, UserInfo_Type } from "./types_and_interfaces";
 
 export const userInfo_Template: Partial<UserInfo_Type> = {
     profilePicture: undefined,
@@ -27,7 +27,7 @@ export const addPost_Template: AddPost_Type['postData'] = {
     transport: undefined,
     landscape: undefined,
     difficulty: undefined,
-    location: undefined,
+    locationString: undefined,
     footfall: undefined,
     healthRisks: undefined,
     description: undefined,
@@ -45,7 +45,7 @@ export const individualLeg_Template: IndividualLeg_type['legData'] = {
     environment: undefined,
     landscape: undefined,
     weather: undefined,
-    location: undefined,
+    locationString: undefined,
     highlights: [''],
     challenges: [''],
     endPhoto: undefined,
@@ -80,4 +80,16 @@ export const legPreview_Template: IndividualLeg_type['legPreview'] = {
     startPhoto: undefined,
     endPhoto: undefined,
     photoDump: undefined
+}
+
+export const sitrep_template: AddSitrep_Type = {
+    sitrepInputs:{
+        sitrepData: {
+            images: undefined,
+            description: undefined
+        },
+        sitrepPreview:{
+            images: undefined
+        }
+    }
 }
