@@ -10,6 +10,7 @@ import { StartupContextProvider } from './contexts/startupContext.tsx'
 import { AddPostContextProvider } from './contexts/addPostContext.tsx'
 import { DisplayPostContextProvider } from './contexts/displayPostContext.tsx'
 import { InteractionsContextProvider } from './contexts/interactionsContext.tsx'
+import { SitrepContextProvider } from './contexts/sitrepContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -19,9 +20,11 @@ createRoot(document.getElementById('root')!).render(
 						<DisplayPostContextProvider>
 								<StartupContextProvider>
 									<AddPostContextProvider>
-										<ProfileContextProvider>
-											<App />
-										</ProfileContextProvider>
+										<SitrepContextProvider>
+											<ProfileContextProvider>
+												<App />
+											</ProfileContextProvider>
+										</SitrepContextProvider>
 									</AddPostContextProvider>
 								</StartupContextProvider>
 						</DisplayPostContextProvider>

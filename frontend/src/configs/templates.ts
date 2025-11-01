@@ -83,13 +83,11 @@ export const legPreview_Template: IndividualLeg_type['legPreview'] = {
 }
 
 export const sitrep_template: AddSitrep_Type = {
-    sitrepInputs:{
-        sitrepData: {
-            images: undefined,
-            description: undefined
-        },
-        sitrepPreview:{
-            images: undefined
-        }
+    sitrepData: {
+        images: undefined,
+        description: undefined
+    },
+    sitrepPreview:{
+        images: undefined
     }
 }
