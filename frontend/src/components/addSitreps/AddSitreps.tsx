@@ -1,3 +1,4 @@
+import { useSitrepContext } from "../../contexts/sitrepContext"
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
 import SitrepDescriptionReception from "./subcomponents/SitrepDescriptionReception"
@@ -5,8 +6,16 @@ import SitrepImagesReception from "./subcomponents/SitrepImagesReception"
 
 
 const AddSitreps = () => {
+
+    const {sitrepUploading} = useSitrepContext()
+
     return (
         <div className="w-screen h-screen">
+            {sitrepUploading === true && 
+                <div className='z-100 fixed w-screen h-screen bg-black/70 flex justify-center items-center'>
+                    <strong className="text-[2rem]">Uploading...</strong>
+                </div>
+            }
             <TopBar/>
             <Sidebar/>
             <div 

@@ -2,8 +2,7 @@ import { Request, Response } from "express"
 import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
-import { fetchAllPosts, fetchAllPostsOfSpecificAccount, fetchSpecificPost } from "../utils/postUtils"
-import { ObjectId } from "mongoose"
+import { fetchAllPosts, fetchSpecificPost } from "../utils/postUtils"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
     try{
@@ -49,7 +48,7 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
             const photoDumpFiles = filesArray.filter(f => f.fieldname === `photoDump_${index}`)
             if (photoDumpFiles.length > 0) {
                 const buffers = photoDumpFiles.map(f => f.buffer)
-                const uploadedArray = await uploadMultipleFiles(buffers, "posts/legs")
+                const uploadedArray: FilesUploadResult_Interface[] = await uploadMultipleFiles(buffers, "posts/legs")
                 legs[index].photoDump = uploadedArray.map(u => u.url)
             }
         }

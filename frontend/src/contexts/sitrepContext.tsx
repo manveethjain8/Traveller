@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { AddSitrep_Type } from "../configs/types_and_interfaces";
 import { sitrep_template } from "../configs/templates";
+import customAPI from "../api/customAPI";
 
 interface SitrepContext_Interface {
     sitrep: AddSitrep_Type
@@ -9,9 +10,13 @@ interface SitrepContext_Interface {
     sitrepImageNumber: number
     setSitrepImageNumber: Dispatch<SetStateAction<number>>
 
+    sitrepUploading: boolean
+    setSitrepUploading: Dispatch<SetStateAction<boolean>>
+
     handleSitrepInputChange: (field: string, value: File[] | string) => void 
     handleSitrepImageSelection: (idx: number) => void
     handleSitrepImageDeletions: (index: number) => void 
+    handleSitrepSubmit: () => Promise<string> 
 }
 
 const SitrepContext = createContext<SitrepContext_Interface | undefined>(undefined)
@@ -24,6 +29,7 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
 
     const [sitrep, setSitrep] = useState<AddSitrep_Type>(structuredClone(sitrep_template))
     const [sitrepImageNumber, setSitrepImageNumber] = useState<number>(0)
+    const [sitrepUploading, setSitrepUploading] = useState<boolean>(false)
 
     const handleSitrepInputChange = (field: string, value: File[] | string): void => {
         setSitrep(prev => {
@@ -82,13 +88,46 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
         })
     }
 
+    const handleSitrepSubmit = async(): Promise<string> => {
+
+        setSitrepUploading(true)
+        const formData = new FormData()
+        if(!sitrep.sitrepData.images){
+            throw new Error("Atleast one sitrep image is required")
+        }
+
+        formData.append('description', String(sitrep.sitrepData.description))
+
+        if(Array.isArray(sitrep.sitrepData.images)){
+            sitrep.sitrepData.images.forEach((file, idx) => {
+                if(file instanceof File){
+                    formData.append(`sitrepImage_${idx}`, file)
+                }
+            })
+        }
+
+        try {
+            await customAPI.post("/sitrep/add-sitrep", formData, {
+                withCredentials: true,
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            setSitrepUploading(false)
+            setSitrep(structuredClone(sitrep_template))
+            return "success";
+        } catch (err) {
+            console.error("Error creating post:", err);
+            return "failure";
+        }
+    } 
+
     return(
         <SitrepContext.Provider value={
             {
                 sitrep, setSitrep,
                 sitrepImageNumber, setSitrepImageNumber,
+                sitrepUploading, setSitrepUploading,
                 handleSitrepInputChange, handleSitrepImageSelection,
-                handleSitrepImageDeletions
+                handleSitrepImageDeletions, handleSitrepSubmit
             }
         }>
             {children}

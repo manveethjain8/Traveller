@@ -357,6 +357,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
             return "success";
         } catch (err) {
             console.error("Error creating post:", err);
+            setUploading(false)
             return "failure";
         }
     };

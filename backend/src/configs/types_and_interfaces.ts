@@ -171,3 +171,10 @@ export interface PostSummarySpecificAccount_Interface extends Document {
     thumbnail: string | null
     domainString: string | null
 }
+
+export interface Sitrep_Interface extends Document {
+    sitrepImages: string[] | null
+    description: string | null
+    createdAt: Date
+    account: LimitedAccountInfo_Interface
+}
