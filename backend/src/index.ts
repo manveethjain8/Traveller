@@ -7,6 +7,7 @@ import session from 'express-session'
 import { configurations } from './configs/connections'
 
 import passport from './utils/passportUtils'
+import "./utils/cloudinaryUtils"
 
 import authRoutes from './routes/authRoutes'
 import accountRoutes from './routes/accountRoutes'

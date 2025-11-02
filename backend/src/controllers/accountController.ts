@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUploadUtils";
+import { deleteFromCloudinary, uploadSingleFile} from "../utils/cloudinaryUtils";
 import Account from "../models/accounts";
 import { Account_Interface, Complex_Account_Interface, Error_Interface, FilesUploadResult_Interface, LimitedAccountInfo_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces";
 import { findAccount, findAccountForInternal, returnLimitedAccountInfo, returnMultipleLimitedAccountInfo } from "../utils/accountUtils";

@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
-import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
+import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUtils"
 import { fetchAllPosts, fetchSpecificPost } from "../utils/postUtils"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {

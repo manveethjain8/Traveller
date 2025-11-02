@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
-import { FilesUploadResult_Interface } from "../configs/types_and_interfaces"
-import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUploadUtils"
+import { Error_Interface, FilesUploadResult_Interface, Sitrep_Interface } from "../configs/types_and_interfaces"
+import { uploadMultipleFiles} from "../utils/cloudinaryUtils"
 import Sitrep from "../models/sitreps"
+import { fetchSitreps } from "../utils/sitrepUtils"
 
 export const uploadSitrep = async(req: Request, res: Response): Promise<void> =>{
     try{
@@ -12,13 +13,18 @@ export const uploadSitrep = async(req: Request, res: Response): Promise<void> =>
             description: body?.description,
         }
 
-        let sitrepImages: string[] = []
+        let sitrepImages: Sitrep_Interface['sitrepImages'] = []
 
         if(filesArray && filesArray.length > 0){
             const buffers = filesArray.map((f) => f.buffer).filter((b): b is Buffer => b != undefined)
 
             const uploadedArray: FilesUploadResult_Interface[] = await uploadMultipleFiles(buffers, "sitreps")
-            sitrepImages = uploadedArray.map((u) => u.url)
+            if (uploadedArray.length > 0) {
+                sitrepImages = uploadedArray.map((u) => ({
+                    url: u.url,
+                    public_id: u.publicId,
+                }));
+            }
         }
 
         postData.sitrepImages = sitrepImages
@@ -35,6 +41,24 @@ export const uploadSitrep = async(req: Request, res: Response): Promise<void> =>
 
         res.status(201).json({message: 'sitrep uploaded successfully'})
 
+    }catch(err){
+        if(err instanceof Error){
+			res.status(500).json({message: 'Error while uploading the sitrep', error: err.message})
+		}else{
+			res.status(500).json({message: 'Unknown Error while uploading the sitrep'})
+		}
+    }
+}
+
+export const getAllSitreps = async(req: Request, res: Response): Promise<void> => {
+    try{
+        const response: Sitrep_Interface[] | Error_Interface = await fetchSitreps()
+
+        if(!response || 'error' in response){
+			res.status(500).json({message: 'Failed to fetch recent sitreps', location: 'sitreps controller [Backend]'})
+		}
+
+        res.status(200).json(response)
     }catch(err){
         if(err instanceof Error){
 			res.status(500).json({message: 'Error while uploading the sitrep', error: err.message})

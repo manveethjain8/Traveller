@@ -1,6 +1,6 @@
 import express from 'express'
 import { authorizeAccount } from '../middlewares/accountMiddlewares';
-import { upload } from '../utils/cloudinaryUploadUtils';
+import { upload } from '../utils/cloudinaryUtils';
 import { getAccountInfo, getLimitedAccountInfo, searchAccountByName, updateUserInfo} from '../controllers/accountController';
 
 const router = express.Router()

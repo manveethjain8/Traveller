@@ -2,7 +2,9 @@ import multer from "multer"
 import {type UploadApiResponse, type UploadApiErrorResponse} from 'cloudinary'
 import cloudinary from "../configs/cloudinaryConfig";
 import streamifier from 'streamifier'
-import { FilesUploadResult_Interface } from "../configs/types_and_interfaces";
+import { FilesUploadResult_Interface, Sitrep_Interface } from "../configs/types_and_interfaces";
+import cron from "node-cron"
+import Sitrep from "../models/sitreps";
 
 
 
@@ -46,3 +48,29 @@ export const uploadToCloudinary = async(buffer: Buffer, folder: string): Promise
 export const deleteFromCloudinary = async(publicId: string):Promise<void> => {
    await cloudinary.uploader.destroy(publicId);
 }
+
+cron.schedule("0 * * * *", async() => {
+    console.log("Running Cloudinary clean up job...")
+
+    try{
+        const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const expiredSitreps: Sitrep_Interface[] = await Sitrep.find({createdAt: {$lt: cutoff}})
+
+        for(const sitrep of expiredSitreps){
+            for(const img of sitrep.sitrepImages){
+                try{
+                    await deleteFromCloudinary(img.public_id)
+                    console.log(`🗑️ Deleted Cloudinary image: ${img.public_id}`)
+                }catch(err){
+                    console.error(`⚠️ Error deleting image ${img.public_id}:`, err)
+                }
+            }
+
+            await Sitrep.deleteOne({_id: sitrep._id})
+            console.log(`✅ Deleted Sitrep: ${sitrep._id}`)
+        }
+        console.log("✨ Cleanup completed successfully.");
+    }catch(err){
+        console.error("❌ Cleanup job failed:", err)
+    }
+})

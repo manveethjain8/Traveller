@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 
 export interface ENV_Interface {                  // Environmental Variables
     MONGO_URI: string
@@ -172,9 +172,14 @@ export interface PostSummarySpecificAccount_Interface extends Document {
     domainString: string | null
 }
 
-export interface Sitrep_Interface extends Document {
-    sitrepImages: string[] | null
+export interface Sitrep_Interface {
+    _id: ObjectId
+    sitrepImages:{
+        url: string,
+        public_id: string
+    }[]
     description: string | null
     createdAt: Date
     account: LimitedAccountInfo_Interface
+    viewers: LimitedAccountInfo_Interface[]
 }
