@@ -49,20 +49,28 @@ export const deleteFromCloudinary = async(publicId: string):Promise<void> => {
    await cloudinary.uploader.destroy(publicId);
 }
 
-cron.schedule("0 * * * *", async() => {
+const cleanUpJob = async(): Promise<void> => {
     console.log("Running Cloudinary clean up job...")
-
     try{
-        const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000)
-        const expiredSitreps: Sitrep_Interface[] = await Sitrep.find({createdAt: {$lt: cutoff}})
+        const cutoffDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
+        const expiredSitreps: Sitrep_Interface[] = await Sitrep.find({
+            createdAt: {$lt: cutoffDate}
+        })
+
+        if (expiredSitreps.length === 0) {
+            console.log("No expired sitreps found.");
+            return;
+        }
 
         for(const sitrep of expiredSitreps){
-            for(const img of sitrep.sitrepImages){
-                try{
-                    await deleteFromCloudinary(img.public_id)
-                    console.log(`🗑️ Deleted Cloudinary image: ${img.public_id}`)
-                }catch(err){
-                    console.error(`⚠️ Error deleting image ${img.public_id}:`, err)
+            if (sitrep.sitrepImages && sitrep.sitrepImages.length > 0) {
+                for (const img of sitrep.sitrepImages) {
+                    try {
+                        await deleteFromCloudinary(img.public_id)
+                        console.log(`🗑️ Deleted Cloudinary image: ${img.public_id}`)
+                    } catch (err) {
+                        console.error(`⚠️ Error deleting image ${img.public_id}:`, err)
+                    }
                 }
             }
 
@@ -73,4 +81,10 @@ cron.schedule("0 * * * *", async() => {
     }catch(err){
         console.error("❌ Cleanup job failed:", err)
     }
+}
+
+cron.schedule("* * * * *", async() => {
+    cleanUpJob()
 })
+
+cleanUpJob()

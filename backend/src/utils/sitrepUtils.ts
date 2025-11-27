@@ -3,7 +3,7 @@ import Sitrep from "../models/sitreps"
 
 export const fetchSitreps = async():Promise<Sitrep_Interface[] | Error_Interface>  => {
     try{
-        const response = await Sitrep.find({}, '_id sitrepImages[url] description account viewers').populate("account viewers", "_id profilePicture userName").sort({createdAt: -1}).lean<Sitrep_Interface[]>()
+        const response = await Sitrep.find({}, '_id sitrepImages description account viewers').populate("account viewers", "_id profilePicture userName").sort({createdAt: -1}).lean<Sitrep_Interface[]>()
         return response
     }catch(err: unknown){
         if(err instanceof Error){

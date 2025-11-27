@@ -1,14 +1,19 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { LimitedAccountInfo_Type } from "../configs/types_and_interfaces";
 import customAPI from "../api/customAPI";
-import { useDisplayPostContext } from "./displayPostContext";
 
 interface StartupContext_Interface {
     limitedUserInfo: LimitedAccountInfo_Type | undefined
     setLimitedUserInfo: Dispatch<SetStateAction<LimitedAccountInfo_Type | undefined>>
 
-    activeAccountId: string | undefined
-    setActiveAccountId: Dispatch<SetStateAction<string | undefined>>
+    activeAccountId: string
+    setActiveAccountId: Dispatch<SetStateAction<string>>
+
+    // Sidebar Category
+    sideBarCategory: string,
+    setSideBarCategory: Dispatch<SetStateAction<string>> 
+    setNavigationCategorytoLocalStorage: (category: string) => void
+    // Sidebar Category
 }
 
 const StartupContext = createContext<StartupContext_Interface | undefined>(undefined)
@@ -19,11 +24,25 @@ interface StartupProviderProps {
 
 export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => {
 
-    const {getAllPosts} = useDisplayPostContext()
-
     const [limitedUserInfo, setLimitedUserInfo] = useState<LimitedAccountInfo_Type | undefined>(undefined)
 
-    const [activeAccountId, setActiveAccountId] = useState<string | undefined>(undefined)
+    const [activeAccountId, setActiveAccountId] = useState<string>('')
+
+    // Sidebar Category
+    const [sideBarCategory, setSideBarCategory] = useState<string>('home')
+    // Sidebar Category
+
+    const setNavigationCategorytoLocalStorage = (category: string): void => {
+        localStorage.setItem('sidebarCategory', category)
+    }
+
+    useEffect(() => {
+        const value: string  = localStorage.getItem('sidebarCategory') ||  'home'
+        if(value){
+            setSideBarCategory(value)
+        }
+    }, [])
+
 
     const getLimitedAccountInfo = async(): Promise<void> => {
         try{
@@ -44,14 +63,15 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
 
     useEffect(() => {
         getLimitedAccountInfo()
-        getAllPosts()
     }, [])
 
     return (
         <StartupContext.Provider value={
             {
                 limitedUserInfo, setLimitedUserInfo,
-                activeAccountId, setActiveAccountId
+                activeAccountId, setActiveAccountId,
+                sideBarCategory, setSideBarCategory,
+                setNavigationCategorytoLocalStorage
             }
         }>
             {children}

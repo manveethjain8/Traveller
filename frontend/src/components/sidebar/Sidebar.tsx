@@ -5,7 +5,6 @@ import addPostIcon from '../../assets/icons/post_add_50dp_E3E3E3_FILL0_wght400_G
 import addSitRepIcon from '../../assets/icons/amp_stories_50dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.png'
 import travellerIcon from '../../assets/icons/hiking_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz40.png'
 
-import { useNavigationContext } from '../../contexts/navigationContext'
 import { useNavigate } from 'react-router-dom'
 import { useProfileContext } from '../../contexts/profileContext'
 import { useStartupContext } from '../../contexts/startupContext'
@@ -14,9 +13,8 @@ const Sidebar = () => {
 
     const navigate = useNavigate()
 
-    const {sideBarCategory, setSideBarCategory, setNavigationCategorytoLocalStorage} = useNavigationContext()
+    const {activeAccountId, sideBarCategory, setSideBarCategory, setNavigationCategorytoLocalStorage} = useStartupContext()
     const {getAccountDetails} = useProfileContext()
-    const {activeAccountId} = useStartupContext()
 
     return (
         <div className="fixed

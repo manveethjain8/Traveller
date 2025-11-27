@@ -1,8 +1,11 @@
+import { useSitrepContext } from "../../../contexts/sitrepContext"
 import { useStartupContext } from "../../../contexts/startupContext"
 
 const Sitrep = () => {
 
     const {limitedUserInfo} = useStartupContext()
+    const {displaySitreps, userSitreps} = useSitrepContext()
+
 
     return (
         <div className="w-full h-[15%] flex flex-row justify-center items-center">

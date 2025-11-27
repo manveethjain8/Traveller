@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
-import type { AddSitrep_Type } from "../configs/types_and_interfaces";
+import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
+import type { AddSitrep_Type, Sitrep_Interface } from "../configs/types_and_interfaces";
 import { sitrep_template } from "../configs/templates";
 import customAPI from "../api/customAPI";
+import { useStartupContext } from "./startupContext";
 
 interface SitrepContext_Interface {
     sitrep: AddSitrep_Type
@@ -13,10 +14,17 @@ interface SitrepContext_Interface {
     sitrepUploading: boolean
     setSitrepUploading: Dispatch<SetStateAction<boolean>>
 
+    displaySitreps: Sitrep_Interface[] | undefined
+    setDisplaySitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
+
+    userSitreps: Sitrep_Interface[] | undefined
+    setUserSitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
+
     handleSitrepInputChange: (field: string, value: File[] | string) => void 
     handleSitrepImageSelection: (idx: number) => void
     handleSitrepImageDeletions: (index: number) => void 
     handleSitrepSubmit: () => Promise<string> 
+    getSitreps: ()=> Promise<void>
 }
 
 const SitrepContext = createContext<SitrepContext_Interface | undefined>(undefined)
@@ -27,9 +35,14 @@ interface SitRepProviderProps {
 
 export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
 
+    const {activeAccountId} = useStartupContext()
+    
     const [sitrep, setSitrep] = useState<AddSitrep_Type>(structuredClone(sitrep_template))
     const [sitrepImageNumber, setSitrepImageNumber] = useState<number>(0)
     const [sitrepUploading, setSitrepUploading] = useState<boolean>(false)
+
+    const [displaySitreps, setDisplaySitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
+    const [userSitreps, setUserSitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
 
     const handleSitrepInputChange = (field: string, value: File[] | string): void => {
         setSitrep(prev => {
@@ -120,14 +133,56 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
         }
     } 
 
+    const getSitreps = async(): Promise<void> => {
+        try {
+            const response = await customAPI.get<Sitrep_Interface[]>("/sitrep/all-sitrep",  {withCredentials: true})
+            const allSitreps = response.data
+            
+            // Safety check to ensure IDs exist before converting
+            if (!activeAccountId) {
+                console.error("No Active Account ID found");
+                return;
+            }
+
+            const activeIdStr = activeAccountId.toString();
+
+            // 1. Filter for Current User (IS Equal ===)
+            // This puts "My Sitreps" into the userSitreps variable
+            const userSitreps = allSitreps.filter(s => 
+                s.account._id.toString() === activeIdStr
+            );
+
+            // 2. Filter for Others (NOT Equal !==)
+            // This puts "Everyone Else" into the otherSitreps variable
+            const otherSitreps = allSitreps.filter(s => 
+                s.account._id.toString() !== activeIdStr
+            );
+
+            setUserSitreps(userSitreps);
+            setDisplaySitreps(otherSitreps);
+
+        } catch (err) {
+            console.error("Error fetching sitreps:", err);
+        }
+    }
+
+    useEffect(() => {
+        // Only run if we actually have an ID
+        if (activeAccountId) {
+            getSitreps()
+        }
+    }, [activeAccountId])
     return(
         <SitrepContext.Provider value={
             {
                 sitrep, setSitrep,
                 sitrepImageNumber, setSitrepImageNumber,
                 sitrepUploading, setSitrepUploading,
+                displaySitreps, setDisplaySitreps,
+                userSitreps, setUserSitreps,
                 handleSitrepInputChange, handleSitrepImageSelection,
-                handleSitrepImageDeletions, handleSitrepSubmit
+                handleSitrepImageDeletions, handleSitrepSubmit,
+                getSitreps
             }
         }>
             {children}

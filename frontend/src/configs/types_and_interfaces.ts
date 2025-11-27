@@ -203,5 +203,16 @@ export type AddSitrep_Type = {
     sitrepPreview: {
         images: string[] | undefined
     }
+}
 
+export interface Sitrep_Interface {
+    _id: string
+    sitrepImages:{
+        url: string,
+        public_id: string
+    }[]
+    description: string | null
+    createdAt: Date
+    account: LimitedAccountInfo_Type
+    viewers: LimitedAccountInfo_Type[]
 }

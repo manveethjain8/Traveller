@@ -71,6 +71,10 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
         setActiveDisplayLeg(reqLeg)
     }, [activeDisplayLegId])
 
+    useEffect(() => {
+        getAllPosts()
+    }, [])
+
 
     return (
         <DisplayPostContext.Provider value={

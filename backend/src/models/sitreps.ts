@@ -21,10 +21,10 @@ const sitrepsSchema = new mongoose.Schema<Sitrep_Interface>({
     viewers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account'
-    }]
-})
+    }],
+    
+},{ timestamps: true })
 
-sitrepsSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 })
 
 const Sitrep = mongoose.model('Sitrep', sitrepsSchema);
 export default Sitrep
