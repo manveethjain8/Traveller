@@ -196,12 +196,13 @@ export type PostsSummary_Type = {
 }
 
 export type AddSitrep_Type = {
+    id: number
     sitrepData: {
-        images: File[] | string[] | undefined,
+        image: File | string | undefined,
         description: string | undefined
     },
     sitrepPreview: {
-        images: string[] | undefined
+        image: string | undefined
     }
 }
 

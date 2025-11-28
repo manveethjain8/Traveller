@@ -82,12 +82,11 @@ export const legPreview_Template: IndividualLeg_type['legPreview'] = {
     photoDump: undefined
 }
 
-export const sitrep_template: AddSitrep_Type = {
-    sitrepData: {
-        images: undefined,
-        description: undefined
-    },
-    sitrepPreview:{
-        images: undefined
-    }
-}
+export const sitrepData_template: AddSitrep_Type['sitrepData'] = Object.freeze({
+    image: undefined,
+    description: ''
+} as const);
+
+export const sitrepPreview_template: AddSitrep_Type['sitrepPreview'] = Object.freeze({
+    image: undefined
+} as const );

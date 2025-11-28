@@ -7,6 +7,7 @@ import { dateFormater } from '../../../utils/formatUtils'
 import PostInteractions from './post-subcomponents/PostInteractions'
 import PostQuickSummary from './post-subcomponents/PostQuickSummary'
 import { useEffect, useRef,} from 'react'
+import { useStartupContext } from '../../../contexts/startupContext'
 
 type PostsProps = {
     scrollContainerRef: React.RefObject<HTMLDivElement | null>
@@ -15,6 +16,7 @@ type PostsProps = {
 const Posts = ({scrollContainerRef}: PostsProps) => {
 
     const {allPosts, getSpecificPost} = useDisplayPostContext()
+    const {setSideBarCategory, setNavigationCategorytoLocalStorage} = useStartupContext()
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -84,6 +86,8 @@ const Posts = ({scrollContainerRef}: PostsProps) => {
                             className='flex-9 flex flex-row max-h-[88%] hover:cursor-pointer'
                             onClick={() => {
                                         getSpecificPost(p._id)
+                                        setSideBarCategory(undefined)
+                                        setNavigationCategorytoLocalStorage('undifined')
                                         navigate('/displayPost')
                                     }}
                         >

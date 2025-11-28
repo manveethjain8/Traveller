@@ -49,7 +49,7 @@ export const deleteFromCloudinary = async(publicId: string):Promise<void> => {
    await cloudinary.uploader.destroy(publicId);
 }
 
-const cleanUpJob = async(): Promise<void> => {
+export const cleanUpJob = async(): Promise<void> => {
     console.log("Running Cloudinary clean up job...")
     try{
         const cutoffDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
@@ -83,8 +83,6 @@ const cleanUpJob = async(): Promise<void> => {
     }
 }
 
-cron.schedule("* * * * *", async() => {
+cron.schedule("*/10 * * * *", async() => {
     cleanUpJob()
 })
-
-cleanUpJob()

@@ -10,10 +10,12 @@ interface StartupContext_Interface {
     setActiveAccountId: Dispatch<SetStateAction<string>>
 
     // Sidebar Category
-    sideBarCategory: string,
-    setSideBarCategory: Dispatch<SetStateAction<string>> 
+    sideBarCategory: string | undefined,
+    setSideBarCategory: Dispatch<SetStateAction<string | undefined>> 
     setNavigationCategorytoLocalStorage: (category: string) => void
     // Sidebar Category
+
+    logoutFunction: () => Promise<void>
 }
 
 const StartupContext = createContext<StartupContext_Interface | undefined>(undefined)
@@ -29,7 +31,7 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
     const [activeAccountId, setActiveAccountId] = useState<string>('')
 
     // Sidebar Category
-    const [sideBarCategory, setSideBarCategory] = useState<string>('home')
+    const [sideBarCategory, setSideBarCategory] = useState<string | undefined>('home')
     // Sidebar Category
 
     const setNavigationCategorytoLocalStorage = (category: string): void => {
@@ -61,6 +63,19 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
         }
     }
 
+    const logoutFunction = async(): Promise<void> => {
+        try{
+            const res = await customAPI.get<string>('/auth/logout')
+            if(res.data === 'success'){
+                window.location.href = '/'
+                setNavigationCategorytoLocalStorage('home')
+                setSideBarCategory('home')
+            }
+        }catch(err){
+            console.error(err)
+        }
+    }
+
     useEffect(() => {
         getLimitedAccountInfo()
     }, [])
@@ -71,7 +86,7 @@ export const StartupContextProvider: FC<StartupProviderProps> = ({children}) => 
                 limitedUserInfo, setLimitedUserInfo,
                 activeAccountId, setActiveAccountId,
                 sideBarCategory, setSideBarCategory,
-                setNavigationCategorytoLocalStorage
+                setNavigationCategorytoLocalStorage, logoutFunction
             }
         }>
             {children}

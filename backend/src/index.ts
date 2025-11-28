@@ -15,6 +15,7 @@ import quoteRoutes from './routes/quotesRoutes'
 import postRoutes from './routes/postRoutes'
 import accountInteractionRoutes from './routes/accountInteractionsRoutes'
 import sitrepRoutes from './routes/sitrepRoutes'
+import { cleanUpJob } from './utils/cloudinaryUtils'
 
 //Provides access to ENV'S
 dotenv.config()
@@ -59,3 +60,5 @@ const PORT: number = configurations.PORT
 app.listen(PORT, (): void =>{
     console.log(`✅ Server running at http://localhost:${PORT}`)
 }) 
+
+cleanUpJob()

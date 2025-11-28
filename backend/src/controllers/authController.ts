@@ -89,3 +89,13 @@ export const refreshAccessToken = async(req: Request, res: Response): Promise<an
         }
     }
 }
+
+export const logOut = (req: Request, res: Response): void => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Session destruction error:", err);
+        }
+        res.clearCookie("connect.sid") // optional but recommended
+        res.json('success')
+    });
+};
