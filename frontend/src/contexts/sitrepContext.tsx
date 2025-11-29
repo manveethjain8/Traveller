@@ -8,8 +8,8 @@ interface SitrepContext_Interface {
     sitrepUploadable: AddSitrep_Type[]
     setSitrepUploadable: Dispatch<SetStateAction<AddSitrep_Type[]>>
 
-    // sitrepImageNumber: number
-    // setSitrepImageNumber: Dispatch<SetStateAction<number>>
+    sitrepNumber: number
+    setSitrepNumber: Dispatch<SetStateAction<number>>
 
    activeSitrepId: number 
    setActiveSitrepId: Dispatch<SetStateAction<number>>
@@ -20,16 +20,22 @@ interface SitrepContext_Interface {
     sitrepUploading: boolean
     setSitrepUploading: Dispatch<SetStateAction<boolean>>
 
-    displaySitreps: Sitrep_Interface[] | undefined
-    setDisplaySitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
+    otherSitreps: Sitrep_Interface[] | undefined
+    setOtherSitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
 
     userSitreps: Sitrep_Interface[] | undefined
     setUserSitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
 
+    displaySitreps: Sitrep_Interface[] | undefined
+    setDisplaySitreps: Dispatch<SetStateAction<Sitrep_Interface[] | undefined>>
+
+    selectedSitrep: Sitrep_Interface| undefined
+    setSelectedSitrep: Dispatch<SetStateAction<Sitrep_Interface| undefined>>
+
     handleSetSitreps: () => void 
     handleDeleteSitreps: (id: number)=> void 
     handleSitrepInputChange: (sitrepId: number, field: string, value: File | string) => void 
-    // handleSitrepImageSelection: (idx: number) => void
+    handleSitrepSelection: (idx: number) => void
     handleSitrepImageDeletions: (sitrepId: number) => void 
     handleSitrepSubmit: () => Promise<string> 
     getSitreps: ()=> Promise<void>
@@ -54,14 +60,18 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
             }
         ])
     )
-    const [sitrepImageNumber, setSitrepImageNumber] = useState<number>(0)
+    const [sitrepNumber, setSitrepNumber] = useState<number>(-1)
     const [sitrepUploading, setSitrepUploading] = useState<boolean>(false)
 
     const [activeSitrepId, setActiveSitrepId] = useState<number>(1)
     const [activeSitrep, setActiveSitrep] = useState<AddSitrep_Type | null>(null)
 
-    const [displaySitreps, setDisplaySitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
+    const [otherSitreps, setOtherSitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
     const [userSitreps, setUserSitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
+
+    const [displaySitreps, setDisplaySitreps] = useState<Sitrep_Interface[] | undefined>(undefined)
+
+    const [selectedSitrep, setSelectedSitrep] = useState<Sitrep_Interface | undefined>(undefined)
 
     const handleSetSitreps = (): void => {
         setSitrepUploadable(prev => {
@@ -78,12 +88,9 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
                 sitrepPreview: structuredClone(sitrepPreview_template)
             };
 
-            console.log('creating new sitrep; template desc =', sitrepData_template.description);
-
             // set active id (ok to call here)
             setActiveSitrepId(newSitrepId);
 
-            console.log('newSitrep', newSitrep);
 
             return [...prev, newSitrep];
         });
@@ -167,18 +174,17 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
         })
     }
 
-    // const handleSitrepImageSelection = (idx: number): void => {
-    //     let nextNumber: number = 0
-    //     if(sitrep.sitrepPreview.images ){
-    //        nextNumber = sitrepImageNumber + idx
-    //         if(idx === -1 &&  nextNumber !== -1){
-    //             setSitrepImageNumber(nextNumber)
-    //         }else if(idx === 1 && nextNumber < sitrep.sitrepPreview.images.length){
-    //             setSitrepImageNumber(nextNumber)
-    //         }
-    //     }
-    // }
-
+    const handleSitrepSelection = (idx: number): void => {
+        let nextNumber: number = 0
+        if(displaySitreps){
+           nextNumber = sitrepNumber + idx
+            if(idx === -1 &&  nextNumber !== -1){
+                setSitrepNumber(nextNumber)
+            }else if(idx === 1 && nextNumber < displaySitreps.length){
+                setSitrepNumber(nextNumber)
+            }
+        }
+    }
     const handleSitrepImageDeletions = (sitrepId: number):void => {
         setSitrepUploadable(prevSitreps => 
             prevSitreps.map(s => {
@@ -263,12 +269,19 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
             );
 
             setUserSitreps(userSitreps);
-            setDisplaySitreps(otherSitreps);
+            setOtherSitreps(otherSitreps);
 
         } catch (err) {
             console.error("Error fetching sitreps:", err);
         }
     }
+
+
+    useEffect(() => {
+        if(displaySitreps){
+            setSelectedSitrep(displaySitreps[sitrepNumber])
+        }
+    },[sitrepNumber])
 
     useEffect(() => {
         // Only run if we actually have an ID
@@ -280,14 +293,16 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
         <SitrepContext.Provider value={
             {
                 sitrepUploadable, setSitrepUploadable,
-                // sitrepImageNumber, setSitrepImageNumber,
+                sitrepNumber, setSitrepNumber,
                 sitrepUploading, setSitrepUploading,
                 activeSitrep, setActiveSitrep,
                 activeSitrepId, setActiveSitrepId,
-                displaySitreps, setDisplaySitreps,
+                otherSitreps, setOtherSitreps,
                 userSitreps, setUserSitreps,
+                displaySitreps, setDisplaySitreps,
+                selectedSitrep, setSelectedSitrep,
                 handleSetSitreps, handleDeleteSitreps,
-                handleSitrepInputChange, //handleSitrepImageSelection,
+                handleSitrepInputChange, handleSitrepSelection,
                 handleSitrepImageDeletions, handleSitrepSubmit,
                 getSitreps
             }

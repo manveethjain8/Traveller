@@ -208,10 +208,10 @@ export type AddSitrep_Type = {
 
 export interface Sitrep_Interface {
     _id: string
-    sitrepImages:{
+    sitrepImage:{
         url: string,
         public_id: string
-    }[]
+    }
     description: string | null
     createdAt: Date
     account: LimitedAccountInfo_Type

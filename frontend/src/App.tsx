@@ -8,6 +8,7 @@ import AddPosts from "./components/addPosts/AddPosts"
 import AddSitreps from "./components/addSitreps/AddSitreps"
 import DisplayPost from "./components/displayFullPost/DisplayPost"
 import Travellers from "./components/travellers/Travellers"
+import DisplaySitreps from "./components/displaySitreps/DisplaySitreps"
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 				<Route path="/addPost" element={<AddPosts/>}/>
 				<Route path="/addSitrep" element={<AddSitreps/>}/>
 				<Route path="/displayPost" element={<DisplayPost/>}/>
+				<Route path="/displaySitrep" element={<DisplaySitreps/>}/>
 			</Routes>
 		</main>
 	)

@@ -62,22 +62,22 @@ export const cleanUpJob = async(): Promise<void> => {
             return;
         }
 
-        for(const sitrep of expiredSitreps){
-            if (sitrep.sitrepImages && sitrep.sitrepImages.length > 0) {
-                for (const img of sitrep.sitrepImages) {
+        if(expiredSitreps.length > 0){
+            for(const sitrep of expiredSitreps){
+                if (sitrep.sitrepImage) {
                     try {
-                        await deleteFromCloudinary(img.public_id)
-                        console.log(`🗑️ Deleted Cloudinary image: ${img.public_id}`)
+                        await deleteFromCloudinary(sitrep.sitrepImage.public_id)
+                        console.log(`🗑️ Deleted Cloudinary image: ${sitrep.sitrepImage.public_id}`)
                     } catch (err) {
-                        console.error(`⚠️ Error deleting image ${img.public_id}:`, err)
+                        console.error(`⚠️ Error deleting image ${sitrep.sitrepImage.public_id}:`, err)
                     }
                 }
-            }
 
-            await Sitrep.deleteOne({_id: sitrep._id})
-            console.log(`✅ Deleted Sitrep: ${sitrep._id}`)
+                await Sitrep.deleteOne({_id: sitrep._id})
+                console.log(`✅ Deleted Sitrep: ${sitrep._id}`)
+            }
+            console.log("✨ Cleanup completed successfully.");
         }
-        console.log("✨ Cleanup completed successfully.");
     }catch(err){
         console.error("❌ Cleanup job failed:", err)
     }
