@@ -2,12 +2,10 @@ import mongoose from "mongoose"
 import { Sitrep_Interface } from "../configs/types_and_interfaces";
 
 const sitrepsSchema = new mongoose.Schema<Sitrep_Interface>({
-    sitrepImages: {type: [
-        {
-            url: {type: String, required: true},
-            public_id: {type: String, required: true}
-        }
-    ], default: []},
+    sitrepImage: {
+        url: {type: String, required: true},
+        public_id: {type: String, required: true}
+    },
     description: {type: String, required: false},
     createdAt: {
         type: Date,

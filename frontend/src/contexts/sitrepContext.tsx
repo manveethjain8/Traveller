@@ -31,7 +31,7 @@ interface SitrepContext_Interface {
     handleSitrepInputChange: (sitrepId: number, field: string, value: File | string) => void 
     // handleSitrepImageSelection: (idx: number) => void
     handleSitrepImageDeletions: (sitrepId: number) => void 
-    // handleSitrepSubmit: () => Promise<string> 
+    handleSitrepSubmit: () => Promise<string> 
     getSitreps: ()=> Promise<void>
 }
 
@@ -229,6 +229,7 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setSitrepUploading(false)
+            setSitrepUploadable([])
             return "success";
         } catch (err) {
             console.error("Error creating post:", err);
@@ -287,7 +288,7 @@ export const SitrepContextProvider: FC<SitRepProviderProps> = ({children}) => {
                 userSitreps, setUserSitreps,
                 handleSetSitreps, handleDeleteSitreps,
                 handleSitrepInputChange, //handleSitrepImageSelection,
-                handleSitrepImageDeletions, //handleSitrepSubmit,
+                handleSitrepImageDeletions, handleSitrepSubmit,
                 getSitreps
             }
         }>

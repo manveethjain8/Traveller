@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { Error_Interface, FilesUploadResult_Interface, Sitrep_Interface } from "../configs/types_and_interfaces"
-import { uploadMultipleFiles} from "../utils/cloudinaryUtils"
+import { uploadMultipleFiles, uploadSingleFile} from "../utils/cloudinaryUtils"
 import Sitrep from "../models/sitreps"
 import { fetchSitreps } from "../utils/sitrepUtils"
 
@@ -9,34 +9,31 @@ export const uploadSitrep = async(req: Request, res: Response): Promise<void> =>
         const filesArray = req.files as Express.Multer.File[]
         const body = req.body
         
-         const postData: Record<string, any> = {
-            description: body?.description,
-        }
+        const sitreps = JSON.parse(body.metadata)
 
-        let sitrepImages: Sitrep_Interface['sitrepImages'] = []
+        for(let index = 0; index < sitreps.length; index++){
+            const sitrep: Sitrep_Interface = {
+                sitrepImage: { url: "", public_id: "" },
+                description: ""
+            } 
+            const sitrepFile = filesArray.find(f => f.fieldname === `file_${index}`)
 
-        if(filesArray && filesArray.length > 0){
-            const buffers = filesArray.map((f) => f.buffer).filter((b): b is Buffer => b != undefined)
+            if(sitrepFile){
+                const uploaded = await uploadSingleFile(sitrepFile.buffer, "sitreps")
+                sitrep.sitrepImage.url= uploaded.url ?? ''
+                sitrep.sitrepImage.public_id = uploaded.publicId ?? ''
 
-            const uploadedArray: FilesUploadResult_Interface[] = await uploadMultipleFiles(buffers, "sitreps")
-            if (uploadedArray.length > 0) {
-                sitrepImages = uploadedArray.map((u) => ({
-                    url: u.url,
-                    public_id: u.publicId,
-                }));
             }
-        }
+            sitrep.description = sitreps[index].description ?? ''
 
-        postData.sitrepImages = sitrepImages
-
-
-        try {
-            await Sitrep.create({
-                ...postData,
-                account: (req.user as any).mongoDbId
-            })
-        } catch (err) {
-            console.error("🔥 Error during sitrep.create():", err)
+            try {
+                await Sitrep.create({
+                    ...sitrep,
+                    account: (req.user as any).mongoDbId
+                })
+            } catch (err) {
+                console.error("🔥 Error during sitrep.create():", err)
+            }
         }
 
         res.status(201).json({message: 'sitrep uploaded successfully'})

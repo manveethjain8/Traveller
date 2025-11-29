@@ -173,13 +173,13 @@ export interface PostSummarySpecificAccount_Interface extends Document {
 }
 
 export interface Sitrep_Interface {
-    _id: ObjectId
-    sitrepImages:{
+    _id?: ObjectId
+    sitrepImage:{
         url: string,
         public_id: string
-    }[]
+    }
     description: string | null
-    createdAt: Date
-    account: LimitedAccountInfo_Interface
-    viewers: LimitedAccountInfo_Interface[]
+    createdAt?: Date
+    account?: LimitedAccountInfo_Interface
+    viewers?: LimitedAccountInfo_Interface[]
 }
