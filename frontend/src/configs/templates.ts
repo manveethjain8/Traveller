@@ -29,7 +29,7 @@ export const addPost_Template: AddPost_Type['postData'] = {
     difficulty: undefined,
     locationString: undefined,
     footfall: undefined,
-    healthRisks: undefined,
+    dangers: undefined,
     description: undefined,
 }
 

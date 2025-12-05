@@ -18,9 +18,10 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
     difficulty: {type: String, required: true},
     locationString: {type: String, required: true},
     footfall: {type: String, required: true},
-    healthRisks: {type: String, required: true},
+    dangers: {type: String, required: true},
     description: {type: String || null, required: false, default: null},
     domainString: {type: String || null, required: true, default: 'public'},
+    embedding: {type: [Number], required: true, default: []},
 
     legs: [{
         startPhoto: {type: String || null, default: null},

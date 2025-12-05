@@ -103,11 +103,11 @@ const PostQuickSummary = ({post}: PostsProviderProps) => {
                     </div>
                 </div>
                 <div className='w-[6.5rem] h-[2rem] flex items-center justify-center rounded-3xl box-border p-1 border-2 border-red-500 relative group'>
-                    <p className='w-fit h-full line-clamp-1'>{`${post.healthRisks}`.length > 12 ? `${post.healthRisks}`.slice(0, 12) + `...` : `${post.healthRisks}`}</p>
+                    <p className='w-fit h-full line-clamp-1'>{`${post.dangers}`.length > 12 ? `${post.dangers}`.slice(0, 12) + `...` : `${post.dangers}`}</p>
 
                     <div className='absolute bg-black/70 top-[-450%] left-[-615%] w-[20rem] h-fit max-h-[10rem] items-center box-border opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-xl text-center'>
-                        <p className='text-center font-bold'>{post.healthRisks}</p>
-                        <p className='w-fit h-full '>Indicates any health issues or risks that travelers might experience. This may include altitude sickness, motion sickness, allergies, or other potential health concerns. Being aware of these conditions helps you take necessary precautions.</p>
+                        <p className='text-center font-bold'>{post.dangers}</p>
+                        <p className='w-fit h-full '>Indicates any dangers or risks that travelers might face during the journey. This may include wildlife encounters, landslides or other safety concerns. Being aware of these dangers helps you stay alert and take necessary precautions throughout the trip.</p>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,13 @@
 import { Request, Response } from "express"
-import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface, PostSummarySpecificAccount_Interface} from "../configs/types_and_interfaces"
+import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUtils"
-import { fetchAllPosts, fetchSpecificPost } from "../utils/postUtils"
+import { embeddingTextBuilder, fetchAllPosts, fetchSpecificPost } from "../utils/postUtils"
+import { getEmbedding } from "../utils/microServices"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
     try{
+        console.log("Controller Hit")
         const filesArray = req.files as Express.Multer.File[]
         const body = req.body
         
@@ -63,10 +65,14 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
 
         postData.legs = legs
 
+        const toBeEmbeddedText = embeddingTextBuilder(postData)
+        const embeddings = await getEmbedding(toBeEmbeddedText)
+
         try {
-            const newPost = await Post.create({
+            await Post.create({
                 ...postData,
-                account: (req.user as any).mongoDbId
+                account: (req.user as any).mongoDbId,
+                embedding: embeddings
             })
         } catch (err) {
             console.error("🔥 Error during Post.create():", err)

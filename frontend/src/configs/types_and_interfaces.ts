@@ -92,7 +92,7 @@ export type AddPost_Type = {
         difficulty: string | undefined
         locationString: string | undefined
         footfall: string | undefined
-        healthRisks: string | undefined
+        dangers: string | undefined
         description: string | undefined
     },
     postPreview: {
@@ -159,7 +159,7 @@ export interface Posts_Interface {
     difficulty: string | null
     locationString: string | null
     footfall: string | null
-    healthRisks: string | null
+    dangers: string | null
     description: string | null
     domainString: string | null
     legs: IndividualLeg_Interface[]
@@ -190,7 +190,7 @@ export type PostsSummary_Type = {
     difficulty: string | null
     locationString: string | null
     footfall: string | null
-    healthRisks: string | null
+    dangers: string | null
     description: string | null
     domainString: string | null
 }

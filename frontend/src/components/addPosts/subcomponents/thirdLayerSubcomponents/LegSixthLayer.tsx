@@ -96,8 +96,8 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             alt='upload icon' 
                             className='w-[2rem] h-[2rem]'
                             onClick={async() => {
-                                const response = await handlePost('private')
                                 setUploading(true)
+                                const response = await handlePost('private')
                                 if(response === 'success' && uploading === false){
                                     localStorage.removeItem("postData")
                                     localStorage.removeItem("legData")
@@ -117,8 +117,8 @@ const LegSixthLayer = ({activeLeg, handleLegInputChange}: ThirdLayerProps) => {
                             alt='upload icon' 
                             className='w-[2rem] h-[2rem]'
                             onClick={async() => {
-                                const response = await handlePost('public')
                                 setUploading(true)
+                                const response = await handlePost('public')
                                 if(response === 'success' && uploading === false){
                                     localStorage.removeItem("postData")
                                     localStorage.removeItem("legData")

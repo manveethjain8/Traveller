@@ -138,9 +138,10 @@ export interface Posts_Interface extends Document {
     difficulty: string | null
     locationString: string | null
     footfall: string | null
-    healthRisks: string | null
+    dangers: string | null
     description: string | null
     domainString: string | null
+    embedding: number[]
     legs: IndividualLeg_Interface[]
     createdAt: Date
 }
@@ -162,7 +163,7 @@ export interface PostsSummary_Interface extends Document {
     difficulty: string | null
     locationString: string | null
     footfall: string | null
-    healthRisks: string | null
+    dangers: string | null
     description: string | null
     domainString: string | null
 }

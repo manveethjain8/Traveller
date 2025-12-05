@@ -98,9 +98,9 @@ const DisplayBaits = ({fullPost}: DisplayFirstLayerProps) => {
 
 
             <div className='min-w-[12rem]'>
-                <p className='text-center font-bold'>Health Risks</p>
+                <p className='text-center font-bold'>Dangers</p>
                 <p className='border w-full h-fit border-red-500 border-2 rounded-3xl focus:outline-none text-center box-border p-1'>
-                    {fullPost?.healthRisks}
+                    {fullPost?.dangers}
                 </p>
             </div>
         </>

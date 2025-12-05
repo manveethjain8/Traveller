@@ -158,13 +158,13 @@ const Baits = ({post, handlePostInputChange}: FirstLayerProps) => {
 
 
             <div className='w-fit h-fit'>
-                <p className='text-center font-bold'>Health Risks</p>
+                <p className='text-center font-bold'>Dangers</p>
                 <input 
                     type="text" 
                     className='border w-fit h-fit border-red-500 border-2 rounded-3xl
                     focus:outline-none text-center box-border p-1'
-                    value={post.postData.healthRisks ?? ''}
-                    onChange={(e) => handlePostInputChange('healthRisks', e.target.value)}
+                    value={post.postData.dangers ?? ''}
+                    onChange={(e) => handlePostInputChange('dangers', e.target.value)}
                 />
             </div>
         </>
