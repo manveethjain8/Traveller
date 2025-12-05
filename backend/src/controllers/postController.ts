@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
-import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface} from "../configs/types_and_interfaces"
+import { Error_Interface, FilesUploadResult_Interface, Posts_Interface, PostsSummary_Interface, SemanticPostsSummary_Interface} from "../configs/types_and_interfaces"
 import Post from "../models/posts"
 import { uploadMultipleFiles, uploadSingleFile } from "../utils/cloudinaryUtils"
 import { embeddingTextBuilder, fetchAllPosts, fetchSpecificPost } from "../utils/postUtils"
 import { getEmbedding } from "../utils/microServices"
+import { cosineSimilarity } from "../utils/mathUtils"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
     try{
@@ -126,5 +127,45 @@ export const getSpecificPost = async(req: Request, res: Response): Promise<void>
         }else{
             res.status(500).json({message: "Unknown Error while retriving specific post"})
         }
+    }
+}
+
+export const getSemanticPost = async(req: Request, res: Response): Promise<void> => {
+    try{
+        const query = (req.query.query as string) || (req.query.q as string)
+        const limit = req.query.limit ? Number(req.query.limit) : 10
+
+        if (!query) {
+            res.status(400).json({ message: "Missing 'query' parameter" });
+            return;
+        }
+
+        const queryEmbedding = await getEmbedding(query)
+
+        const post = await Post.find({
+            embedding: {$exists: true, $ne: []}},'_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty embedding locationString footfall dangers account'
+        ).populate("account", "_id profilePicture userName")
+
+        const scored = post.map((p: SemanticPostsSummary_Interface) => {
+            const sim = cosineSimilarity(queryEmbedding, p.embedding)
+            return {p, score: sim}
+        })
+
+        scored.sort((a, b) => b.score - a.score)
+
+        const top = scored.slice(0, limit).map(({p, score}) => {
+            const {embedding, ...rest} = p
+            return { ...rest, score }
+        })
+
+        res.status(200).json({
+            query,
+            count: top.length,
+            results: top,
+        });
+
+    }catch(err: unknown){
+        console.error("Error in semanticSearchPosts:", err);
+        res.status(500).json({ message: "Error while searching posts" });
     }
 }

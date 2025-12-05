@@ -167,6 +167,28 @@ export interface PostsSummary_Interface extends Document {
     description: string | null
     domainString: string | null
 }
+export interface SemanticPostsSummary_Interface extends Document {
+    account: LimitedAccountInfo_Interface
+    thumbnail: string | null
+    expeditionName: string | null
+    date: string | null,
+    introduction: string | null,
+    days: number | null
+    totalDistance: number | null
+    expenses: number | null
+    amenities: string | null
+    season: string | null
+    environment: string | null
+    transport: string | null
+    landscape: string | null
+    difficulty: string | null
+    locationString: string | null
+    footfall: string | null
+    dangers: string | null
+    description: string | null
+    domainString: string | null
+    embedding: number[]
+}
 
 export interface PostSummarySpecificAccount_Interface extends Document {
     thumbnail: string | null

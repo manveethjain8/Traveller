@@ -73,7 +73,7 @@ const Posts = ({scrollContainerRef}: PostsProps) => {
                                         alt="profile picture" 
                                     />
                                 </div>
-                                <p>high_rider_8</p>
+                                <p>{p.account.userName}</p>
                             </div>
                             <div className='flex-1 flex justify-center items-center box-border px-4'>
                                 <p>{p.expeditionName}</p>

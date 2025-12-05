@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
-import type { IndividualLeg_Interface, Posts_Interface, PostsSummary_Type, PostSummarySpecificAccount_Type } from "../configs/types_and_interfaces";
+import type { IndividualLeg_Interface, Posts_Interface, PostsSummary_Type, PostSummarySpecificAccount_Type, SemanticPostsSummary_Interface } from "../configs/types_and_interfaces";
 import customAPI from "../api/customAPI";
 
 interface DisplayPostContext_Interface {
@@ -9,6 +9,9 @@ interface DisplayPostContext_Interface {
     accountAllPosts: PostSummarySpecificAccount_Type[] | undefined
     setAccountAllPosts: Dispatch<SetStateAction<PostSummarySpecificAccount_Type[] | undefined>>
 
+    semanticPosts: SemanticPostsSummary_Interface[] | undefined
+    setSemanticPosts: Dispatch<SetStateAction<SemanticPostsSummary_Interface[] | undefined>>
+
     fullPost: Posts_Interface | undefined
     setFullPost: Dispatch<SetStateAction<Posts_Interface | undefined>>
 
@@ -17,8 +20,12 @@ interface DisplayPostContext_Interface {
     activeDisplayLeg: IndividualLeg_Interface | undefined
     setActiveDisplayLeg: Dispatch<SetStateAction<IndividualLeg_Interface | undefined>>
 
+    postQuery: string | undefined
+    setPostQuery: Dispatch<SetStateAction<string | undefined>>
+
     getAllPosts: () => Promise<void> 
     getSpecificPost: (postId: string) => Promise<void>
+    getSemanticPosts: () => Promise<void>
 }
 
 const DisplayPostContext = createContext<DisplayPostContext_Interface | undefined>(undefined)
@@ -30,10 +37,13 @@ interface DisplayPostProviderProps {
 export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({children}) => {
     const [allPosts, setAllPosts] = useState<PostsSummary_Type[] | undefined>(undefined)
     const [accountAllPosts, setAccountAllPosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
+    const [semanticPosts, setSemanticPosts] = useState<SemanticPostsSummary_Interface[] | undefined>(undefined)
 
     const [fullPost, setFullPost] = useState<Posts_Interface | undefined>(undefined)
     const [activeDisplayLeg, setActiveDisplayLeg] = useState<IndividualLeg_Interface | undefined>(undefined)
     const [activeDisplayLegId, setActiveDisplayLegId] = useState<string | undefined>(undefined)
+
+    const [postQuery, setPostQuery] = useState<string | undefined>(undefined)
 
     const getAllPosts = async(): Promise<void> => {
         try{
@@ -62,6 +72,39 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
         }
     }
 
+    interface SemanticSearchResponse {
+        query: string;
+        count: number;
+        results: SemanticPostsSummary_Interface[];
+    }
+
+    const getSemanticPosts = async(): Promise<void> => {
+        try{
+                if (!postQuery || !postQuery.trim()) {      // or keep previous results / do nothing
+                    return;
+                }
+
+            const result = await customAPI.get<SemanticSearchResponse>("post/semanticSearchPosts", {
+                params: { query: postQuery },         // 🔹 send query → backend
+                withCredentials: true,
+            })
+
+            setSemanticPosts(result.data.results)
+        }catch(err){
+            if (err instanceof Error) {
+                console.log(
+                    "Error retrieving semantic posts. Location: displayPostContext[Frontend]",
+                    err
+                )
+            } else {
+                console.log(
+                    "Unknown error occured while retrieving semantic posts. Location: displayPostContext[Frontend]",
+                    err
+                )
+            }
+        }
+    }
+
     useEffect(() => {
         const reqLeg: IndividualLeg_Interface | undefined = fullPost?.legs.find((l) => {
             if(activeDisplayLegId === l._id){
@@ -82,9 +125,12 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
                 allPosts, setAllPosts,
                 accountAllPosts, setAccountAllPosts,
                 fullPost, setFullPost,
+                semanticPosts, setSemanticPosts,
                 activeDisplayLegId, setActiveDisplayLegId,
                 activeDisplayLeg, setActiveDisplayLeg,
-                getAllPosts, getSpecificPost
+                postQuery, setPostQuery,
+                getAllPosts, getSpecificPost,
+                getSemanticPosts
             }
         }>
             {children}

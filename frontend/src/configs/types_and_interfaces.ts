@@ -195,6 +195,29 @@ export type PostsSummary_Type = {
     domainString: string | null
 }
 
+export interface SemanticPostsSummary_Interface extends Document {
+    account: LimitedAccountInfo_Type
+    thumbnail: string | null
+    expeditionName: string | null
+    date: string | null,
+    introduction: string | null,
+    days: number | null
+    totalDistance: number | null
+    expenses: number | null
+    amenities: string | null
+    season: string | null
+    environment: string | null
+    transport: string | null
+    landscape: string | null
+    difficulty: string | null
+    locationString: string | null
+    footfall: string | null
+    dangers: string | null
+    description: string | null
+    domainString: string | null
+    embedding: number[]
+}
+
 export type AddSitrep_Type = {
     id: number
     sitrepData: {
