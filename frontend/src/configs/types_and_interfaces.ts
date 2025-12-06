@@ -80,7 +80,7 @@ export type AddPost_Type = {
         thumbnail: File | string | undefined
         expeditionName: string | undefined
         date: string | undefined,
-        introduction: string | undefined,
+        tags: string | undefined,
         days: number | undefined
         totalDistance: number | undefined
         expenses: number | undefined
@@ -147,7 +147,7 @@ export interface Posts_Interface {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null
@@ -178,7 +178,7 @@ export type PostsSummary_Type = {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null
@@ -200,7 +200,7 @@ export interface SemanticPostsSummary_Interface extends Document {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null

@@ -8,7 +8,6 @@ import { cosineSimilarity } from "../utils/mathUtils"
 
 export const uploadPost = async(req: Request, res: Response): Promise<void> => {
     try{
-        console.log("Controller Hit")
         const filesArray = req.files as Express.Multer.File[]
         const body = req.body
         
@@ -140,10 +139,11 @@ export const getSemanticPost = async(req: Request, res: Response): Promise<void>
             return;
         }
 
-        const queryEmbedding = await getEmbedding(query)
+        const formatedQuery = query.split(",").map(q => q.trim().toLowerCase()).filter(Boolean).join("\n") ?? ""
+        const queryEmbedding = await getEmbedding(formatedQuery)
 
         const post = await Post.find({
-            embedding: {$exists: true, $ne: []}},'_id thumbnail expeditionName date introduction days totalDistance expenses amenities season environment transport landscape difficulty embedding locationString footfall dangers account'
+            embedding: {$exists: true, $ne: []}},'_id thumbnail expeditionName date description days totalDistance expenses amenities season environment transport landscape difficulty embedding locationString footfall dangers account'
         ).populate("account", "_id profilePicture userName")
 
         const scored = post.map((p: SemanticPostsSummary_Interface) => {

@@ -78,10 +78,10 @@ const FirstLayer = () => {
                     </div>
                     <div className='flex-5 w-full'>
                         <textarea 
-                            placeholder='Add an introduction'
+                            placeholder='Add an description'
                             className='bg-[#36454F] w-full h-full resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3'
-                            value={post.postData.introduction}
-                            onChange={(e) => handlePostInputChange('introduction', e.target.value)}
+                            value={post.postData.description}
+                            onChange={(e) => handlePostInputChange('description', e.target.value)}
                         />
                     </div>
                 </div>

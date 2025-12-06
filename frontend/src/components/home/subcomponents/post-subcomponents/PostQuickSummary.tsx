@@ -9,7 +9,7 @@ const PostQuickSummary = ({post}: PostsProviderProps) => {
         <div key={post._id} className="flex flex-col h-full">
             <div className='w-full min-h-[70%] max-h-[70%] flex-1 flex box-border px-4'>
                 <p className='h-[98%] w-full line-clamp-18 text-[0.9rem]'>
-                    {post.introduction}
+                    {post.description}
                 </p>
             </div>
             <div className='w-full h-[30%] flex-1 grid grid-cols-3 grid-rows-4 place-items-center box-border text-[0.9rem] p-1 cursor-default'>

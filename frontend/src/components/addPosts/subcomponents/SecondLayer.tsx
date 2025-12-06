@@ -24,11 +24,11 @@ const SecondLayer = () => {
         <div className="max-h-[50rem] w-full pr-3">
             <textarea 
                 ref={textareaRef} 
-                placeholder="Add an description"
+                placeholder="Add tags [Separate them by comma]"
                 className='bg-[#36454F] w-full max-h-[50rem] resize-none placeholder:text-center focus:outline-none rounded-3xl box-border p-3 overflow-y-auto'
                 onInput={handleInput}
-                value={post.postData.description}
-                onChange={(e) => handlePostInputChange('description', e.target.value)}
+                value={post.postData.tags}
+                onChange={(e) => handlePostInputChange('tags', e.target.value)}
             />
         </div>
     )

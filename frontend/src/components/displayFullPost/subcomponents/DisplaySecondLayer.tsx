@@ -27,7 +27,7 @@ const DisplaySecondLayer = () => {
                 className='w-full min-h-[10rem] max-h-[50rem] box-border p-3 overflow-y-auto'
                 onChange={handleInput}
             >
-                {fullPost?.description}
+                {fullPost?.tags}
             </p>
         </div>
     )

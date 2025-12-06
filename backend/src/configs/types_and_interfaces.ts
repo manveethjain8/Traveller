@@ -126,7 +126,7 @@ export interface Posts_Interface extends Document {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null
@@ -151,7 +151,7 @@ export interface PostsSummary_Interface extends Document {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null
@@ -172,7 +172,7 @@ export interface SemanticPostsSummary_Interface extends Document {
     thumbnail: string | null
     expeditionName: string | null
     date: string | null,
-    introduction: string | null,
+    tags: string | null,
     days: number | null
     totalDistance: number | null
     expenses: number | null

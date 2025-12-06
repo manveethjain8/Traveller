@@ -6,7 +6,7 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
     thumbnail: {type: String, required: true},
     expeditionName: {type: String, required: true},
     date: {type: String, required: true},
-    introduction: {type: String, required: true},
+    tags: {type: String, required: true},
     days: {type: Number, required: true},
     totalDistance: {type: Number, required: true},
     expenses: {type: Number, required: true},

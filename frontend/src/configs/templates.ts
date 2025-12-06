@@ -17,7 +17,7 @@ export const addPost_Template: AddPost_Type['postData'] = {
     thumbnail: undefined,
     expeditionName: undefined,
     date: undefined,
-    introduction: undefined,
+    tags: undefined,
     days: undefined,
     totalDistance: undefined,
     expenses: undefined,

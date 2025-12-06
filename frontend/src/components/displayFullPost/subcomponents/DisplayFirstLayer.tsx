@@ -31,7 +31,7 @@ const DisplayFirstLayer = () => {
 
                     <div className='flex-5 w-full max-h-[18rem]'>
                         <p className='w-full h-full resize-none focus:outline-none box-border p-3 overflow-y-auto'>
-                            {fullPost?.introduction}
+                            {fullPost?.description}
                         </p>
                     </div>
                 </div>
