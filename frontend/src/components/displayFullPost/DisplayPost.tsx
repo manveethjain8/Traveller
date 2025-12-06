@@ -1,8 +1,8 @@
 import Sidebar from "../sidebar/Sidebar"
 import TopBar from "../topbar/TopBar"
+import DisplayFirstLayer from "./subcomponents/DisplayFirstLayer"
 import DisplaySecondLayer from "./subcomponents/DisplaySecondLayer"
 import DisplayThirdLayer from "./subcomponents/DisplayThirdLayer"
-import DisplayFirstLayer from "./subcomponents/DisplayFirstLayer"
 
 
 const DisplayPost = () => {
