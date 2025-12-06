@@ -4,6 +4,7 @@ import TopBar from "../topbar/TopBar"
 import searchIcon from '../../assets/icons/search_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import deleteIcon from '../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz20.png'
 import { useDisplayPostContext } from "../../contexts/displayPostContext"
+import TailoredPosts from "./subcomponents/tailoredPosts"
 
 
 const Explore = () => {
@@ -13,7 +14,7 @@ const Explore = () => {
     console.log(semanticPosts)
 
     return (
-        <div>
+        <div className="flex flex-col">
             <TopBar/>
             <Sidebar/>
             <div 
@@ -21,7 +22,7 @@ const Explore = () => {
                             2xl:top-[4rem] 2xl:left-[15rem]
                             3xl:top-[5rem] 3xl:left-[17rem]"
             >
-                <div className="w-full flex-1 flex flex-row justify-center items-center box-border">
+                <div className="relative h-full w-full flex-1 flex flex-row justify-center items-center box-border">
                     <div className="min-w-[30rem] flex flex-row justify-center items-center border-2 border-red-500 rounded-3xl px-5 py-2">
                         <img 
                             src={searchIcon} 
@@ -53,46 +54,18 @@ const Explore = () => {
                         />
                     </div>
                 </div>
-            </div>
-            {/* <div className="relative w-full h-full grid grid-cols-4 auto-rows-min box-border p-5 gap-x-3 gap-y-3 overflow-y-auto">
-                    {searchedAccounts.length > 0 ? (
-                        <>
-                            {searchedAccounts.map(s => (
-                                <div 
-                                    key={s._id}
-                                    className="h-[5rem] box-border p-2 px-5 flex flex-row items-center gap-x-3"
-                                >
-                                    <div className="w-[4rem] rounded-full h-full hover:cursor-pointer">
-                                        <img 
-                                            src={s.profilePicture} 
-                                            alt="profile picture" 
-                                            className="w-full h-full rounded-full object-center object-cover"
-                                            // onClick={() => {
-                                            //     getAccountDetails(s._id)
-                                            //     sessionStorage.setItem('searchedAccountId', s._id)
-                                            //     navigate('/profile')
-                                            // }}
-                                        />
-                                    </div>
-                                    <strong
-                                        className="w-fit hover:cursor-pointer"
-                                        // onClick={() => {
-                                        //     getAccountDetails(s._id)
-                                        //     sessionStorage.setItem('searchedAccountId', s._id)
-                                        //     navigate('/profile')
-                                        // }}
-                                    >
-                                        {s.userName}
-                                    </strong>
-                                </div>
-                            ))}
-                        </>
+                <div className="w-full h-full grid grid-cols-2 auto-rows-min box-border p-5 gap-x-3 gap-y-3 overflow-y-auto">
+                    {semanticPosts && semanticPosts.length > 0 ? (
+                        <div className="min-w-[45rem] min-h-[10rem] max-h-[35rem]">
+                            <TailoredPosts/>
+                        </div>
                     ) : (
-                        <div className="absolute w-fit h-fit top-[35%] left-[40%]">
-                            <p className="font-[Oddly-Calm] text-[2rem]">No travellers in sight ! ! !</p>
+                        <div className="absolute w-fit h-fit top-[50%] left-[40%]">
+                            <p className="font-[Oddly-Calm] text-[2rem]">No Post Yet ! ! !</p>
                         </div>
                     )}
-            </div> */}
+            </div>
+            </div>
         </div>
     )
 }

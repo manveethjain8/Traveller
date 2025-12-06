@@ -196,6 +196,7 @@ export type PostsSummary_Type = {
 }
 
 export interface SemanticPostsSummary_Interface extends Document {
+    _id: string
     account: LimitedAccountInfo_Type
     thumbnail: string | null
     expeditionName: string | null
@@ -215,7 +216,6 @@ export interface SemanticPostsSummary_Interface extends Document {
     dangers: string | null
     description: string | null
     domainString: string | null
-    embedding: number[]
 }
 
 export type AddSitrep_Type = {

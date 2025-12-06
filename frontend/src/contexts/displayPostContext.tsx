@@ -73,9 +73,9 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
     }
 
     interface SemanticSearchResponse {
-        query: string;
-        count: number;
-        results: SemanticPostsSummary_Interface[];
+        query: string
+        count: number
+        results: SemanticPostsSummary_Interface[]
     }
 
     const getSemanticPosts = async(): Promise<void> => {
@@ -84,12 +84,15 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
                     return;
                 }
 
-            const result = await customAPI.get<SemanticSearchResponse>("post/semanticSearchPosts", {
+            const response = await customAPI.get<SemanticSearchResponse>("post/semanticSearchPosts", {
                 params: { query: postQuery },         // 🔹 send query → backend
                 withCredentials: true,
             })
 
-            setSemanticPosts(result.data.results)
+            console.log(response.data)
+            const resultDocs = response.data.results.map((item: any) => item._doc)
+
+            setSemanticPosts(resultDocs)
         }catch(err){
             if (err instanceof Error) {
                 console.log(

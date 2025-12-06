@@ -17,7 +17,7 @@ const AccountPosts = () => {
 
     const {profileCategory, setProfileCategory, userInfo, getAccountDetails} = useProfileContext()
     const {getSpecificPost} = useDisplayPostContext()
-    const {activeAccountId} = useStartupContext()
+    const {activeAccountId, setNavigationCategorytoLocalStorage, setSideBarCategory} = useStartupContext()
 
     const [publicPosts, setPublicPosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
     const [privatePosts, setPrivatePosts] = useState<PostSummarySpecificAccount_Type[] | undefined>(undefined)
@@ -129,6 +129,8 @@ const AccountPosts = () => {
                                             hover:cursor-pointer'
                                     onClick={() => {
                                         getSpecificPost(p._id)
+                                        setSideBarCategory(undefined)
+                                        setNavigationCategorytoLocalStorage('undifined')
                                         navigate('/displayPost')
                                     }}
                                 >
