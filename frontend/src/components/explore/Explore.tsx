@@ -4,7 +4,7 @@ import TopBar from "../topbar/TopBar"
 import searchIcon from '../../assets/icons/search_50dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import deleteIcon from '../../assets/icons/close_50dp_E3E3E3_FILL0_wght700_GRAD200_opsz20.png'
 import { useDisplayPostContext } from "../../contexts/displayPostContext"
-import TailoredPosts from "./subcomponents/tailoredPosts"
+import TailoredPosts from "./subcomponents/TailoredPosts"
 
 
 const Explore = () => {

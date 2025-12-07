@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose"
+import mongoose, { ObjectId, Types } from "mongoose"
 
 export interface ENV_Interface {                  // Environmental Variables
     MONGO_URI: string
@@ -206,3 +206,19 @@ export interface Sitrep_Interface {
     account?: LimitedAccountInfo_Interface
     viewers?: LimitedAccountInfo_Interface[]
 }
+
+export interface PostInteractions_Interface extends Document{ 
+    postId: Types.ObjectId,
+    likes: Types.Array<Types.ObjectId>,
+    comments: {
+        accountId: Types.ObjectId,
+        commentId: Types.ObjectId,
+        comment: string,
+        createdAt: Date
+    }[]
+}
+
+export interface Comments_Interface {
+    account: LimitedAccountInfo_Interface,
+    comment: string
+}[]
