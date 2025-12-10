@@ -103,7 +103,9 @@ const Posts = ({scrollContainerRef}: PostsProps) => {
                                 />
                             </div>
                             <div className='flex-1 h-full flex flex-col items-center'>
-                                <PostInteractions/>
+                                <PostInteractions
+                                    post={p}
+                                />
                             </div>
                         </div>
                     </div>

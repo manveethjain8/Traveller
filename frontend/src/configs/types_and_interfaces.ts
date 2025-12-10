@@ -240,3 +240,19 @@ export interface Sitrep_Interface {
     account: LimitedAccountInfo_Type
     viewers: LimitedAccountInfo_Type[]
 }
+
+export interface PostInteractions_Interface extends Document{ 
+    postId: string,
+    likes: number,
+    comments: {
+        accountId: string,
+        commentId: string,
+        comment: string,
+        createdAt: Date
+    }[]
+}
+
+export interface Comments_Interface {
+    account: LimitedAccountInfo_Type,
+    comment: string
+}[]

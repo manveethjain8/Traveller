@@ -107,7 +107,7 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
     try{
         const { serviceType, sentAccountId, sentPostId, sentComment, sentCommentId } = req.body;
 
-        if (!serviceType || !sentAccountId || !sentPostId || !sentCommentId) {
+        if (!serviceType || !sentAccountId || !sentPostId) {
             return res.status(400).json({ message: "Account ID or service type or post ID is missing" });
         }
 
@@ -129,7 +129,7 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
                     setDefaultsOnInsert: true
                 }
             )
-        }else if(serviceType === 2){ // Update Comment
+        }else if(serviceType === 2 && sentCommentId){ // Update Comment
             await Interactions.findOneAndUpdate(
                 {
                     postId: sentPostId,
@@ -140,7 +140,7 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
                 },
                 {new: true}
             )
-        }else if(serviceType === 3){ // Delete Comment
+        }else if(serviceType === 3 && sentCommentId){ // Delete Comment
             await Interactions.findOneAndUpdate(
                 {postId: sentPostId},
                 {
