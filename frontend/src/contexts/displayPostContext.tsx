@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
-import type { IndividualLeg_Interface, Posts_Interface, PostsSummary_Type, PostSummarySpecificAccount_Type, SemanticPostsSummary_Interface } from "../configs/types_and_interfaces";
+import type { Comment_Interface, IndividualLeg_Interface, Posts_Interface, PostsSummary_Type, PostSummarySpecificAccount_Type, SemanticPostsSummary_Interface } from "../configs/types_and_interfaces";
 import customAPI from "../api/customAPI";
+import { socket } from "../socket";
 
 interface DisplayPostContext_Interface {
     allPosts: PostsSummary_Type[] | undefined
@@ -57,6 +58,59 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
             }
         }
     }
+
+    type LikeUpdates = {
+        postId: string,
+        likes: string[]
+    }
+
+    useEffect(() => {
+        const onLikeUpdate = ({postId, likes}: LikeUpdates) => {
+            setAllPosts(prev => 
+                prev?.map(post => post._id === postId ? {...post, interactions: {...post.interactions, likes}} : post)
+            )
+        }
+
+        socket.on("likeUpdated", onLikeUpdate);
+
+        return () => {
+            socket.off("likeUpdated", onLikeUpdate)
+        }
+    }, [])
+
+    type CommentAddedPayload = {
+        postId: string
+        comment: Comment_Interface
+    }
+
+    useEffect(() => {
+        const onCommentUpdate = ({postId, comment}: CommentAddedPayload) => {
+            setAllPosts(prev => 
+                prev?.map(post => post._id === postId ? {
+                    ...post, interactions: 
+                        {
+                            ...post.interactions, comments: [
+                                ...post.interactions.comments,
+                                comment
+                            ]
+                        }
+                    } 
+                    : 
+                post)
+            )
+        }
+
+
+        socket.on("commentUpdated", (data) => {
+            console.log("New Comment", data)
+        })
+
+        socket.on("commentUpdated", onCommentUpdate);
+
+        return () => {
+            socket.off("commentUpdated", onCommentUpdate)
+        }
+    }, [])
 
     const getSpecificPost = async(postId: string): Promise<void> => {
         try{

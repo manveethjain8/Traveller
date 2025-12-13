@@ -4,7 +4,12 @@ import Post from "../models/posts"
 
 export const fetchAllPosts = async(): Promise<PostsSummary_Interface[] | Error_Interface> => {
     try{
-        const response = await Post.find({}, '_id thumbnail expeditionName date description days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall dangers account').populate("account", "_id profilePicture userName").sort({ createdAt: -1 })
+        const response = await Post.find({}, '_id thumbnail expeditionName date description days totalDistance expenses amenities season environment transport landscape difficulty locationString footfall dangers account interactions')
+        .populate("account", "_id profilePicture userName")
+        .populate("interactions", "likes comments")
+        .populate({path: "interactions", populate: {path: "comments.account", select: "_id userName profilePicture"}})
+        .sort({ createdAt: -1 })
+        .lean<PostsSummary_Interface[]>()
         return response
     }catch(err: unknown){
         if(err instanceof Error){

@@ -144,6 +144,7 @@ export interface Posts_Interface extends Document {
     embedding: number[]
     legs: IndividualLeg_Interface[]
     createdAt: Date
+    interactions: Interactions_Interface
 }
 
 export interface PostsSummary_Interface extends Document {
@@ -166,6 +167,7 @@ export interface PostsSummary_Interface extends Document {
     dangers: string | null
     description: string | null
     domainString: string | null
+    interactions: Interactions_Interface
 }
 export interface SemanticPostsSummary_Interface extends Document {
     account: LimitedAccountInfo_Interface
@@ -207,18 +209,25 @@ export interface Sitrep_Interface {
     viewers?: LimitedAccountInfo_Interface[]
 }
 
-export interface PostInteractions_Interface extends Document{ 
+export interface PostInteractions_Interface { 
     postId: Types.ObjectId,
-    likes: Types.Array<Types.ObjectId>,
+    likes: Types.ObjectId[],
     comments: {
-        accountId: Types.ObjectId,
-        commentId: Types.ObjectId,
+        _id: Types.ObjectId
+        account: Types.ObjectId,
         comment: string,
         createdAt: Date
     }[]
 }
 
-export interface Comments_Interface {
-    account: LimitedAccountInfo_Interface,
-    comment: string
-}[]
+export interface Comment_Interface {
+  _id: string;
+  account: LimitedAccountInfo_Interface;
+  comment: string;
+  createdAt: string;
+}
+
+export interface Interactions_Interface {
+    likes: string[]; // account IDs
+    comments: Comment_Interface[];
+}

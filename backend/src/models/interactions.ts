@@ -7,8 +7,7 @@ const InteractionsSchema = new mongoose.Schema<PostInteractions_Interface>({
     likes:[{type: mongoose.Schema.Types.ObjectId, ref: 'Account'}],
     comments: [{
         account: {type: mongoose.Schema.Types.ObjectId, ref: 'Account'},
-        commentId: {type: mongoose.Schema.Types.ObjectId, auto: true},
-        comment: {type: String},
+        comment: { type: String },
         createdAt: { type: Date, default: Date.now }
     }],
 })

@@ -83,18 +83,18 @@ const Posts = ({scrollContainerRef}: PostsProps) => {
                             </div>
                         </div>
                         <div 
-                            className='flex-9 flex flex-row max-h-[88%] hover:cursor-pointer'
-                            onClick={() => {
+                            className='flex-9 flex flex-row max-h-[88%] '
+                        >
+                            <div className="flex-1 h-full">
+                                <img
+                                    className='h-full w-full object-center object-cover hover:cursor-pointer' 
+                                    src={p.thumbnail ?? defaultTNP} alt="post image" 
+                                    onClick={() => {
                                         getSpecificPost(p._id)
                                         setSideBarCategory(undefined)
                                         setNavigationCategorytoLocalStorage('undifined')
                                         navigate('/displayPost')
                                     }}
-                        >
-                            <div className="flex-1 h-full">
-                                <img
-                                    className='h-full w-full object-center object-cover' 
-                                    src={p.thumbnail ?? defaultTNP} alt="post image" 
                                 />
                             </div>
                             <div className='flex-1 h-full' >

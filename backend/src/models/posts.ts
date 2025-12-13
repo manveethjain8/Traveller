@@ -71,6 +71,11 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Account",
         required: true
+    },
+
+    interactions: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Interactions",
     }
 })
 

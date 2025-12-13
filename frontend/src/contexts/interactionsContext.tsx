@@ -81,7 +81,7 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
 
     const handleLikes = async(postId: string): Promise<string> => {
         try{
-            const likeInfo = {postId, accountId: activeAccountId }
+            const likeInfo = {sentPostId:postId, sentAccountId: activeAccountId }
             await customAPI.post('/interaction/likes', likeInfo, {withCredentials: true})
             return ('success')
         }catch(err){
@@ -96,7 +96,7 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
 
     const handleComments = async(serviceType: number, postId: string, comment: string, commentId?: string): Promise<string> => {
         try{
-            const commentInfo = {serviceType, accountId: activeAccountId , postId, comment, commentId}
+            const commentInfo = {serviceType, sentAccountId: activeAccountId , sentPostId: postId, sentComment: comment, sentCommentId: commentId}
             await customAPI.post('/interaction/comments', commentInfo, {withCredentials: true})
             return ('success')
         }catch(err){

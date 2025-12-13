@@ -3,6 +3,7 @@ import FandUF from "../models/FandUF"
 import { fetchRelationship } from "../utils/accountInteractionUtils";
 import { Error_Interface, FandUF_Interface } from "../configs/types_and_interfaces";
 import Interactions from "../models/interactions";
+import Post from "../models/posts";
 
 export const handleFollowingAndUnfollowing = async(req: Request, res: Response): Promise<any> => {
     try{
@@ -71,15 +72,16 @@ export const handleLikes = async(req: Request, res: Response): Promise<any> => {
             likes: sentAccountId
         })
 
+        let updatedInteraction
+
         if(alreadyLikes){
-            await Interactions.findOneAndUpdate(
+            updatedInteraction = await Interactions.findOneAndUpdate(
                 {postId: sentPostId},
                 {$pull: {likes: sentAccountId}},
                 {new: true}
             )
-            return res.status(200).json({message: 'like interaction handled'})
         }else{
-            await Interactions.findOneAndUpdate(
+            updatedInteraction = await Interactions.findOneAndUpdate(
                 {postId: sentPostId},
                 {
                     $addToSet: {likes: sentAccountId},
@@ -91,8 +93,22 @@ export const handleLikes = async(req: Request, res: Response): Promise<any> => {
                     setDefaultsOnInsert: true
                 }
             )
-            return res.status(200).json({message: 'like interaction handled'})
         }
+
+        const exsits = await Post.findById(sentPostId)
+        if(!exsits?.interactions){
+            await Post.findByIdAndUpdate(sentPostId, {
+                $set: {interactions: updatedInteraction?._id}
+            })
+        }
+
+
+        const io = req.app.get("io")
+        io.emit("likeUpdated", {
+            postId: sentPostId,
+            likes: updatedInteraction?.likes
+        })
+        return res.status(200).json({message: 'like interaction handled'})
 
     }catch (err: any) {
         console.error("Error in handling likes:", err.name, err.message, err);
@@ -111,13 +127,15 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
             return res.status(400).json({ message: "Account ID or service type or post ID is missing" });
         }
 
+        let updatedInteraction  
+
         if(serviceType === 1){ // Add comment
-            await Interactions.findOneAndUpdate(
+            updatedInteraction = await Interactions.findOneAndUpdate(
                 {postId: sentPostId}, 
                 {
                     $push: {
                         comments: {
-                            accountId: sentAccountId,
+                            account: sentAccountId,
                             comment: sentComment
                         }
                     },
@@ -129,6 +147,13 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
                     setDefaultsOnInsert: true
                 }
             )
+
+            const exsits = await Post.findById(sentPostId)
+            if(!exsits?.interactions){
+                await Post.findByIdAndUpdate(sentPostId, {
+                    $set: {interactions: updatedInteraction?._id}
+                })
+            }
         }else if(serviceType === 2 && sentCommentId){ // Update Comment
             await Interactions.findOneAndUpdate(
                 {
@@ -151,6 +176,18 @@ export const handleComments = async(req: Request, res: Response): Promise<any> =
                 {new: true}
             )
         }
+
+        const populatedInteraction = await Interactions.findById(
+            updatedInteraction?._id
+        ).populate("comments.account", "_id userName profilePicture")
+
+        const lastComment = populatedInteraction?.comments[populatedInteraction.comments.length - 1]
+
+        const io = req.app.get("io")
+        io.emit("commentUpdated", {
+            postId: sentPostId,
+            comment: lastComment
+        })
 
        res.status(200).json({message: 'comment interaction handled'})
 

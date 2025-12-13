@@ -114,7 +114,8 @@
 
 {
   "compilerOptions": {
-    "target": "ES2020",                     // Support modern JS features
+    "target": "ES2022",                     // Support modern JS features
+    "lib": ["ES2022", "DOM"],
     "module": "ESNext",                     // Use ESM (not CommonJS)
     "moduleResolution": "bundler", // forces correct extension usage
     "allowImportingTsExtensions": false,          // Resolves imports like Node

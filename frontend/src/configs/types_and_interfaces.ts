@@ -193,6 +193,7 @@ export type PostsSummary_Type = {
     dangers: string | null
     description: string | null
     domainString: string | null
+    interactions: Interactions_Interface
 }
 
 export interface SemanticPostsSummary_Interface extends Document {
@@ -241,7 +242,7 @@ export interface Sitrep_Interface {
     viewers: LimitedAccountInfo_Type[]
 }
 
-export interface PostInteractions_Interface extends Document{ 
+export interface PostInteractions_Interface { 
     postId: string,
     likes: number,
     comments: {
@@ -252,7 +253,14 @@ export interface PostInteractions_Interface extends Document{
     }[]
 }
 
-export interface Comments_Interface {
-    account: LimitedAccountInfo_Type,
-    comment: string
-}[]
+export interface Comment_Interface {
+  _id: string;
+  account: LimitedAccountInfo_Type;
+  comment: string;
+  createdAt: string;
+}
+
+export interface Interactions_Interface {
+    likes: string[]; // account IDs
+    comments: Comment_Interface[];
+}

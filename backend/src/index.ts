@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser'
 import connectDB from './configs/db'
 import session from 'express-session'
 import { configurations } from './configs/connections'
+import http from "http";
+import { setupSocket } from "./socket";
 
 import passport from './utils/passportUtils'
 import "./utils/cloudinaryUtils"
@@ -55,9 +57,15 @@ app.use('/post', postRoutes)
 app.use('/interaction', accountInteractionRoutes)
 app.use('/sitrep', sitrepRoutes)
 
+// 1️⃣ Create HTTP server from Express app
+const server = http.createServer(app)
+
+// 2️⃣ Setup socket (separate file)
+setupSocket(server, app)
+
 //Provides the means to connect to the server
 const PORT: number = configurations.PORT
-app.listen(PORT, (): void =>{
+server.listen(PORT, (): void =>{
     console.log(`✅ Server running at http://localhost:${PORT}`)
 }) 
 

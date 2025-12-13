@@ -1,4 +1,5 @@
 import { Routes, Route} from "react-router-dom"
+import { socket } from "./socket"
 
 import Authenticate from "./components/authenticate/Authenticate"
 import Profile from "./components/profile/Profile"
@@ -9,8 +10,28 @@ import AddSitreps from "./components/addSitreps/AddSitreps"
 import DisplayPost from "./components/displayFullPost/DisplayPost"
 import Travellers from "./components/travellers/Travellers"
 import DisplaySitreps from "./components/displaySitreps/DisplaySitreps"
+import { useEffect} from "react"
 
 function App() {
+
+	useEffect(() => {
+		const onConnect = (): void => {
+			console.log("Connected to Socket.IO server")
+		}
+
+		const onDisconnect = (): void => {
+			console.log("Disconnected from Socket.IO server")
+		}
+
+		socket.on("connect", onConnect)
+		socket.off("disconnect", onDisconnect)
+
+		return () => {
+			socket.off("connect", onConnect)
+			socket.off("disconnet", onDisconnect)
+		}
+	}, [])
+
 	return (
 		<main>
 			<Routes>
