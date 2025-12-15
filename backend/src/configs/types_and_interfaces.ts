@@ -82,15 +82,7 @@ export interface FandUF_Interface extends Document {
 
 export interface IndividualLeg_Interface {
     startPhoto: string | null,
-    legIntroduction: string | null,
-    startDate: string | null,
-    legDistance: number | null,
-    environment: string | null,
-    landscape: string | null,
-    weather: string | null,
-    location: string | null,
-    highlights: string[],
-    challenges: string[],
+    legDescription: string | null,
     restaurants: {
         availability: string | null,
         recommendation: string | null
@@ -107,13 +99,6 @@ export interface IndividualLeg_Interface {
         availability: string | null,
         recommendation: string | null
     },
-    conclusion: string | null,
-    startTime: string | null,
-    endTime: string | null,
-    difficulty: string | null,
-    expenses: number | null,
-    traffic: string | null,
-    roadConditions: string | null
     endPhoto: File | string | null,
     notes: string | null
     photoDump: string[] | null 

@@ -39,15 +39,7 @@ export const addPostPreview_Template: AddPost_Type['postPreview'] = {
 
 export const individualLeg_Template: IndividualLeg_type['legData'] = {
     startPhoto: undefined,
-    legIntroduction: undefined,
-    startDate: undefined,
-    legDistance: undefined,
-    environment: undefined,
-    landscape: undefined,
-    weather: undefined,
-    locationString: undefined,
-    highlights: [''],
-    challenges: [''],
+    legDescription: undefined,
     endPhoto: undefined,
     photoDump: undefined,
     restaurants: {
@@ -66,13 +58,6 @@ export const individualLeg_Template: IndividualLeg_type['legData'] = {
         availability: undefined,
         recommendation: undefined
     },
-    conclusion: undefined,
-    startTime: undefined,
-    endTime: undefined,
-    roadConditions: undefined,
-    difficulty: undefined,
-    expenses: undefined,
-    traffic: undefined,
     notes: undefined
 }
 

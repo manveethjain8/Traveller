@@ -26,8 +26,6 @@ interface AddPostContext_Interface {
     handleDeleteLegs: (id: string) => void
     handleActiveLeg: () => void 
     handleLegPhotoDelete: (legId: string,  type: number, index?: number) => void 
-    handleDeleteLegPoints: (field: 'highlights' | 'challenges', idx: number)=> void
-
     handlePost: (domain: 'public' | 'private') => Promise<string>
 }
 
@@ -197,7 +195,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 const updatedLegData = {...l.legData,}
                 const updatedPreview = { ...l.legPreview }
 
-                const stringFields = ["legIntroduction", "startDate", "environment", "landscape", "weather", "locationString", "conclusion", "startTime", "endTime", "difficulty", "traffic", "roadConditions", "notes"] as const
+                const stringFields = ["legDescription", "notes"] as const
                 type StringFields = typeof stringFields[number]
 
                 const numberFields = ["legDistance", "expenses"]
@@ -216,18 +214,6 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                     const finalFiles = [...previousDump , ...files];
                     updatedPreview.photoDump = finalFiles.map(file =>  typeof file !== 'string' ? URL.createObjectURL(file) : file)
                     updatedLegData.photoDump = finalFiles as (string[] | File [])
-                } else if (field === 'highlights' || field === 'challenges') {
-                    if (Array.isArray(value)) {
-                        updatedLegData[field] = value;
-                    } else {
-                        const points: string[] = [...(l.legData[field]|| [])];
-                        if (typeof index === "number") {
-                        points[index] = value
-                        } else {
-                        points.push(value)
-                        }
-                        updatedLegData[field] = points;
-                    }
                 }else if (nestedFields.includes(field as NestedFields)) {
                     const f = field as NestedFields
                     const nested = { 
@@ -291,24 +277,6 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 return updatedLeg;
             })
         )
-    }
-
-    const handleDeleteLegPoints = (field: 'highlights' | 'challenges', idx: number): void => {
-        let updated: string[] = []
-        if(field === 'highlights'){
-            updated = [...(activeLeg?.legData.highlights ?? [])]
-
-        }else{
-            updated = [...(activeLeg?.legData.challenges ?? [])]
-        }
-
-        updated.splice(idx, 1)
-
-        if (updated.length === 0) {
-            updated.push('');
-        }
-
-        handleLegInputChange(activeLeg?.id as string, field, updated)
     }
 
     const handlePost = async (domain: "public" | "private"): Promise<string> => {
@@ -377,8 +345,7 @@ export const AddPostContextProvider: FC<AddPostProviderProps> = ({children}) => 
                 handlePostInputChange, handleThumbnailImageRemoval,
                 handleSetLegs, handleDeleteLegs,
                 handleActiveLeg, handleLegInputChange,
-                handleLegPhotoDelete, handleDeleteLegPoints,
-                handlePost
+                handleLegPhotoDelete, handlePost
             }
         }>
             {children}

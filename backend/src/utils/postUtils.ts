@@ -36,6 +36,9 @@ export const fetchAllPostsOfSpecificAccount = async(accountId: string | ObjectId
 export const fetchSpecificPost = async(postId: string | ObjectId): Promise<Posts_Interface | Error_Interface | null> => {
     try{
         const response: Posts_Interface | null = await Post.findById({_id: postId})
+        .populate("account", "_id profilePicture userName")
+        .populate("interactions", "likes comments")
+        .populate({path: "interactions", populate: {path: "comments.account", select: "_id userName profilePicture"}})
         return response
     }catch(err: unknown){
         if(err instanceof Error){

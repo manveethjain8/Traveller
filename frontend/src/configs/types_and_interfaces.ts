@@ -32,15 +32,8 @@ export type IndividualLeg_type = {
     name: string,
     legData: {
         startPhoto: File | string | undefined,
-        legIntroduction: string | undefined,
-        startDate: string | undefined,
-        legDistance: number | undefined,
-        environment: string | undefined,
-        landscape: string | undefined,
-        weather: string | undefined,
-        locationString: string | undefined,
-        highlights: string[],
-        challenges: string[],
+        endPhoto: File | string | undefined,
+        legDescription: string | undefined,
         restaurants: {
             availability: string | undefined,
             recommendation: string | undefined
@@ -57,14 +50,6 @@ export type IndividualLeg_type = {
             availability: string | undefined,
             recommendation: string | undefined
         },
-        conclusion: string | undefined,
-        startTime: string | undefined,
-        endTime: string | undefined,
-        difficulty: string | undefined,
-        expenses: number | undefined,
-        traffic: string | undefined,
-        roadConditions: string | undefined,
-        endPhoto: File | string | undefined,
         notes: string | undefined,
         photoDump: File[] | string[] | undefined 
     },
@@ -103,15 +88,7 @@ export type AddPost_Type = {
 export interface IndividualLeg_Interface {
     _id: string,
     startPhoto: string | null,
-    legIntroduction: string | null,
-    startDate: string | null,
-    legDistance: number | null,
-    environment: string | null,
-    landscape: string | null,
-    weather: string | null,
-    locationString: string | null,
-    highlights: string[],
-    challenges: string[],
+    legDescription: string | null,
     restaurants: {
         availability: string | null,
         recommendation: string | null
@@ -128,13 +105,6 @@ export interface IndividualLeg_Interface {
         availability: string | null,
         recommendation: string | null
     },
-    conclusion: string | null,
-    startTime: string | null,
-    endTime: string | null,
-    difficulty: string | null,
-    expenses: number | null,
-    traffic: string | null,
-    roadConditions: string | null
     endPhoto: File | string | null,
     notes: string | null
     photoDump: string[] | null 
@@ -164,6 +134,7 @@ export interface Posts_Interface {
     domainString: string | null
     legs: IndividualLeg_Interface[]
     createdAt: Date
+    interactions: Interactions_Interface
 }
 
 export type PostSummarySpecificAccount_Type = {

@@ -69,6 +69,17 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
             setAllPosts(prev => 
                 prev?.map(post => post._id === postId ? {...post, interactions: {...post.interactions, likes}} : post)
             )
+
+            setFullPost(prev => {
+                if(!prev) return prev
+                return {
+                    ...prev,
+                    interactions: {
+                        ...prev.interactions,
+                        likes
+                    }
+                }
+            })
         }
 
         socket.on("likeUpdated", onLikeUpdate);
@@ -85,19 +96,39 @@ export const DisplayPostContextProvider: FC<DisplayPostProviderProps> = ({childr
 
     useEffect(() => {
         const onCommentUpdate = ({postId, comment}: CommentAddedPayload) => {
-            setAllPosts(prev => 
-                prev?.map(post => post._id === postId ? {
-                    ...post, interactions: 
-                        {
-                            ...post.interactions, comments: [
-                                ...post.interactions.comments,
-                                comment
-                            ]
+            setAllPosts(prev =>
+                prev?.map(post => {
+                    if (post._id !== postId) return post
+
+                    const comments = Array.isArray(post.interactions.comments)
+                        ? post.interactions.comments
+                        : []
+
+                    return {
+                        ...post,
+                        interactions: {
+                        ...post.interactions,
+                        comments: [comment, ...comments]
                         }
-                    } 
-                    : 
-                post)
+                    }
+                })
             )
+
+            setFullPost(prev => {
+                 if (!prev) return prev
+
+                const comments = Array.isArray(prev.interactions.comments)
+                    ? prev.interactions.comments
+                    : []
+
+                return {
+                    ...prev,
+                    interactions: {
+                    ...prev.interactions,
+                    comments: [comment, ...comments]
+                    }
+                }
+            })
         }
 
 

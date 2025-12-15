@@ -1,6 +1,3 @@
-
-
-import {useRef} from "react"
 import type { IndividualLeg_Interface} from "../../../../configs/types_and_interfaces";
 
 
@@ -8,79 +5,95 @@ type DisplayThirdLayerProps = {
     activeDisplayLeg: IndividualLeg_Interface | undefined
 }
 
-const DisplayLegSecondLayer = ({activeDisplayLeg}: DisplayThirdLayerProps) => {
-
-
-    const highlightsParagraphRef = useRef<(HTMLParagraphElement | null)[]>([])
-    const challengesParagraphRef = useRef<(HTMLParagraphElement | null)[]>([])
-
-    
-    const handleHighlightsInput = (idx: number):void => {
-        const highlightsParagraph = highlightsParagraphRef.current[idx]
-        if(!highlightsParagraph) return
-
-        highlightsParagraph.style.height = 'auto'
-        highlightsParagraph.style.height = Math.min(highlightsParagraph.scrollHeight, 480) + 'px'
-    }
-
-    const handleChallengesInput = (idx: number):void => {
-        const challengesParagraph = challengesParagraphRef.current[idx]
-        if(!challengesParagraph) return
-
-        challengesParagraph.style.height = 'auto'
-        challengesParagraph.style.height = Math.min(challengesParagraph.scrollHeight, 480) + 'px'
-    }
-
-
+const DisplayLegSecondLayer = ({activeDisplayLeg}: DisplayThirdLayerProps) => { 
     return (
-        <div className="flex flex-row w-full min-h-[10rem] max-h-fit gap-x-[2rem]">
+        <div className="border border-red-500 min-h-[15rem] w-full rounded-xl">
             {activeDisplayLeg && 
-                <>
-                    <div className="relative flex-1">
-                        {activeDisplayLeg.highlights.map((point, idx) => (
-                            <div 
-                                key={idx}
-                                className="relative w-full mt-[1rem] flex items-center"
-                            >
-                                <p
-                                    ref={(el) => {
-                                        highlightsParagraphRef.current[idx] = el
-                                        if(el){
-                                            handleHighlightsInput(idx)
-                                        }
-                                    }}
-                                    onInput={() => handleHighlightsInput(idx)}
-                                    className="relative w-[95%] h-full resize-none placeholder:text-center focus:outline-none mt-[1rem]"
-                                >
-                                    {point}
+                <div key={activeDisplayLeg._id} className="h-full w-full grid grid-cols-4 gap-x-[3rem] box-border p-2 ">
+                    <div className="h-full w-full flex-col ">
+                        <div className="flex flex-1 flex-col w-full gap-y-4">
+                            <strong className="text-center">Restaurants</strong>
+                            <div className="w-full h-fit flex flex-row gap-x-2 justify-center items-center">
+                                <strong >Availability</strong>
+                                <p className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2">
+                                    {activeDisplayLeg.restaurants.availability}
                                 </p>
-                                    
                             </div>
-                        ))}
-                    </div>
-                    <div className="relative flex-1">
-                        {activeDisplayLeg.challenges.map((point, idx) => (
-                            <div 
-                                key={idx}
-                                className="relative w-full mt-[1rem] flex items-center"
-                            >
+                            <div className="w-[80%] h-[0.2rem] bg-red-500 self-center"></div>
+                            <div className="flex-1 flex w-full flex-col gap-x-2 justify-center items-center">
+                                <strong >Recommendation</strong>
                                 <p
-                                    ref={(el) => {
-                                        challengesParagraphRef.current[idx] = el
-                                        if(el){
-                                            handleChallengesInput(idx)
-                                        }
-                                    }}
-                                    onInput={() => handleChallengesInput(idx)}
-                                    className="relative w-[95%] h-full resize-none placeholder:text-center focus:outline-none mt-[1rem]"
+                                    className="min-h-[8rem] w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
                                 >
-                                    {point}
+                                    {activeDisplayLeg.restaurants.recommendation}
                                 </p>
-                                    
                             </div>
-                        ))}
+                        </div>
                     </div>
-                </>
+
+                    <div className="flex flex-col">
+                        <div className="flex flex-1 flex-col w-full gap-y-4">
+                            <strong className="text-center">Fuel and Services</strong>
+                            <div className="w-full h-fit flex flex-row gap-x-2 justify-center items-center">
+                                <strong >Availability</strong>
+                                <p className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2">
+                                    {activeDisplayLeg.fuelAndServices.availability}
+                                </p>
+                            </div>
+                            <div className="w-[80%] h-[0.2rem] bg-red-500 self-center"></div>
+                            <div className="flex-1 flex w-full flex-col gap-x-2 justify-center items-center">
+                                <strong >Recommendation</strong>
+                                <p
+                                    className="min-h-[8rem] w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
+                                >
+                                    {activeDisplayLeg.fuelAndServices.recommendation}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                        <div className="flex flex-1 flex-col w-full gap-y-4">
+                            <strong className="text-center">Stays</strong>
+                            <div className="w-full h-fit flex flex-row gap-x-2 justify-center items-center">
+                                <strong >Availability</strong>
+                                <p className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2">
+                                    {activeDisplayLeg.stays.availability}
+                                </p>
+                            </div>
+                            <div className="w-[80%] h-[0.2rem] bg-red-500 self-center"></div>
+                            <div className="flex-1 flex w-full flex-col gap-x-2 justify-center items-center">
+                                <strong >Recommendation</strong>
+                                <p
+                                    className="min-h-[8rem] w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
+                                >
+                                    {activeDisplayLeg.stays.recommendation}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                        <div className="flex flex-1 flex-col w-full gap-y-4">
+                            <strong className="text-center">Network</strong>
+                            <div className="w-full h-fit flex flex-row gap-x-2 justify-center items-center">
+                                <strong >Availability</strong>
+                                <p className="flex-1 border rounded-3xl focus:outline-none text-center box-border border-red-500 border-2">
+                                    {activeDisplayLeg.network.availability}
+                                </p>
+                            </div>
+                            <div className="w-[80%] h-[0.2rem] bg-red-500 self-center"></div>
+                            <div className="flex-1 flex w-full flex-col gap-x-2 justify-center items-center">
+                                <strong >Recommendation</strong>
+                                <p
+                                    className="min-h-[8rem] w-full rounded-xl focus:outline-none text-center box-border p-2 resize-none"
+                                >
+                                    {activeDisplayLeg.network.recommendation}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     )

@@ -25,15 +25,7 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
 
     legs: [{
         startPhoto: {type: String || null, default: null},
-        legIntroduction: {type: String || null, default: null},
-        startDate: {type: String || null, default: null},
-        legDistance: {type: Number || null, default: null},
-        environment: {type: String || null, default: null},
-        landscape: {type: String || null, default: null},
-        weather: {type: String || null, default: null},
-        locationString: {type: String || null, default: null},
-        highlights: {type: [String] , default: []},
-        challenges: {type: [String] , default: []},
+        legDescription: {type: String || null, default: null},
         restaurants: {
             availability: {type: String || null, default: null},
             recommendation: {type: String || null, default: null}
@@ -50,13 +42,6 @@ const postsSchema = new mongoose.Schema<Posts_Interface>({
             availability: {type: String || null, default: null},
             recommendation: {type: String || null, default: null}
         },
-        conclusion: {type: String || null, default: null},
-        startTime: {type: String || null, default: null},
-        endTime: {type: String || null, default: null},
-        difficulty: {type: String || null, default: null},
-        expenses: {type: String || null, default: null},
-        traffic: {type: String || null, default: null},
-        roadConditions: {type: String || null, default: null},
         endPhoto: {type: String || null, default: null},
         notes: {type: String || null, default: null},
         photoDump: {type: [String], default: []},

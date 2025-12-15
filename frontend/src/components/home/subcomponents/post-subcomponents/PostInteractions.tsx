@@ -48,15 +48,13 @@ const PostInteractions = ({post}: PostsProviderProps) => {
         setCommentsClicked(prev => !prev)
     }
 
-    console.log(post)
-
     const l = 10000
     return (
         <>
             <div className="flex-1 w-full h-full flex flex-row gap-x-8 box-border px-4">
                 <div className="w-full h-full flex flex-col items-center">
                     <img 
-                        src={post.interactions.likes.includes(activeAccountId) ? likeIconRed : likeIcon} 
+                        src={post.interactions?.likes?.includes(activeAccountId) ? likeIconRed : likeIcon} 
                         alt="like-icon"
                         className="w-[70%] h-[70%] hover:bg-orange-400 hover:rounded-full p-[0.3rem] active:bg-orange-500 transition-all duration-300 ease-in-out cursor-pointer" 
                         onClick={() => handleLikes(post._id)}
@@ -71,7 +69,7 @@ const PostInteractions = ({post}: PostsProviderProps) => {
                         className="w-[70%] h-[70%] hover:bg-red-500 hover:rounded-full p-[0.3rem] active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer" 
                         onClick={toggleCommentsSection}
                     />
-                    <p className='text-[0.9rem]'>{post.interactions.comments.length> 0 ? post.interactions.comments.length: 0}</p>
+                    <p className='text-[0.9rem]'>{post.interactions?.comments?.length> 0 ? post.interactions.comments.length: 0}</p>
                 </div>
                 <div className="w-full h-full flex flex-col items-center">
                     <img 
@@ -125,7 +123,7 @@ const PostInteractions = ({post}: PostsProviderProps) => {
                     </>
                 ) : (
                     <>
-                        {post.interactions.comments && post.interactions.comments.map(c => (
+                        {post.interactions?.comments && post.interactions.comments.map(c => (
                             <div className='h-fit w-full flex flex-col mb-[1rem]' key={c._id}>
                                 <div className='flex flex-row w-full h-fit items-center mb-[0.2rem]'>
                                     <div className='w-[2.5rem] h-[2.5rem] rounded-full'>

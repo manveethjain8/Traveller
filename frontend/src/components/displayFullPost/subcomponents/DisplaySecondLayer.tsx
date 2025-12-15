@@ -1,14 +1,14 @@
+import {useState } from 'react'
 import { useDisplayPostContext } from '../../../contexts/displayPostContext'
-import LegFifthLayer from './displaySecondLayerSubcomponents/DisplayLegFifthLayer'
 import LegFirstLayer from './displaySecondLayerSubcomponents/DisplayLegFirstLayer'
-import LegFourthLayer from './displaySecondLayerSubcomponents/DisplayLegFourthLayer'
 import LegSecondLayer from './displaySecondLayerSubcomponents/DisplayLegSecondLayer'
-import LegSixthLayer from './displaySecondLayerSubcomponents/DisplayLegSixthLayer'
 import LegThirdLayer from './displaySecondLayerSubcomponents/DisplayLegThirdLayer'
+import LegFourthLayer from './displaySecondLayerSubcomponents/DisplayLegFourthLayer'
 
 const DisplaySecondLayer = () => {
 
     const {fullPost, activeDisplayLeg, activeDisplayLegId ,setActiveDisplayLegId} = useDisplayPostContext()
+    const [activeId, setActiveId] = useState<number>(1)
 
     return (
         <div className="w-full h-fit flex flex-col mt-10 p-4">
@@ -16,7 +16,10 @@ const DisplaySecondLayer = () => {
                 {fullPost?.legs.map((l, idx) => (
                     < div key={l._id} className='flex flex-row items-center'>
                         <div 
-                            onClick={() => setActiveDisplayLegId(l._id)}
+                            onClick={() => {
+                                setActiveDisplayLegId(l._id)
+                                setActiveId(idx + 1)
+                            }}
                             className="rounded-xl py-[0.5rem] pl-[1.5rem] pr-[0.5rem] flex flex-row items-center cursor-pointer"
                             style={l._id === activeDisplayLegId ? {backgroundColor: 'green'} : {backgroundColor: 'orange'}}
                         >
@@ -27,6 +30,7 @@ const DisplaySecondLayer = () => {
                 ))}
             </div>
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
+                <p className='text-center mb-[3rem] text-[1.5rem] font-bold'>{`Leg ${activeId}`}</p>
                 <LegFirstLayer 
                     activeDisplayLeg={activeDisplayLeg}
                 />
@@ -44,17 +48,6 @@ const DisplaySecondLayer = () => {
             <div className='flex flex-col w-full h-fit mt-[2rem]'>
                 <LegFourthLayer
                     activeDisplayLeg={activeDisplayLeg}
-                />
-            </div>
-            <div className='flex flex-col w-full h-fit mt-[2rem]'>
-                <LegFifthLayer
-                    activeDisplayLeg={activeDisplayLeg}
-                />
-            </div>
-            <div className='flex flex-col w-full h-fit mt-[2rem]'>
-                <LegSixthLayer
-                    activeDisplayLeg={activeDisplayLeg}
-
                 />
             </div>
         </div>
