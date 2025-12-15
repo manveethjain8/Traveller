@@ -15,21 +15,23 @@ import { useEffect} from "react"
 function App() {
 
 	useEffect(() => {
-		const onConnect = (): void => {
-			console.log("Connected to Socket.IO server")
-		}
+		setTimeout(() => {
+			const onConnect = (): void => {
+				console.log("Connected to Socket.IO server")
+			}
 
-		const onDisconnect = (): void => {
-			console.log("Disconnected from Socket.IO server")
-		}
+			const onDisconnect = (): void => {
+				console.log("Disconnected from Socket.IO server")
+			}
 
-		socket.on("connect", onConnect)
-		socket.off("disconnect", onDisconnect)
+			socket.on("connect", onConnect)
+			socket.off("disconnect", onDisconnect)
 
-		return () => {
-			socket.off("connect", onConnect)
-			socket.off("disconnet", onDisconnect)
-		}
+			return () => {
+				socket.off("connect", onConnect)
+				socket.off("disconnet", onDisconnect)
+			}
+		}, 1000)
 	}, [])
 
 	return (
