@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.api.v1.embedding_routes import router as embedding_router
-from app.api.v1.gecode_routes import router as geocode_router
+from app.api.v1.geocode_routes import router as geocode_router
 
 app = FastAPI(
     title="Emedding Service",
