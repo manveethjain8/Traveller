@@ -5,7 +5,7 @@ class GeocodeService:
     def __init__(self):
         self.base_url = "https://api.opencagedata.com/geocode/v1/json"
 
-    async def get_coordinates(self, place: str) -> dict:
+    async def search_coordinates(self, place: str) -> dict:
         params = {
             "q": place,
             "key": settings.OPENCAGE_API_KEY,
