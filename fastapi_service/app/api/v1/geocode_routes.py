@@ -6,7 +6,7 @@ router = APIRouter(tags=["Geocoding Service"])
 
 geocode_service = GeocodeService()
 
-@router.get("geocode/{place}", response_model=GeocodeResponse)
+@router.get("/geocode/{place}", response_model=GeocodeResponse)
 async def get_coordinates(place: str):
     try: 
         return await geocode_service.get_coordinates(place)

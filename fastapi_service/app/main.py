@@ -3,8 +3,8 @@ from app.api.v1.embedding_routes import router as embedding_router
 from app.api.v1.geocode_routes import router as geocode_router
 
 app = FastAPI(
-    title="Emedding Service",
-    description="Microservice for generating text embeddings for posts",
+    title="Python Micro Service",
+    description="Microservice for generating text embeddings and geocode",
     version="1.0.0"
 )
 

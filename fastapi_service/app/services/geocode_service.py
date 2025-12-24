@@ -12,12 +12,12 @@ class GeocodeService:
             "limit": 1
         }
 
-        async with httpx.AsyncCLient() as client:
+        async with httpx.AsyncClient() as client:
             response = await client.get(self.base_url, params=params)
 
-        if response.status_code != 208:
-            raise Exception("Failed to fetch coordinates from OpenCage")
-        
+        if response.status_code != 200:
+            raise ValueError(response.text)
+
         data = response.json()
 
         if not data.get("results"):
