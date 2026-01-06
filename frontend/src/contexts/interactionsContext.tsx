@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
-import customAPI from "../api/customAPI"
-import type { LimitedAccountInfo_Type } from "../configs/types_and_interfaces"
+import {customAPI, fastAPI_client} from "../api/customAPI"
+import type { PlaceWithImagesResponse, LimitedAccountInfo_Type, PlaceInfo, PlaceImage } from "../configs/types_and_interfaces"
 import { useStartupContext } from "./startupContext"
 
 interface Interactions_Interface {
@@ -14,6 +14,20 @@ interface Interactions_Interface {
     getRelationship: (followingId: string, followerId: string) => Promise<string>
     handleLikes: (postId: string) => Promise<string> 
     handleComments: (serviceType: number, postId: string, comment: string, commentId?: string) => Promise<string> 
+
+    additionalInformationClicked: boolean
+    setAdditionalInformationClicked: Dispatch<SetStateAction<boolean>>
+    additionalInformationPostId: string | undefined
+    setAdditionalInformationActivePostId: Dispatch<SetStateAction<string | undefined>>
+
+    additionalOption: string
+    setAdditionalOption: Dispatch<SetStateAction<string>>
+
+    placeInfo: PlaceWithImagesResponse | null
+    setPlaceInfo: Dispatch<SetStateAction<PlaceWithImagesResponse | null>>
+
+    toggleAdditionalInformation: (id: string) => void 
+    fetchAdditinalInformation: (destination: string) => Promise<void> 
 }
 
 const InteractionContext = createContext<Interactions_Interface | undefined>(undefined)
@@ -28,6 +42,13 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
 
     const [searchedAccounts, setSearchedAccounts] = useState<LimitedAccountInfo_Type[] | []>([])
     const [accountSearchText, setAccountSearchText] = useState<string | undefined>(undefined)
+
+    const [additionalInformationClicked, setAdditionalInformationClicked]= useState<boolean>(false)
+    const [additionalInformationPostId, setAdditionalInformationActivePostId] = useState<string | undefined>(undefined)
+
+    const [additionalOption, setAdditionalOption] = useState<string>('')
+
+    const [placeInfo, setPlaceInfo] = useState<PlaceWithImagesResponse | null>(null)
 
     const handleRelationship = async(toBeFollowedId: string, followerId: string): Promise<string> => {
         try{
@@ -109,14 +130,52 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
         }
     }
 
+        const toggleAdditionalInformation = (id: string): void => {
+            if(additionalInformationPostId === id){
+                setAdditionalInformationClicked(false)
+                setAdditionalInformationActivePostId(undefined)
+            }else{
+                setAdditionalInformationClicked(true)
+                setAdditionalInformationActivePostId(id)
+            }
+        }
+
+        const fetchAdditinalInformation = async(destination: string): Promise<void> => {
+            try{
+                const [placeRes, imageRes] = await Promise.all([
+                    fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
+                    fastAPI_client.get<PlaceImage[]>(`/image/${destination}`)
+                ])
+
+                const finalResponse: PlaceWithImagesResponse = {
+                    text: placeRes.data,
+                    images: imageRes.data ?? []
+                }
+
+                setPlaceInfo(finalResponse)
+
+            }catch(err){
+                if (err instanceof Error){
+                    console.log('Error fetching more information. Location: interaction context[Frontend]', err)
+                }else{
+                    console.log('Unknown error occured while fetching more information. Location: interaction context[Frontend]', err)
+                }
+            }
+        }
+
     return (
         <InteractionContext value={
             {
                 accountSearchText, setAccountSearchText,
                 searchedAccounts, setSearchedAccounts,
+                additionalInformationClicked, setAdditionalInformationClicked,
+                additionalInformationPostId, setAdditionalInformationActivePostId,
+                additionalOption, setAdditionalOption,
+                placeInfo, setPlaceInfo,
                 handleRelationship, handleAccountSearch,
                 getRelationship, handleLikes,
-                handleComments
+                handleComments, toggleAdditionalInformation,
+                fetchAdditinalInformation
             }
         }>
             {children}

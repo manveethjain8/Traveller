@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const customAPI = axios.create({
+export const customAPI = axios.create({
     baseURL: import.meta.env.VITE_BackendURL,
     withCredentials: true
 })
@@ -26,5 +26,7 @@ customAPI.interceptors.response.use(
     }
 );
 
+export const fastAPI_client = axios.create({
+    baseURL: "http://localhost:8001/api/v1"
+})
 
-export default customAPI

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type {UserInfo_Type } from "../configs/types_and_interfaces";
 import { userInfo_Template } from "../configs/templates";
-import customAPI from "../api/customAPI";
+import {customAPI} from "../api/customAPI";
 
 interface ProfileContext_Interface {
     // Profile Posts Category

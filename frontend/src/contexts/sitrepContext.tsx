@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { AddSitrep_Type, Sitrep_Interface } from "../configs/types_and_interfaces";
 import {sitrepData_template, sitrepPreview_template } from "../configs/templates";
-import customAPI from "../api/customAPI";
+import {customAPI} from "../api/customAPI";
 import { useStartupContext } from "./startupContext";
 
 interface SitrepContext_Interface {

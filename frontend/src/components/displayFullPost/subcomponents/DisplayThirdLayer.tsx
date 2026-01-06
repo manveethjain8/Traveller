@@ -94,25 +94,31 @@ const DisplayThirdLayer = () => {
                     </div>
                 ) : (
                     <div className="overflow-y-auto max-h-[20rem] flex flex-col gap-y-10">
-                        {fullPost?.interactions.comments && fullPost.interactions.comments.length > 0 && 
-                            fullPost.interactions.comments.map(c => (
-                                <div className='h-full w-full flex flex-col' key={c._id}>
-                                    <div className='flex flex-row w-full h-fit items-center mb-[0.2rem]'>
-                                        <div className='w-[2.5rem] h-[2.5rem] rounded-full'>
-                                            <img 
-                                                className='w-full h-full rounded-full object-cover object-center' 
-                                                src={c.account.profilePicture ?? WP} 
-                                                alt='profile picture' 
-                                            />
+                        {fullPost?.interactions?.comments && fullPost.interactions.comments.length > 0 ?
+                            (
+                                    fullPost.interactions.comments.map(c => (
+                                    <div className='h-full w-full flex flex-col' key={c._id}>
+                                        <div className='flex flex-row w-full h-fit items-center mb-[0.2rem]'>
+                                            <div className='w-[2.5rem] h-[2.5rem] rounded-full'>
+                                                <img 
+                                                    className='w-full h-full rounded-full object-cover object-center' 
+                                                    src={c.account.profilePicture ?? WP} 
+                                                    alt='profile picture' 
+                                                />
+                                            </div>
+                                            <p className='ml-[0.3rem] font-bold text-[0.9rem]'>{c.account.userName}</p>
+                                            <p className='ml-auto text-[0.9rem]'>{timeAgoFormat(c.createdAt)}</p>
                                         </div>
-                                        <p className='ml-[0.3rem] font-bold text-[0.9rem]'>{c.account.userName}</p>
-                                        <p className='ml-auto text-[0.9rem]'>{timeAgoFormat(c.createdAt)}</p>
+                                        <div>
+                                            <p className='text-[0.9rem] mt-[0.5rem]'>{c.comment}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className='text-[0.9rem] mt-[0.5rem]'>{c.comment}</p>
-                                    </div>
+                                ))
+                            ) : (
+                                <div>
+                                    <p>"No Comments Yet"</p>
                                 </div>
-                            ))
+                            )
                         }
                     </div>
                 )}

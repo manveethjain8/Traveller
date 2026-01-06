@@ -29,6 +29,7 @@ export const uploadToCloudinary = async(buffer: Buffer, folder: string): Promise
     return new Promise<FilesUploadResult_Interface>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream({folder}, (err: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
             if (err){
+                console.error("Cloudinary error:", err)
                 return reject(err)
             }
             if (!result){

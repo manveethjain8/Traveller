@@ -235,3 +235,33 @@ export interface Interactions_Interface {
     likes: string[]; // account IDs
     comments: Comment_Interface[];
 }
+
+export interface PlaceInfo {
+    name: string
+    description: string
+    summary: string
+
+    coordinates: {
+        lat?: number | null
+        lon?: number | null
+    }
+
+    facts: {
+        country?: string | null
+        state?: string | null
+        population?: number | null
+    }
+}
+
+export interface PlaceImage { 
+    url: string
+    width?: number | null
+    height?: number | null
+    description?: string | null
+    source?: string // default: "Unsplash"
+}
+
+export type PlaceWithImagesResponse = {
+    text: PlaceInfo
+    images: PlaceImage[]
+}

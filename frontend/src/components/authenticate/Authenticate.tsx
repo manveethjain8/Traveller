@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import WP from '../../assets/background_images/authenticate_page_background.jpg'
 import GoogleIcon from '../../assets/logo/google.png'
 import type { Quotes_Type } from '../../configs/types_and_interfaces'
-import customAPI from '../../api/customAPI'
+import {customAPI} from '../../api/customAPI'
 
 const Authenticate = () => {
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { LimitedAccountInfo_Type } from "../configs/types_and_interfaces";
-import customAPI from "../api/customAPI";
+import {customAPI} from "../api/customAPI";
 
 interface StartupContext_Interface {
     limitedUserInfo: LimitedAccountInfo_Type | undefined

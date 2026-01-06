@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import type { AddPost_Type, IndividualLeg_type } from "../configs/types_and_interfaces"
 import { addPost_Template, addPostPreview_Template, individualLeg_Template, legPreview_Template } from "../configs/templates"
-import customAPI from "../api/customAPI"
+import {customAPI} from "../api/customAPI"
 import {loadFromLocalStorage, saveToLocalStorage } from "../utils/temporaryStorage"
 
 interface AddPostContext_Interface {

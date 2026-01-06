@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react";
 import type { Comment_Interface, IndividualLeg_Interface, Posts_Interface, PostsSummary_Type, PostSummarySpecificAccount_Type, SemanticPostsSummary_Interface } from "../configs/types_and_interfaces";
-import customAPI from "../api/customAPI";
+import {customAPI} from "../api/customAPI";
 import { socket } from "../socket";
 
 interface DisplayPostContext_Interface {

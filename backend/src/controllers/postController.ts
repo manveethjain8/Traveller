@@ -41,11 +41,11 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
                 legs[index].startPhoto = uploaded.url
             }
 
+
             if (endPhotoFile) {
                 const uploaded = await uploadSingleFile(endPhotoFile.buffer, "posts/legs")
                 legs[index].endPhoto = uploaded.url
             }
-
 
             const photoDumpFiles = filesArray.filter(f => f.fieldname === `photoDump_${index}`)
             if (photoDumpFiles.length > 0) {
@@ -67,6 +67,7 @@ export const uploadPost = async(req: Request, res: Response): Promise<void> => {
 
         const toBeEmbeddedText = embeddingTextBuilder(postData)
         const embeddings = await getEmbedding(toBeEmbeddedText)
+
 
         try {
             await Post.create({
