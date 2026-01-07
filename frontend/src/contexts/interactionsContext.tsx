@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import {customAPI, fastAPI_client} from "../api/customAPI"
-import type { PlaceWithImagesResponse, LimitedAccountInfo_Type, PlaceInfo, PlaceImage } from "../configs/types_and_interfaces"
+import type { AdditionalInformationType, LimitedAccountInfo_Type, PlaceInfo, PlaceImage, WeatherResponse, Coordinates } from "../configs/types_and_interfaces"
 import { useStartupContext } from "./startupContext"
 
 interface Interactions_Interface {
@@ -23,8 +23,8 @@ interface Interactions_Interface {
     additionalOption: string
     setAdditionalOption: Dispatch<SetStateAction<string>>
 
-    placeInfo: PlaceWithImagesResponse | null
-    setPlaceInfo: Dispatch<SetStateAction<PlaceWithImagesResponse | null>>
+    placeInfo: AdditionalInformationType | null
+    setPlaceInfo: Dispatch<SetStateAction<AdditionalInformationType | null>>
 
     toggleAdditionalInformation: (id: string) => void 
     fetchAdditinalInformation: (destination: string) => Promise<void> 
@@ -38,7 +38,7 @@ interface InteractionsProviderProps {
 
 export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({children}) => {
 
-    const {activeAccountId} = useStartupContext()
+    const {activeAccountId, limitedUserInfo} = useStartupContext()
 
     const [searchedAccounts, setSearchedAccounts] = useState<LimitedAccountInfo_Type[] | []>([])
     const [accountSearchText, setAccountSearchText] = useState<string | undefined>(undefined)
@@ -48,7 +48,7 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
 
     const [additionalOption, setAdditionalOption] = useState<string>('Info')
 
-    const [placeInfo, setPlaceInfo] = useState<PlaceWithImagesResponse | null>(null)
+    const [placeInfo, setPlaceInfo] = useState<AdditionalInformationType | null>(null)
 
     useEffect(() => {
         const value: string  = localStorage.getItem('additionalInformationCategory') ||  'info'
@@ -147,17 +147,24 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
             }
         }
 
-        const fetchAdditinalInformation = async(destination: string): Promise<void> => {
+        const fetchAdditinalInformation = async(destination: string, source?: string): Promise<void> => {
             try{
                 setPlaceInfo(null)
-                const [placeRes, imageRes] = await Promise.all([
-                    fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
-                    fastAPI_client.get<{ images: PlaceImage[] }>(`/image/${destination}`)
+                const [sourCoords, destCoords] = await Promise.all([
+                    fastAPI_client.get<Coordinates>(`geocode/${source ?? limitedUserInfo?.district}`),
+                    fastAPI_client.get<Coordinates>(`geocode/${destination}`)
                 ])
 
-                const finalResponse: PlaceWithImagesResponse = {
+                const [placeRes, imageRes, weatherRes] = await Promise.all([
+                    fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
+                    fastAPI_client.get<{ images: PlaceImage[] }>(`/image/${destination}`),
+                    fastAPI_client.get<WeatherResponse>(`weather/${destCoords.data.latitude}/${destCoords.data.longitude}`)
+                ])
+
+                const finalResponse: AdditionalInformationType = {
                     text: placeRes.data,
-                    images: imageRes.data.images ?? []
+                    images: imageRes.data.images ?? [],
+                    weather: weatherRes.data
                 }
 
                 setPlaceInfo(finalResponse)

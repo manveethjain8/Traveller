@@ -11,3 +11,26 @@ export const timeAgoFormat = (date: string): string => {
     dayjs.extend(relativeTime)
     return (dayjs(date).fromNow())
 }
+
+export const formatDateAndTime = (type: string, isoString: string):string => {
+    const date = new Date(isoString)
+
+    return date.toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: type === '12h' ? true : false
+    })
+}
+
+export const formatTimeWithUnix = (type: string, unix: number, timzone: number): string => {
+    const date = new Date((unix + timzone) * 1000)
+
+    return date.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: type === '12h' ? true : false
+    })
+}

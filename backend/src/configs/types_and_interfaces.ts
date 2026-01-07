@@ -29,6 +29,7 @@ export interface LimitedAccountInfo_Interface {
     _id: ObjectId | string
     userName: string
     profilePicture: string
+    district?: string
 }
 
 export interface Account_Interface extends LimitedAccountInfo_Interface { // Accounts

@@ -80,7 +80,7 @@ export const findAccountForInternal = async(mongoDbId: ObjectId | string): Promi
 
 export const returnLimitedAccountInfo = async(mongoDbId: ObjectId | string): Promise<LimitedAccountInfo_Interface | Error_Interface | null> => {
     try{
-        const response = await Account.findOne<LimitedAccountInfo_Interface | null>({_id: mongoDbId}, 'profilePicture userName')
+        const response = await Account.findOne<LimitedAccountInfo_Interface | null>({_id: mongoDbId}, 'profilePicture userName district')
         return response
     }catch(err: unknown){
         if(err instanceof Error){

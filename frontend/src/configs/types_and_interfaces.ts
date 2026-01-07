@@ -7,6 +7,7 @@ export type LimitedAccountInfo_Type = { // Limited User Information
     _id: string
     userName: string
     profilePicture: string
+    district?: string
 }
 
 export type UserInfo_Type = { // User Information
@@ -236,6 +237,12 @@ export interface Interactions_Interface {
     comments: Comment_Interface[];
 }
 
+export interface Coordinates {
+    place: string,
+    latitude: number,
+    longitude: number
+}
+
 export interface PlaceInfo {
     name: string
     description: string
@@ -262,8 +269,69 @@ export interface PlaceImage {
 }
 
 
-export interface PlaceWithImagesResponse {
+  
+
+export type WeatherResponse = {
+    coordinates: {
+        lon: number
+        lat: number
+    }
+
+    weather: {
+        id: number
+        main: string
+        description: string
+        icon: string
+    }[]
+
+    base: string
+
+    main: {
+        temp: number
+        feels_like: number
+        temp_min: number
+        temp_max: number
+        pressure: number
+        humidity: number
+        sea_level?: number | null
+        grd_level?: number | null
+    }
+
+    visibility: number
+
+    wind: {
+        speed: number
+        deg?: number | null
+        gust?: number | null
+    }
+
+    rain?: {
+        one_h: number
+    } | null
+
+    clouds: {
+        all: number
+    }
+
+    date: string   // ISO datetime string from FastAPI
+
+    sys: {
+        type: number
+        id: number
+        country: string
+        sunrise: number
+        sunset: number
+    }
+
+    timezone: number
+    id: number
+    name: string
+    cod: number
+}
+
+export interface AdditionalInformationType{
     text: PlaceInfo
     images: PlaceImage[]
-}   
+    weather: WeatherResponse
+} 
     

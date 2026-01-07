@@ -1,41 +1,41 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { PlaceWithImagesResponse } from "../../../../../configs/types_and_interfaces"
+import type { AdditionalInformationType, PlaceImage, PlaceInfo } from "../../../../../configs/types_and_interfaces"
 
 import arrowBackward from '../../../../../assets/icons/arrow_back_ios_100dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 import arrowForward from '../../../../../assets/icons/arrow_forward_ios_100dp_E3E3E3_FILL0_wght700_GRAD0_opsz48.png'
 
 type PlaceInfoProviderProps = {
-    placeInfo: PlaceWithImagesResponse | null
+    placeImages: PlaceImage[] | undefined
+    placeText: PlaceInfo | undefined
 }
 
-const Introduction = ({placeInfo}: PlaceInfoProviderProps) => {
+const Introduction = ({placeImages, placeText}: PlaceInfoProviderProps) => {
 
     const [index, setIndex] = useState<number>(1)
     const timeOutId = useRef<ReturnType<typeof setTimeout> |  null>(null)
     const [transition, setTransition] = useState<boolean>(true)
 
     const images = useMemo(() => {
-        const imgs = placeInfo?.images
+        const imgs = placeImages
         if (!Array.isArray(imgs) || imgs.length === 0) return []
         return [
             imgs[imgs.length - 1],
             ...imgs,
             imgs[0]
         ]
-    },[placeInfo?.images, placeInfo])
-
+    },[placeImages, placeImages])
 
     useEffect(() => {
-        timeOutId.current = setTimeout(() => {
-            handleTransition(1)
-        }, 5000)
+            timeOutId.current = setTimeout(() => {
+                handleTransition(1)
+            }, 5000)
 
-        return () => {
-            if(timeOutId.current){
-                clearTimeout(timeOutId.current)
+            return () => {
+                if(timeOutId.current){
+                    clearTimeout(timeOutId.current)
+                }
             }
-        }
-    }, [index, images.length])
+        }, [index, images.length])
 
     const handleTransition = (type: number): void => {
         if(!images.length) return
@@ -69,9 +69,9 @@ const Introduction = ({placeInfo}: PlaceInfoProviderProps) => {
     return (
         <div className="w-full h-full flex flex-col">
             <div className="w-full h-full flex-2 max-h-[27rem] flex flex-col py-2">
-                <p className="w-full text-center font-bold">{placeInfo?.text.name}</p>
-                <p className="w-full text-center">{placeInfo?.text.facts.state ?? 'state unknown'} , {placeInfo?.text.facts.country ??  'country unknown'}</p>
-                <p className="w-full text-center ">{placeInfo?.text.coordinates.lat} , {placeInfo?.text.coordinates.lon}</p>
+                <p className="w-full text-center font-bold">{placeText?.name}</p>
+                <p className="w-full text-center">{placeText?.facts.state ?? 'state unknown'} , {placeText?.facts.country ??  'country unknown'}</p>
+                <p className="w-full text-center ">{placeText?.coordinates.lat} , {placeText?.coordinates.lon}</p>
                 <div className="relative w-full h-full max-h-[20rem] flex flex-row justify-center items-center gap-x-2 ">
                     <button
                         onClick={() => handleTransition(0)}
@@ -119,7 +119,7 @@ const Introduction = ({placeInfo}: PlaceInfoProviderProps) => {
                 </div>
             </div>
             <div className="w-full h-full flex-1">
-                <p className="text-[1rem] text-center">{placeInfo?.text.summary}</p>
+                <p className="text-[1rem] text-center">{placeText?.summary}</p>
             </div>
         </div>
     )

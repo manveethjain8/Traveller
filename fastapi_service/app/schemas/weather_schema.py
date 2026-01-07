@@ -34,8 +34,8 @@ class Clouds(BaseModel):
     all: float
 
 class Sys(BaseModel):
-    type: int
-    id: int
+    type: Optional[int] = None
+    id: Optional[int] = None
     country: str
     sunrise: int
     sunset: int
