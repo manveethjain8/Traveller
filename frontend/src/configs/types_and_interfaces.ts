@@ -261,7 +261,9 @@ export interface PlaceImage {
     source?: string // default: "Unsplash"
 }
 
-export type PlaceWithImagesResponse = {
+
+export interface PlaceWithImagesResponse {
     text: PlaceInfo
     images: PlaceImage[]
-}
+}   
+    

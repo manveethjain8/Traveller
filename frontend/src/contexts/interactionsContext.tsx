@@ -46,9 +46,16 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
     const [additionalInformationClicked, setAdditionalInformationClicked]= useState<boolean>(false)
     const [additionalInformationPostId, setAdditionalInformationActivePostId] = useState<string | undefined>(undefined)
 
-    const [additionalOption, setAdditionalOption] = useState<string>('')
+    const [additionalOption, setAdditionalOption] = useState<string>('Info')
 
     const [placeInfo, setPlaceInfo] = useState<PlaceWithImagesResponse | null>(null)
+
+    useEffect(() => {
+        const value: string  = localStorage.getItem('additionalInformationCategory') ||  'info'
+        if(value){
+            setAdditionalOption(value)
+        }
+    }, [])
 
     const handleRelationship = async(toBeFollowedId: string, followerId: string): Promise<string> => {
         try{
@@ -142,14 +149,15 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
 
         const fetchAdditinalInformation = async(destination: string): Promise<void> => {
             try{
+                setPlaceInfo(null)
                 const [placeRes, imageRes] = await Promise.all([
                     fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
-                    fastAPI_client.get<PlaceImage[]>(`/image/${destination}`)
+                    fastAPI_client.get<{ images: PlaceImage[] }>(`/image/${destination}`)
                 ])
 
                 const finalResponse: PlaceWithImagesResponse = {
                     text: placeRes.data,
-                    images: imageRes.data ?? []
+                    images: imageRes.data.images ?? []
                 }
 
                 setPlaceInfo(finalResponse)
