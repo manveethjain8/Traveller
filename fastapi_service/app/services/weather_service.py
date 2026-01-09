@@ -44,3 +44,28 @@ class WeatherService:
             "name": data["name"],
             "cod": data["cod"]
         }
+    
+    async def forecastInfo(self, lat: float, lon:float) -> dict:
+        complete_url  = f"{self.url}/forecast"
+
+        params = {
+            "lat": lat,
+            "lon": lon,
+            "units": "metric",
+            "appid": settings.OPEN_WEATHER_API_KEY
+        }
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(complete_url, params=params)
+
+        if response.status_code != 200:
+            raise ValueError(f"Forecast Error: {response.status_code}")
+        
+        data = response.json()
+        return {
+            "cod": data["cod"],
+            "message": data["message"],
+            "cnt": data["cnt"],
+            "list": data["list"],
+            "city": data["city"]
+        }

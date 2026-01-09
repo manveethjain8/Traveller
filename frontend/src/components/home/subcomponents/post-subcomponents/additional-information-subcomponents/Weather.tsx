@@ -1,5 +1,4 @@
 import type { WeatherResponse } from "../../../../../configs/types_and_interfaces"
-import weatherIcon from '../../../../../assets/icons/weather_mix_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png'
 import { formatDateAndTime, formatTimeWithUnix } from "../../../../../utils/formatUtils"
 
 type PlaceInfoProviderProps = {
