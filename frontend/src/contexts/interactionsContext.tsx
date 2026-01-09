@@ -46,16 +46,9 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
     const [additionalInformationClicked, setAdditionalInformationClicked]= useState<boolean>(false)
     const [additionalInformationPostId, setAdditionalInformationActivePostId] = useState<string | undefined>(undefined)
 
-    const [additionalOption, setAdditionalOption] = useState<string>('Info')
+    const [additionalOption, setAdditionalOption] = useState<string>('info')
 
     const [placeInfo, setPlaceInfo] = useState<AdditionalInformationType | null>(null)
-
-    useEffect(() => {
-        const value: string  = localStorage.getItem('additionalInformationCategory') ||  'info'
-        if(value){
-            setAdditionalOption(value)
-        }
-    }, [])
 
     const handleRelationship = async(toBeFollowedId: string, followerId: string): Promise<string> => {
         try{

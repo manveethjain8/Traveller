@@ -23,7 +23,6 @@ const AdditionalInformation = ({post}: PostsProviderProps) => {
                         style={additionalOption === 'info' ? {backgroundColor: "red"} : {}}
                         onClick={() => {
                             setAdditionalOption('info')
-                            localStorage.setItem('additionalInformationCategory', 'info')
                         }}
                     >
                         <img 
@@ -38,7 +37,6 @@ const AdditionalInformation = ({post}: PostsProviderProps) => {
                         style={additionalOption === 'weather' ? {backgroundColor: "red"} : {}}
                         onClick={() => {
                             setAdditionalOption('weather')
-                            localStorage.setItem('additionalInformationCategory', 'weather')
                         }}
                     >
                         <img 

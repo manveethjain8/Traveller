@@ -12,7 +12,7 @@ export const timeAgoFormat = (date: string): string => {
     return (dayjs(date).fromNow())
 }
 
-export const formatDateAndTime = (type: string, isoString: string):string => {
+export const formatDateAndTime = (type: "12h" | "24h", isoString: string):string => {
     const date = new Date(isoString)
 
     return date.toLocaleString("en-IN", {
@@ -25,12 +25,13 @@ export const formatDateAndTime = (type: string, isoString: string):string => {
     })
 }
 
-export const formatTimeWithUnix = (type: string, unix: number, timzone: number): string => {
+export const formatTimeWithUnix = (type: "12h" | "24h", unix: number, timzone: number): string => {
     const date = new Date((unix + timzone) * 1000)
 
     return date.toLocaleTimeString("en-IN", {
         hour: "2-digit",
         minute: "2-digit",
-        hour12: type === '12h' ? true : false
+        hour12: type === '12h' ? true : false,
+        timeZone: "UTC"
     })
 }
