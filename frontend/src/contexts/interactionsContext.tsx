@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import {customAPI, fastAPI_client} from "../api/customAPI"
-import type { AdditionalInformationType, LimitedAccountInfo_Type, PlaceInfo, PlaceImage, WeatherResponse, Coordinates } from "../configs/types_and_interfaces"
+import type { AdditionalInformationType, LimitedAccountInfo_Type, PlaceInfo, PlaceImage, WeatherResponse, Coordinates, ForecastResponse } from "../configs/types_and_interfaces"
 import { useStartupContext } from "./startupContext"
 
 interface Interactions_Interface {
@@ -143,21 +143,24 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
         const fetchAdditinalInformation = async(destination: string, source?: string): Promise<void> => {
             try{
                 setPlaceInfo(null)
+                setAdditionalOption('info')
                 const [sourCoords, destCoords] = await Promise.all([
                     fastAPI_client.get<Coordinates>(`geocode/${source ?? limitedUserInfo?.district}`),
                     fastAPI_client.get<Coordinates>(`geocode/${destination}`)
                 ])
 
-                const [placeRes, imageRes, weatherRes] = await Promise.all([
+                const [placeRes, imageRes, weatherRes, forecastRes] = await Promise.all([
                     fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
                     fastAPI_client.get<{ images: PlaceImage[] }>(`/image/${destination}`),
-                    fastAPI_client.get<WeatherResponse>(`weather/${destCoords.data.latitude}/${destCoords.data.longitude}`)
+                    fastAPI_client.get<WeatherResponse>(`weather/${destCoords.data.latitude}/${destCoords.data.longitude}`),
+                    fastAPI_client.get<ForecastResponse>(`forecast/${destCoords.data.latitude}/${destCoords.data.longitude}`)
                 ])
 
                 const finalResponse: AdditionalInformationType = {
                     text: placeRes.data,
                     images: imageRes.data.images ?? [],
-                    weather: weatherRes.data
+                    weather: weatherRes.data,
+                    forecast: forecastRes.data
                 }
 
                 setPlaceInfo(finalResponse)

@@ -7,7 +7,6 @@ type PlaceInfoProviderProps = {
 
 
 const Weather = ({placeWeather}: PlaceInfoProviderProps) => {
-    console.log(placeWeather)
     return (
         <div className="w-full h-full flex flex-col">
             <div className="relative w-full flex-1 p-2 flex flex-col justify-center items-center">

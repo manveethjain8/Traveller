@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Union
 from datetime import datetime
 
 class Coordinates(BaseModel):
@@ -54,7 +54,7 @@ class WeatherResponse(BaseModel):
     timezone: int
     id: int
     name: str
-    cod: int
+    cod: Union[str, int]
 
 class ForecastMain(BaseModel):
     temp: float
@@ -97,7 +97,7 @@ class City(BaseModel):
 
 
 class ForecastResponse(BaseModel):
-    cod: int
+    cod: Union[str, int]
     message: int
     cnt: int
     list: List[ForecastList] = Field(default_factory=list)
