@@ -249,8 +249,8 @@ export interface PlaceInfo {
     summary: string
 
     coordinates: {
-        lat?: number | null
-        lon?: number | null
+        lat: number | null
+        lon: number | null
     }
 
     facts: {

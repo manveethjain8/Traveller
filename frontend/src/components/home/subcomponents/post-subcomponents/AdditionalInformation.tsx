@@ -4,9 +4,11 @@ import moreIcon from '../../../../assets/icons/more_vert_50dp_FFFFFF_FILL0_wght7
 import infoIcon from '../../../../assets/icons/article_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png'
 import weatherIcon from '../../../../assets/icons/weather_mix_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png'
 import forecastIcon from '../../../../assets/icons/upcoming_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png'
+import mapIcon from '../../../../assets/icons/map_50dp_FFFFFF_FILL0_wght400_GRAD0_opsz48.png'
 import Introduction from "./additional-information-subcomponents/Introduction"
 import Weather from "./additional-information-subcomponents/Weather"
 import Forecast from "./additional-information-subcomponents/Forecast"
+import Map from "./additional-information-subcomponents/Map"
 
 type PostsProviderProps = {
     post: PostsSummary_Type
@@ -63,6 +65,20 @@ const AdditionalInformation = ({post}: PostsProviderProps) => {
                         <strong className='text-[0.7rem]'>Forecast</strong>
                     </div>
                     <div 
+                        className="w-[5%] rounded-xl h-full flex flex-col items-center hover:bg-red-500 p-[0.3rem] active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer"
+                        style={additionalOption === 'map' ? {backgroundColor: "red"} : {}}
+                        onClick={() => {
+                            setAdditionalOption('map')
+                        }}
+                    >
+                        <img 
+                            src={mapIcon}
+                            alt="map icon"
+                            className="w-[70%] h-[70%]" 
+                        />
+                        <strong className='text-[0.7rem]'>Map</strong>
+                    </div>
+                    <div 
                         onClick={() => toggleAdditionalInformation(post._id)}
                         className='absolute right-2 w-[2.5rem] hover:bg-red-500 hover:rounded-full p-[0.3rem] active:bg-red-800 transition-all duration-300 ease-in-out cursor-pointer'
                         >
@@ -88,6 +104,11 @@ const AdditionalInformation = ({post}: PostsProviderProps) => {
             {additionalOption === 'forecast' && 
                 <Forecast
                     placeForecast={placeInfo?.forecast}
+                />
+            }
+            {additionalOption === 'map' && 
+                <Map
+                    placeCoordinates={placeInfo?.text.coordinates}
                 />
             }
         </div>
