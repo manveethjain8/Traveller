@@ -398,11 +398,37 @@ export type ForecastResponse = {
     }
 }
 
+export type RouteGeoJSON = {
+  type: "FeatureCollection";
+  features: {
+    geometry: {
+      type: "LineString";
+      coordinates: [number, number][];
+    };
+    properties: {
+      summary: {
+        distance: number;   // meters
+        duration: number;   // seconds
+      };
+    };
+  }[];
+};
+
+
 
 export interface AdditionalInformationType{
     text: PlaceInfo
     images: PlaceImage[]
     weather: WeatherResponse
     forecast: ForecastResponse
+    route: RouteGeoJSON
+    sourceCoordinates: {
+        lat: number,
+        lng: number 
+    },
+    destinationCoordinates: {
+        lat: number,
+        lng: number
+    }
 } 
     

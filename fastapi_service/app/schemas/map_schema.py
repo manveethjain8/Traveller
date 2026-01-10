@@ -1,12 +1,15 @@
-from pydantic import BaseModel, HttpUrl
-from typing import List, Dict, Any
+from pydantic import BaseModel, HttpUrl, Field
+from typing import List
 
 class MapResponse(BaseModel):
     map_url: HttpUrl
 
 class Coordinates(BaseModel):
-    lat: float
-    lng: float
+    lat: float = Field(..., alias="latitude")
+    lng: float = Field(..., alias="longitude")
+
+    class Config:
+        populate_by_name = True
 
 class Summary(BaseModel):
     distance: float
@@ -26,3 +29,7 @@ class Features(BaseModel):
 class RouteGeoJSON(BaseModel):
     type: str
     features: List[Features]
+
+class RouteRequest(BaseModel):
+    source: Coordinates
+    destination: Coordinates

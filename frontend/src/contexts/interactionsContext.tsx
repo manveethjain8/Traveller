@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type FC, type ReactNode, type SetStateAction } from "react"
 import {customAPI, fastAPI_client} from "../api/customAPI"
-import type { AdditionalInformationType, LimitedAccountInfo_Type, PlaceInfo, PlaceImage, WeatherResponse, Coordinates, ForecastResponse } from "../configs/types_and_interfaces"
+import type{ AdditionalInformationType, LimitedAccountInfo_Type, PlaceInfo, PlaceImage, WeatherResponse, Coordinates, ForecastResponse, RouteGeoJSON } from "../configs/types_and_interfaces"
 import { useStartupContext } from "./startupContext"
 
 interface Interactions_Interface {
@@ -149,18 +149,38 @@ export const InteractionsContextProvider: FC<InteractionsProviderProps> = ({chil
                     fastAPI_client.get<Coordinates>(`geocode/${destination}`)
                 ])
 
-                const [placeRes, imageRes, weatherRes, forecastRes] = await Promise.all([
+                const finalSourceCoords: {
+                    lat: number,
+                    lng: number
+                } = {
+                    lat: sourCoords.data.latitude,
+                    lng: sourCoords.data.longitude
+                }
+
+                const finalDestinationCoords: {
+                    lat: number,
+                    lng: number
+                } = {
+                    lat: destCoords.data.latitude,
+                    lng: destCoords.data.longitude
+                }
+
+                const [placeRes, imageRes, weatherRes, forecastRes, routesRes] = await Promise.all([
                     fastAPI_client.get<PlaceInfo>(`/place/${destination}`),
                     fastAPI_client.get<{ images: PlaceImage[] }>(`/image/${destination}`),
-                    fastAPI_client.get<WeatherResponse>(`weather/${destCoords.data.latitude}/${destCoords.data.longitude}`),
-                    fastAPI_client.get<ForecastResponse>(`forecast/${destCoords.data.latitude}/${destCoords.data.longitude}`)
+                    fastAPI_client.get<WeatherResponse>(`weather/${finalDestinationCoords.lat}/${finalDestinationCoords.lng}`),
+                    fastAPI_client.get<ForecastResponse>(`forecast/${finalDestinationCoords.lat}/${finalDestinationCoords.lng}`),
+                    fastAPI_client.post<RouteGeoJSON>("route-map", {source: finalSourceCoords, destination: finalDestinationCoords})
                 ])
 
                 const finalResponse: AdditionalInformationType = {
                     text: placeRes.data,
                     images: imageRes.data.images ?? [],
                     weather: weatherRes.data,
-                    forecast: forecastRes.data
+                    forecast: forecastRes.data,
+                    route: routesRes.data,
+                    sourceCoordinates: finalSourceCoords,
+                    destinationCoordinates: finalDestinationCoords
                 }
 
                 setPlaceInfo(finalResponse)
